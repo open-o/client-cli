@@ -16,15 +16,13 @@
 
 package org.openo.swagger.service.rest;
 
-import java.io.IOException;
+import org.apache.commons.io.IOUtils;
 
+import java.io.IOException;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
-
-import org.apache.commons.io.IOUtils;
-
 
 /**
  * Swagger API Doc.<br/>
@@ -33,20 +31,18 @@ import org.apache.commons.io.IOUtils;
  * @version CLIENT 1.0 Jan 24, 2017
  */
 @Path("/")
-@Produces({MediaType.APPLICATION_JSON})
+@Produces({ MediaType.APPLICATION_JSON })
 public class SwaggerRoa {
 
     /**
      * API doc.
      *
-     * @param filename
-     * @return
-     * @throws IOException
+     * @return string
+     * @throws IOException exception
      */
     @GET
     @Path("/swagger.json")
-    public String apidoc()
-            throws IOException {
+    public String apidoc() throws IOException {
         ClassLoader classLoader = this.getClass().getClassLoader();
         return IOUtils.toString(classLoader.getResourceAsStream("swagger.json"));
     }

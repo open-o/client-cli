@@ -24,11 +24,15 @@
     </parent>
 
     <groupId>org.openo.client.cli</groupId>
-    <artifactId>cli</artifactId>
-    <version>1.1.0-SNAPSHOT</version>
+    <artifactId>client-cli</artifactId>
     <packaging>pom</packaging>
 
     <name>client-cli</name>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <package.name>client-cli</package.name>
+    </properties>
 
     <modules>
         <module>swagger-sdk</module>

@@ -13,19 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.openo.swagger.bean;
 
+import io.swagger.jaxrs.config.BeanConfig;
 import org.openo.swagger.util.AdapterInfoUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanPostProcessor;
 
-import io.swagger.jaxrs.config.BeanConfig;
-
 /**
  * <br>
- * <p>Bean post processor for setting the ip and port into swaggerConfig bean from adapter file.
+ * <p>
+ * Bean post processor for setting the ip and port into swaggerConfig bean from adapter file.
  * </p>
  *
  * @author
@@ -37,18 +38,18 @@ public class BeanConfigPostProcessor implements BeanPostProcessor {
     private static final Logger LOGGER = LoggerFactory.getLogger(BeanConfigPostProcessor.class);
 
     /**
-     * <br/>
+     * Post process after bean initialization.<br/>
      *
-     * @param bean
-     * @param beanName
-     * @return
-     * @throws BeansException
+     * @param bean obj
+     * @param beanName string
+     * @return object
+     * @throws BeansException exception
      */
     public Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException {
-        if(SWAGGER_BEAN_ID.equals(beanName)) {
-            BeanConfig config = (BeanConfig)bean;
+        if (SWAGGER_BEAN_ID.equals(beanName)) {
+            BeanConfig config = (BeanConfig) bean;
             AdapterInfoUtil util = AdapterInfoUtil.getInstance();
-            if(util.getIp() != null && !util.getIp().equals("") && util.getPort() != null
+            if (util.getIp() != null && !util.getIp().equals("") && util.getPort() != null
                     && !util.getPort().equals("")) {
                 config.setHost(util.getIp() + ":" + util.getPort());
                 LOGGER.info("BeanConfigPostProcessor : Host Details=" + util.getIp() + ":" + util.getPort());
@@ -60,12 +61,15 @@ public class BeanConfigPostProcessor implements BeanPostProcessor {
     }
 
     /**
-     * <br/>
+     * Post processor.<br/>
      *
      * @param bean
+     *            obj
      * @param beanName
-     * @return
+     *            String
+     * @return object
      * @throws BeansException
+     *             exception
      */
     public Object postProcessBeforeInitialization(Object bean, String beanName) throws BeansException {
         return bean;
