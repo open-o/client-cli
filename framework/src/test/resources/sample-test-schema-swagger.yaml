@@ -1,0 +1,26 @@
+openo_cmd_schema_version: 1.0
+name: sample-test-swagger
+description: Sample swagger command test.
+service:
+  name: sample
+  version: v1
+parameters:
+  - name: user
+    type: string
+    description: Open-O user
+    short_option: n
+    long_option: username
+    is_optional: false
+results:
+  direction: portrait
+  attributes:
+    - name: name
+      description: Open-O user
+      scope: short
+      type: string
+exec:
+  api: org.openo.common_services.auth.auth_service.client.api.DefaultApi
+  client: org.openo.common_services.auth.auth_service.client.invoker.ApiClient
+  entity: org.openo.common_services.auth.auth_service.client.model.User, username(userName), password, description
+  method: create
+  exception: org.openo.common_services.auth.auth_service.client.invoker.ApiException

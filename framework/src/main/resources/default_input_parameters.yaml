@@ -1,0 +1,58 @@
+openo_cmd_schema_version: 1.0
+parameters:
+  - name: openo-username
+    type: string
+    description: Open-O user name
+    short_option: u
+    long_option: openo-username
+    default_value: ${OPENO_USERNAME}
+    is_optional: false
+  - name: openo-password
+    type: string
+    description: Open-O user password
+    short_option: p
+    long_option: openo-password
+    default_value: ${OPENO_PASSWORD}
+    is_secured: true
+  - name: msb_url
+    type: url
+    description: Open-O MSB url
+    short_option: m
+    long_option: msb-url
+    default_value: ${OPENO_MSB_URL}
+  - name: help
+    type: string
+    description: Open-O command help message
+    short_option: h
+    long_option: help
+    default_value: false
+  - name: version
+    type: string
+    description: Open-O command service version
+    short_option: v
+    long_option: version
+    default_value: false
+  - name: debug
+    type: bool
+    description: Enable debug output
+    short_option: d
+    long_option: debug
+    default_value: false
+  - name: format
+    type: string
+    description: Output formats, supported formatas such as table, csv, json, yaml
+    short_option: f
+    long_option: format
+    default_value: table
+  - name: long
+    type: bool
+    description: whether to print all attributes or only short attributes
+    short_option: s
+    long_option: long
+    default_value: false
+  - name: no-title
+    type: bool
+    description: whether to print title or not
+    short_option: t
+    long_option: no-title
+    default_value: true

@@ -1,0 +1,66 @@
+usage: openo sample-test
+
+Open-O sample command to test the command features
+
+Open-O service: sample v1
+
+Options:
+[-u | --openo-username] [-p | --openo-password] [-m | --msb-url] 
+[-h | --help] [-v | --version] [-d | --debug] 
+[-f | --format] [-s | --long] [-t | --no-title] 
+[-b | --bool] [-x | --secure] [-c | --string-param] 
+[-y | --yaml-param] [-j | --json-param] [-l | --long-opt] 
+[-r | --url] [-z | --env] <positional-args> 
+where,
+-u | --openo-username   Open-O user name. It is of type STRING. By            
+                        default, it is read from environment variable         
+                        OPENO_USERNAME.                                       
+-p | --openo-password   Open-O user password. It is of type STRING. By        
+                        default, it is read from environment variable         
+                        OPENO_PASSWORD.                                       
+-m | --msb-url          Open-O MSB url. It is of type URL. By default, it     
+                        is read from environment variable OPENO_MSB_URL.      
+-h | --help             Open-O command help message. It is of type STRING.    
+                        By default, it is false.                              
+-v | --version          Open-O command service version. It is of type         
+                        STRING. By default, it is false.                      
+-d | --debug            Enable debug output. It is of type BOOL. By           
+                        default, it is false.                                 
+-f | --format           Output formats, supported formatas such as table,     
+                        csv, json, yaml. It is of type STRING. By default,    
+                        it is table.                                          
+-s | --long             whether to print all attributes or only short         
+                        attributes. It is of type BOOL. By default, it is     
+                        false.                                                
+-t | --no-title         whether to print title or not. It is of type BOOL.    
+                        By default, it is false.                              
+-b | --bool             Open-O boolean param, by default its always false.    
+                        It is of type BOOL. By default, it is false.          
+-x | --secure           Open-O secure param such as password. It is of        
+                        type STRING.                                          
+-c | --string-param     Open-O string param. It is of type STRING.            
+-y | --yaml-param       Open-O yaml file location param. It is of type        
+                        JSON.                                                 
+-j | --json-param       Open-O json file location param. It is of type        
+                        JSON.                                                 
+-l | --long-opt         Open-O long param. It is of type LONG. By default,    
+                        it is 10.                                             
+-r | --url              Open-O url param. It is of type URL. By default,      
+                        it is http://localhost:8082/file.txt.                 
+-z | --env              Open-O env param. It is of type STRING. By            
+                        default, it is read from environment variable         
+                        ENV_VAR.                                              
+positional-args         Open-O positional args, if no short option and no     
+                        long option given for it. It is of type STRING. By    
+                        default, it is http://localhost:8082/file.txt.        
+
+
+Results:
+output-1  Open-O output attribute marked in short and is of   
+          type STRING.                                        
+output-2  Open-O output attribute marked in long and is of    
+          type STRING.                                        
+
+
+Error:
+On error, it prints <HTTP STATUS CODE>::<ERROR CODE>::<ERROR MESSAGE>
