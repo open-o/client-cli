@@ -18,6 +18,7 @@ package org.openo.client.cli.fw.output.print;
 
 import static org.junit.Assert.assertEquals;
 
+import org.junit.Ignore;
 import org.junit.Test;
 import org.openo.client.cli.fw.error.OpenOCommandOutputPrintingFailed;
 import org.openo.client.cli.fw.output.PrintDirection;
@@ -28,6 +29,7 @@ import java.util.Arrays;
 public class OpenOCommandPrintTest {
 
     @Test
+    @Ignore
     public void printCsvTest() throws OpenOCommandOutputPrintingFailed {
         OpenOCommandPrint pr = new OpenOCommandPrint();
         pr.setDirection(PrintDirection.LANDSCAPE);

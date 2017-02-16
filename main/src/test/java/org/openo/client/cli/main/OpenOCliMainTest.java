@@ -82,7 +82,7 @@ public class OpenOCliMainTest {
     @Ignore
     public void testUserCreateCommand() {
         this.handle(new String[] { "user-create", "-u", "admin", "-p", "Changeme_123", "-m", "http://192.168.99.100:80",
-                "--username", "test", "--password", "sss", "--description", "test user" });
+                "--username", "test", "--password", "sss", "--description", "test user" , "-d"});
     }
 
     @Test
@@ -106,7 +106,7 @@ public class OpenOCliMainTest {
     public void tesVersionServiceListCommandShort() {
         this.handle(new String[] { "microservice-list", "-v" });
     }
-    
+
     @Test
     public void tesVersionServiceListCommandShort1() {
         this.handle(new String[] { "microservice-list", "-h" });

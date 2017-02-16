@@ -254,7 +254,14 @@ public abstract class OpenOCommand {
         this.authClient.login();
 
         // execute
-        this.run();
+        try {
+            this.run();
+        } catch (OpenOCommandExecutionFailed e) {
+            if (this.result.isDebug()) {
+                this.result.setDebugInfo(this.authClient.getDebugInfo());
+            }
+            throw e;
+        }
 
         // logout
         this.authClient.logout();
