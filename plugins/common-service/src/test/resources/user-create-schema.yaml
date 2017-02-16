@@ -1,0 +1,47 @@
+openo_cmd_schema_version: 1.0
+name: user-create
+description: Open-O user create command.
+service:
+  name: auth
+  version: v1
+parameters:
+  - name: username
+    type: string
+    description: Open-O user name
+    short_option: n
+    long_option: username
+    is_optional: false
+  - name: password
+    type: string
+    description: Open-O user password
+    short_option: c
+    long_option: password
+    is_secured: true
+    is_optional: false
+  - name: description
+    type: string
+    description: Open-O user description
+    short_option: e
+    long_option: description
+    is_optional: true
+results:
+  direction: portrait
+  attributes:
+    - name: name
+      description: Open-O user name
+      scope: short
+      type: string
+    - name: id
+      description: Open-O user id
+      scope: short
+      type: string
+    - name: description
+      description: Open-O user description
+      scope: short
+      type: string
+exec:
+  api: org.openo.common_services.auth.auth_service.client.api.DefaultApi
+  client: org.openo.common_services.auth.auth_service.client.invoker.ApiClient
+  entity: org.openo.common_services.auth.auth_service.client.model.User, username(userName), password, description
+  method: create
+  exception: org.openo.common_services.auth.auth_service.client.invoker.ApiException

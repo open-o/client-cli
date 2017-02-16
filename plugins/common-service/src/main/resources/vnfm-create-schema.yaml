@@ -1,0 +1,166 @@
+openo_cmd_schema_version: 1.0
+name: vnfm-create
+description: Register VNFM into Open-O
+service:
+  name: extsys
+  version: v1
+parameters:
+  - name: name
+    description: Open-O VNFM name
+    scope: short
+    type: string
+    short_option: n
+    long_option: name
+    is_optional: false
+  - name: vendor
+    description: Open-O VNFM vendor
+    scope: short
+    type: string
+    short_option: e
+    long_option: vendor
+    is_optional: false
+  - name: type
+    description: Open-O VNFM type
+    scope: short
+    type: string
+    short_option: y
+    long_option: type
+    is_optional: false
+  - name: category
+    description: Open-O VNFM category
+    scope: short
+    type: string
+    short_option: c
+    long_option: category
+    is_optional: false
+  - name: VNFM-version
+    description: Open-O VNFM version
+    scope: short
+    type: string
+    short_option: r
+    long_option: VNFM-version
+    is_optional: false
+  - name: url
+    description: Open-O VNFM base url
+    scope: short
+    type: url
+    short_option: l
+    long_option: url
+    is_optional: false
+  - name: description
+    description: Open-O VNFM description
+    scope: short
+    type: string
+    short_option: i
+    long_option: description
+    is_optional: false
+  - name: username
+    description: Open-O VNFM username
+    scope: short
+    type: string
+    short_option: g
+    long_option: username
+    is_optional: false
+  - name: password
+    description: Open-O VNFM password
+    scope: short
+    type: string
+    is_secured: true
+    short_option: j
+    long_option: password
+    is_optional: false
+  - name: vim-id
+    description: Open-O VIM id
+    scope: short
+    type: string
+    short_option: o
+    long_option: vim-id
+    is_optional: false
+  - name: certificate-url
+    description: Open-O VNFM certificate url
+    scope: short
+    type: string
+    short_option: k
+    long_option: certificate-url
+    is_optional: false
+results:
+  direction: portrait
+  attributes:
+    - name: ID
+      description: Open-O VNFM ID
+      scope: short
+      type: string
+    - name: name
+      description: Open-O VNFM name
+      scope: short
+      type: string
+    - name: vendor
+      description: Open-O VNFM vendor
+      scope: short
+      type: string
+    - name: type
+      description: Open-O VNFM type
+      scope: short
+      type: string
+    - name: category
+      description: Open-O VNFM category
+      scope: short
+      type: string
+    - name: version
+      description: Open-O VNFM version
+      scope: short
+      type: string
+    - name: url
+      description: Open-O VNFM base url
+      scope: short
+      type: url
+    - name: description
+      description: Open-O VNFM description
+      scope: short
+      type: string
+    - name: username
+      description: Open-O VNFM username
+      scope: short
+      type: string
+    - name: password
+      description: Open-O VNFM password
+      scope: short
+      type: string
+      is_secured: true
+    - name: vim-id
+      description: Open-O VNFM id
+      scope: short
+      type: string
+    - name: certificate-url
+      description: Open-O VNFM certificate url
+      scope: short
+      type: url
+    - name: create-time
+      description: Open-O VNFM create-time
+      scope: long
+      type: string
+http:
+  request:
+    uri: /vnfms
+    method: POST
+    body: '{"name":"${name}","vendor":"${vendor}","version":"${VNFM-version}","description":"${description}","type":"${type}","category":"${category}","url":"${url}","userName":"${username}","password":"${password}","vimId":"${vim-id}","certificateUrl":"${certificate-url}"}'
+    headers:
+  success_codes:
+    - 201
+    - 200
+  result_map:
+    ID: $b{$.id}
+    name: $b{$.name}
+    vendor: $b{$.vendor} 
+    type: $b{$.type}
+    category: $b{$.category}
+    version: $b{$.version}
+    url: $b{$.url}
+    description: $b{$.description}
+    username: $b{$.username}
+    password: $b{$.password}
+    vim-id: $b{$.vimId}
+    certificate-url: $b{$.certificateUrl}
+    create-time: $b{$.createTime}
+  sample_response:
+    body:'{"id":"string","name":"string","vendor":"string","version":"string","description":"string","type":"string","createTime":"string","category":"string","url":"string","userName":"string","password":"string","vimId":"string","certificateUrl":"string"}'	

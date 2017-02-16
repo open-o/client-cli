@@ -1,0 +1,87 @@
+openo_cmd_schema_version: 1.0
+name: vim-list
+description: Retrieves the registered VIMs in Open-O
+service:
+  name: extsys
+  version: v1
+results:
+  direction: landscape
+  attributes:
+    - name: ID
+      description: Open-O VIM ID
+      scope: short
+      type: string
+    - name: name
+      description: Open-O VIM name
+      scope: short
+      type: string
+    - name: vendor
+      description: Open-O VIM vendor
+      scope: short
+      type: string
+    - name: type
+      description: Open-O VIM type
+      scope: short
+      type: string
+    - name: category
+      description: Open-O VIM category
+      scope: short
+      type: string
+    - name: version
+      description: Open-O VIM version
+      scope: short
+      type: string
+    - name: url
+      description: Open-O VIM base url
+      scope: short
+      type: url
+    - name: description
+      description: Open-O VIM description
+      scope: short
+      type: string
+    - name: username
+      description: Open-O VIM username
+      scope: short
+      type: string
+    - name: password
+      description: Open-O VIM password
+      scope: short
+      type: string
+      is_secured: true
+    - name: domain
+      description: Open-O VIM domain
+      scope: short
+      type: string
+    - name: tenant
+      description: Open-O VIM tenant
+      scope: short
+      type: string
+    - name: create-time
+      description: Open-O VIM create-time
+      scope: long
+      type: string
+http:
+  request:
+    uri: /vims
+    method: GET
+  success_codes:
+    - 201
+    - 200
+  result_map:
+    ID: $b{$.[*].id}
+    name: $b{$.[*].name}
+    vendor: $b{$.[*].vendor}
+    type: $b{$.[*].type}
+    category: $b{$.[*].category}
+    version: $b{$.[*].version}
+    url: $b{$.[*].url}
+    description: $b{$.[*].description}
+    username: $b{$.[*].userName}
+    password: $b{$.[*].password}
+    domain: $b{$.[*].domain}
+    tenant: $b{$.[*].tenant}
+    create-time: $b{$.[*].createTime}
+  sample_response:
+    body: '[{"id":"string","name":"string","vendor":"string","version":"string","description":"string","type":"string","createTime":"string","category":"string","url":"string","userName":"string","password":"string","domain":"string","tenant":"string"}]'
+
+

@@ -1,0 +1,165 @@
+openo_cmd_schema_version: 1.0
+name: sdnc-create
+description: Register SDNC into Open-O
+service:
+  name: extsys
+  version: v1
+parameters:
+  - name: name
+    description: Open-O SDNC name
+    scope: short
+    type: string
+    short_option: n
+    long_option: name
+    is_optional: false
+  - name: vendor
+    description: Open-O SDNC vendor
+    scope: short
+    type: string
+    short_option: e
+    long_option: vendor
+    is_optional: false
+  - name: type
+    description: Open-O SDNC type
+    scope: short
+    type: string
+    short_option: y
+    long_option: type
+    is_optional: false
+  - name: category
+    description: Open-O SDNC category
+    scope: short
+    type: string
+    short_option: c
+    long_option: category
+    is_optional: false
+  - name: SDNC-version
+    description: Open-O SDNC version
+    scope: short
+    type: string
+    short_option: r
+    long_option: SDNC-version
+    is_optional: false
+  - name: url
+    description: Open-O SDNC base url
+    scope: short
+    type: url
+    short_option: l
+    long_option: url
+    is_optional: false
+  - name: description
+    description: Open-O SDNC description
+    scope: short
+    type: string
+    short_option: i
+    long_option: description
+    is_optional: false
+  - name: username
+    description: Open-O SDNC username
+    scope: short
+    type: string
+    short_option: g
+    long_option: username
+    is_optional: false
+  - name: password
+    description: Open-O SDNC password
+    scope: short
+    type: string
+    is_secured: true
+    short_option: j
+    long_option: password
+    is_optional: false
+  - name: product-name
+    description: Open-O SDNC product-name
+    scope: short
+    type: string
+    short_option: o
+    long_option: product-name
+    is_optional: false
+  - name: protocol
+    description: Open-O SDNC protocol
+    scope: short
+    type: string
+    short_option: k
+    long_option: protocol
+    is_optional: false
+results:
+  direction: portrait
+  attributes:
+    - name: ID
+      description: Open-O SDNC ID
+      scope: short
+      type: string
+    - name: name
+      description: Open-O SDNC name
+      scope: short
+      type: string
+    - name: vendor
+      description: Open-O SDNC vendor
+      scope: short
+      type: string
+    - name: type
+      description: Open-O SDNC type
+      scope: short
+      type: string
+    - name: category
+      description: Open-O SDNC category
+      scope: short
+      type: string
+    - name: version
+      description: Open-O SDNC version
+      scope: short
+      type: string
+    - name: url
+      description: Open-O SDNC base url
+      scope: short
+      type: url
+    - name: description
+      description: Open-O SDNC description
+      scope: short
+      type: string
+    - name: username
+      description: Open-O SDNC username
+      scope: short
+      type: string
+    - name: password
+      description: Open-O SDNC password
+      scope: short
+      type: string
+      is_secured: true
+    - name: product-name
+      description: Open-O SDNC product name
+      scope: short
+      type: string
+    - name: protocol
+      description: Open-O SDNC protocol
+      scope: short
+      type: string
+    - name: create-time
+      description: Open-O SDNC create-time
+      scope: long
+      type: string
+http:
+  request:
+    uri: /sdncontrollers
+    method: POST
+    body: '{"name":"${name}","vendor":"${vendor}","version":"${SDNC-version}","description":"${description}","type":"${type}","category":"${category}","url":"${url}","userName":"${username}","password":"${password}","productName":"${product-name}","protocol":"${protocol}"}'
+  success_codes:
+    - 201
+    - 200
+  result_map:
+    ID: $b{$.id}
+    name: $b{$.name}
+    vendor: $b{$.vendor} 
+    type: $b{$.type}
+    category: $b{$.category}
+    version: $b{$.version}
+    url: $b{$.url}
+    description: $b{$.description}
+    username: $b{$.username}
+    password: $b{$.password}
+    protocol: $b{$.protocol}
+    product-name: $b{$.productName}
+    create-time: $b{$.createTime}
+  sample_response:
+    body:'{"id":"string","name":"string","vendor":"string","version":"string","description":"string","type":"string","createTime":"string","category":"string","url":"string","userName":"string","password":"string","productName":"string","protocol":"string"}'	

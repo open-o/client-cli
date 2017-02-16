@@ -1,0 +1,94 @@
+openo_cmd_schema_version: 1.0
+name: vnfm-show
+description: Retrieves the given VNFM details from Open-O
+service:
+  name: extsys
+  version: v1
+parameters:
+  - name: id
+    description: Open-O VNFM ID
+    scope: short
+    type: string
+    short_option: i
+    long_option: id
+    is_optional: false
+results:
+  direction: portrait
+  attributes:
+    - name: ID
+      description: Open-O VNFM ID
+      scope: short
+      type: string
+    - name: name
+      description: Open-O VNFM name
+      scope: short
+      type: string
+    - name: vendor
+      description: Open-O VNFM vendor
+      scope: short
+      type: string
+    - name: type
+      description: Open-O VNFM type
+      scope: short
+      type: string
+    - name: category
+      description: Open-O VNFM category
+      scope: short
+      type: string
+    - name: version
+      description: Open-O VNFM version
+      scope: short
+      type: string
+    - name: url
+      description: Open-O VNFM base url
+      scope: short
+      type: url
+    - name: description
+      description: Open-O VNFM description
+      scope: short
+      type: string
+    - name: username
+      description: Open-O VNFM username
+      scope: short
+      type: string
+    - name: password
+      description: Open-O VNFM password
+      scope: short
+      type: string
+      is_secured: true
+    - name: vim-id
+      description: Open-O VNFM id
+      scope: short
+      type: string
+    - name: certificate-url
+      description: Open-O VNFM certificate url
+      scope: short
+      type: url
+    - name: create-time
+      description: Open-O VNFM create-time
+      scope: long
+      type: string
+http:
+  request:
+    uri: /vnfms/${id}
+    method: GET    
+  success_codes:
+    - 201
+    - 200
+  result_map:
+    ID: $b{$.id}
+    name: $b{$.name}
+    vendor: $b{$.vendor} 
+    type: $b{$.type}
+    category: $b{$.category}
+    version: $b{$.version}
+    url: $b{$.url}
+    description: $b{$.description}
+    username: $b{$.username}
+    password: $b{$.password}
+    vim-id: $b{$.vimId}
+    certificate-url: $b{$.certificateUrl}
+    create-time: $b{$.createTime}
+  sample_response:
+    body:'{"id":"string","name":"string","vendor":"string","version":"string","description":"string","type":"string","createTime":"string","category":"string","url":"string","userName":"string","password":"string","domain":"string","tenant":"string"}'	
+

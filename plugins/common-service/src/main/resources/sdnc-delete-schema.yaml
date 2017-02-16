@@ -1,0 +1,22 @@
+openo_cmd_schema_version: 1.0
+name: sdnc-delete
+description: Removes the given SDNC from Open-O
+service:
+  name: extsys
+  version: v1
+parameters:
+  - name: id
+    description: Open-O SDNC ID
+    scope: short
+    type: string
+    short_option: i
+    long_option: id
+    is_optional: false
+http:
+  request:
+    uri: /sdncontrollers/${id}
+    method: DELETE
+  success_codes:
+    - 201
+    - 200
+    - 204

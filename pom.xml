@@ -37,6 +37,7 @@
     <modules>
         <module>swagger-sdk</module>
         <module>framework</module>
+        <module>plugins</module>
         <module>main</module>
         <module>deployment</module>
     </modules>

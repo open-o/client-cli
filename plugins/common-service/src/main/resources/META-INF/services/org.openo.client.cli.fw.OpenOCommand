@@ -1,0 +1,17 @@
+org.openo.client.cli.cmd.cs.msb.OpenOServiceListCommand
+org.openo.client.cli.cmd.cs.msb.OpenOServiceShowCommand
+org.openo.client.cli.cmd.cs.msb.OpenOServiceDeleteCommand
+org.openo.client.cli.cmd.cs.msb.OpenOServiceCreateCommand
+org.openo.client.cli.cmd.cs.esr.vim.OpenOVimCreateCommand
+org.openo.client.cli.cmd.cs.esr.vim.OpenOVimListCommand
+org.openo.client.cli.cmd.cs.esr.vim.OpenOVimShowCommand
+org.openo.client.cli.cmd.cs.esr.vim.OpenOVimDeleteCommand
+org.openo.client.cli.cmd.cs.esr.vnfm.OpenOVnfmCreateCommand
+org.openo.client.cli.cmd.cs.esr.vnfm.OpenOVnfmShowCommand
+org.openo.client.cli.cmd.cs.esr.vnfm.OpenOVnfmDeleteCommand
+org.openo.client.cli.cmd.cs.esr.vnfm.OpenOVnfmListCommand
+org.openo.client.cli.cmd.cs.esr.sdnc.OpenOSdncCreateCommand
+org.openo.client.cli.cmd.cs.esr.sdnc.OpenOSdncShowCommand
+org.openo.client.cli.cmd.cs.esr.sdnc.OpenOSdncDeleteCommand
+org.openo.client.cli.cmd.cs.esr.sdnc.OpenOSdncListCommand
+org.openo.client.cli.cmd.cs.auth.OpenOUserCreateCommand
