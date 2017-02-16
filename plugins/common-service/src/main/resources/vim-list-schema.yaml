@@ -7,7 +7,7 @@ service:
 results:
   direction: landscape
   attributes:
-    - name: ID
+    - name: id
       description: Open-O VIM ID
       scope: short
       type: string
@@ -68,7 +68,7 @@ http:
     - 201
     - 200
   result_map:
-    ID: $b{$.[*].id}
+    id: $b{$.[*].id}
     name: $b{$.[*].name}
     vendor: $b{$.[*].vendor}
     type: $b{$.[*].type}

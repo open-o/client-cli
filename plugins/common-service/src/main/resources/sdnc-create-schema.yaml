@@ -33,12 +33,12 @@ parameters:
     short_option: c
     long_option: category
     is_optional: false
-  - name: SDNC-version
+  - name: sdnc-version
     description: Open-O SDNC version
     scope: short
     type: string
     short_option: r
-    long_option: SDNC-version
+    long_option: sdnc-version
     is_optional: false
   - name: url
     description: Open-O SDNC base url
@@ -86,7 +86,7 @@ parameters:
 results:
   direction: portrait
   attributes:
-    - name: ID
+    - name: id
       description: Open-O SDNC ID
       scope: short
       type: string
@@ -143,14 +143,14 @@ http:
   request:
     uri: /sdncontrollers
     method: POST
-    body: '{"name":"${name}","vendor":"${vendor}","version":"${SDNC-version}","description":"${description}","type":"${type}","category":"${category}","url":"${url}","userName":"${username}","password":"${password}","productName":"${product-name}","protocol":"${protocol}"}'
+    body: '{"name":"${name}","vendor":"${vendor}","version":"${sdnc-version}","description":"${description}","type":"${type}","category":"${category}","url":"${url}","userName":"${username}","password":"${password}","productName":"${product-name}","protocol":"${protocol}"}'
   success_codes:
     - 201
     - 200
   result_map:
-    ID: $b{$.id}
+    id: $b{$.id}
     name: $b{$.name}
-    vendor: $b{$.vendor} 
+    vendor: $b{$.vendor}
     type: $b{$.type}
     category: $b{$.category}
     version: $b{$.version}
@@ -162,4 +162,4 @@ http:
     product-name: $b{$.productName}
     create-time: $b{$.createTime}
   sample_response:
-    body:'{"id":"string","name":"string","vendor":"string","version":"string","description":"string","type":"string","createTime":"string","category":"string","url":"string","userName":"string","password":"string","productName":"string","protocol":"string"}'	
+    body:'{"id":"string","name":"string","vendor":"string","version":"string","description":"string","type":"string","createTime":"string","category":"string","url":"string","userName":"string","password":"string","productName":"string","protocol":"string"}'

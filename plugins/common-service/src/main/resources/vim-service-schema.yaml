@@ -4,7 +4,7 @@ name: extsys
 description: Open-O ESR Virtual Infrastructure Manager (VIM)
 version: v1
 attributes:
-  - name: ID
+  - name: id
     description: Open-O VIM ID
     type: string
     short_option: i
@@ -84,12 +84,12 @@ create:
     - name: ${--ALL--}
 show:
   parameters:
-    - name: ${ID}
+    - name: ${id}
   results:
     - name: ${--ALL--}
 list:
   results:
-    - name: ${ID}
+    - name: ${id}
     - name: ${name}
     - name: ${vendor}
       scope: long
@@ -111,10 +111,10 @@ list:
       scope: long
 delete:
   parameters:
-    - name: ${ID}
+    - name: ${id}
 update:
   parameters:
-    - name: ${ID}
+    - name: ${id}
     - name: ${name}
     - name: ${url}
     - name: ${description}

@@ -49,7 +49,7 @@ http:
     - 200
   result_map:
     name: $b{$.userName}
-    ID: $b{$.id}
+    id: $b{$.id}
     description: $b{$.description}
   sample_response:
     body: '{"description":"string","userName":"string","id":"string"}'
