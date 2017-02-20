@@ -31,10 +31,6 @@ results:
       description: Open-O SDNC type
       scope: short
       type: string
-    - name: category
-      description: Open-O SDNC category
-      scope: short
-      type: string
     - name: version
       description: Open-O SDNC version
       scope: short
@@ -76,15 +72,14 @@ http:
     - 201
     - 200
   result_map:
-    id: $b{$.id}
+    id: $b{$.sdnControllerId}
     name: $b{$.name}
     vendor: $b{$.vendor}
     type: $b{$.type}
-    category: $b{$.category}
     version: $b{$.version}
     url: $b{$.url}
     description: $b{$.description}
-    username: $b{$.username}
+    username: $b{$.userName}
     password: $b{$.password}
     protocol: $b{$.protocol}
     product-name: $b{$.productName}

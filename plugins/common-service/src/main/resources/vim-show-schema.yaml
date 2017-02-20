@@ -31,10 +31,6 @@ results:
       description: Open-O VIM type
       scope: short
       type: string
-    - name: category
-      description: Open-O VIM category
-      scope: short
-      type: string
     - name: version
       description: Open-O VIM version
       scope: short
@@ -76,15 +72,14 @@ http:
     - 201
     - 200
   result_map:
-    id: $b{$.id}
+    id: $b{$.vimId}
     name: $b{$.name}
     vendor: $b{$.vendor}
     type: $b{$.type}
-    category: $b{$.category}
     version: $b{$.version}
     url: $b{$.url}
     description: $b{$.description}
-    username: $b{$.username}
+    username: $b{$.userName}
     password: $b{$.password}
     domain: $b{$.domain}
     tenant: $b{$.tenant}
