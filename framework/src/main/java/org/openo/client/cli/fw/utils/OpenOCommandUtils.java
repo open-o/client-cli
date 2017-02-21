@@ -75,12 +75,6 @@ import java.util.Set;
  *
  */
 public class OpenOCommandUtils {
-
-    private static String EXTERNAL_SCHEMA_PATH_PATERN="openo-cli-schema/**/*.yaml";
-    private static String EXTERNAL_SCHEMA_DIRECTORY="openo-cli-schema";
-    private static String EXTERNAL_DISCOVERY_DIRECTORY="discovery";
-    private static String EXTERNAL_DISCOVERY_FILE="external-schema.json";
-
     /**
      * Validates schema version.
      *
@@ -858,7 +852,7 @@ public class OpenOCommandUtils {
             throws OpenOCommandDiscoveryFailed, OpenOCommandInvalidSchema {
         List<ExternalSchema> extSchemas = new ArrayList<>();
         try {
-            Resource[] res = getExternalResources(EXTERNAL_SCHEMA_PATH_PATERN);
+            Resource[] res = getExternalResources(OpenOCommandConfg.EXTERNAL_SCHEMA_PATH_PATERN);
             if (res != null && res.length > 0) {
                 Map<String, ?> resourceMap = null;
                 for (Resource resource : res) {
@@ -874,7 +868,7 @@ public class OpenOCommandUtils {
                 }
             }
         } catch (IOException e) {
-            new OpenOCommandDiscoveryFailed(EXTERNAL_SCHEMA_DIRECTORY);
+            new OpenOCommandDiscoveryFailed(OpenOCommandConfg.EXTERNAL_SCHEMA_DIRECTORY);
         }
 
         return extSchemas;
@@ -941,15 +935,15 @@ public class OpenOCommandUtils {
     public static void persist(List<ExternalSchema> schemas) throws OpenOCommandDiscoveryFailed {
         if (schemas != null) {
             try {
-                Resource[] resources = getExternalResources(EXTERNAL_DISCOVERY_DIRECTORY);
+                Resource[] resources = getExternalResources(OpenOCommandConfg.EXTERNAL_DISCOVERY_DIRECTORY);
                 if (resources != null && resources.length == 1) {
                     String path = resources[0].getURI().getPath();
-                    File file = new File(path + File.separator + EXTERNAL_DISCOVERY_FILE);
+                    File file = new File(path + File.separator + OpenOCommandConfg.EXTERNAL_DISCOVERY_FILE);
                     ObjectMapper mapper = new ObjectMapper();
                     mapper.writerWithDefaultPrettyPrinter().writeValue(file, schemas);
                 }
             } catch (IOException e1) {
-                throw new OpenOCommandDiscoveryFailed(EXTERNAL_DISCOVERY_DIRECTORY, EXTERNAL_DISCOVERY_FILE);
+                throw new OpenOCommandDiscoveryFailed(OpenOCommandConfg.EXTERNAL_DISCOVERY_DIRECTORY, OpenOCommandConfg.EXTERNAL_DISCOVERY_FILE);
             }
         }
     }
@@ -961,14 +955,14 @@ public class OpenOCommandUtils {
     public static boolean isJsonFileDiscovered() {
         Resource resource = null;
         try {
-            resource = getExternalResource(EXTERNAL_DISCOVERY_FILE, EXTERNAL_DISCOVERY_DIRECTORY);
+            resource = getExternalResource(OpenOCommandConfg.EXTERNAL_DISCOVERY_FILE, OpenOCommandConfg.EXTERNAL_DISCOVERY_DIRECTORY);
             if (resource != null) {
-                if (EXTERNAL_DISCOVERY_FILE.equals(resource.getFilename())) {
+                if (OpenOCommandConfg.EXTERNAL_DISCOVERY_FILE.equals(resource.getFilename())) {
                     return true;
                 }
             }
         } catch (IOException e) {
-            new OpenOCommandDiscoveryFailed(EXTERNAL_DISCOVERY_DIRECTORY, "external-schema.json");
+            new OpenOCommandDiscoveryFailed(OpenOCommandConfg.EXTERNAL_DISCOVERY_DIRECTORY, "external-schema.json");
         }
 
         return false;
@@ -989,9 +983,9 @@ public class OpenOCommandUtils {
             }
         } else {
             try {
-                Resource resource = getExternalResource(EXTERNAL_DISCOVERY_FILE,EXTERNAL_DISCOVERY_DIRECTORY);
+                Resource resource = getExternalResource(OpenOCommandConfg.EXTERNAL_DISCOVERY_FILE,OpenOCommandConfg.EXTERNAL_DISCOVERY_DIRECTORY);
                 if (resource != null) {
-                    if (EXTERNAL_DISCOVERY_FILE.equals(resource.getFilename())) {
+                    if (OpenOCommandConfg.EXTERNAL_DISCOVERY_FILE.equals(resource.getFilename())) {
                         File file = new File(resource.getURI().getPath());
                         ObjectMapper mapper = new ObjectMapper();
                         ExternalSchema[] list =  mapper.readValue(file, ExternalSchema[].class);
@@ -999,7 +993,7 @@ public class OpenOCommandUtils {
                     }
                 }
             } catch (IOException e) {
-                new OpenOCommandDiscoveryFailed(EXTERNAL_DISCOVERY_DIRECTORY, EXTERNAL_DISCOVERY_FILE);
+                new OpenOCommandDiscoveryFailed(OpenOCommandConfg.EXTERNAL_DISCOVERY_DIRECTORY, OpenOCommandConfg.EXTERNAL_DISCOVERY_FILE);
             }
         }
 

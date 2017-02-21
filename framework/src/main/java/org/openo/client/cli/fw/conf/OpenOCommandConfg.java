@@ -49,6 +49,11 @@ public class OpenOCommandConfg {
     public static String PORTRAINT_COLUMN_NAME_PROPERTY = "property";
     public static String PORTRAINT_COLUMN_NAME_VALUE = "value";
 
+    public static String EXTERNAL_SCHEMA_DIRECTORY = "openo-cli-schema";
+    public static String EXTERNAL_SCHEMA_PATH_PATERN = EXTERNAL_SCHEMA_DIRECTORY + "/**/*.yaml";
+    public static String EXTERNAL_DISCOVERY_DIRECTORY = "data";
+    public static String EXTERNAL_DISCOVERY_FILE = "external-schema.json";
+
     private static Properties prps = new Properties();
 
     static {

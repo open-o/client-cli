@@ -62,6 +62,12 @@
                                 ant.delete(dir: "${deployUnzip}/lib")
                                 ant.mkdir(dir: "${deployUnzip}/lib")
 
+                                ant.delete(dir: "${deployUnzip}/openo-cli-schema")
+                                ant.mkdir(dir: "${deployUnzip}/openo-cli-schema")
+
+                                ant.delete(dir: "${deployUnzip}/data")
+                                ant.mkdir(dir: "${deployUnzip}/data")
+
                                 ant.copy(todir: "${deployUnzip}") {
                                 fileset(dir: "${basedir}/src/main/release"){
                                 exclude(name: "**/.gitignore")
