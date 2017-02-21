@@ -19,6 +19,6 @@ package org.openo.client.cli.cmd.cs.msb;
 import org.openo.client.cli.fw.OpenOCommandSchema;
 import org.openo.client.cli.fw.OpenOHttpCommand;
 
-@OpenOCommandSchema(name = "microservice-delete", schema = "service-delete-schema.yaml")
+@OpenOCommandSchema(name = "microservice-delete", schema = "microservice-delete-schema.yaml")
 public class OpenOServiceDeleteCommand extends OpenOHttpCommand {
 }

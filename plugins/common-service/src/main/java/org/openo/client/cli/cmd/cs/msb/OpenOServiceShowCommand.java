@@ -19,6 +19,6 @@ package org.openo.client.cli.cmd.cs.msb;
 import org.openo.client.cli.fw.OpenOCommandSchema;
 import org.openo.client.cli.fw.OpenOHttpCommand;
 
-@OpenOCommandSchema(name = "microservice-show", schema = "service-show-schema.yaml")
+@OpenOCommandSchema(name = "microservice-show", schema = "microservice-show-schema.yaml")
 public class OpenOServiceShowCommand extends OpenOHttpCommand {
 }
