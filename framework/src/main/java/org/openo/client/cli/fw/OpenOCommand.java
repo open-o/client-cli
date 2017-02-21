@@ -256,7 +256,7 @@ public abstract class OpenOCommand {
         // execute
         try {
             this.run();
-        } catch (OpenOCommandExecutionFailed e) {
+        } catch (OpenOCommandException e) {
             if (this.result.isDebug()) {
                 this.result.setDebugInfo(this.authClient.getDebugInfo());
             }

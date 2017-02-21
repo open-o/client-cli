@@ -145,6 +145,32 @@ public class OpenOCliMainTest {
 
     @Test
     @Ignore
+    public void testSdncCreate() {
+
+        this.handle(new String[] { "sdnc-create", "-u", "root1", "-p", "root123", "-m", "http://192.168.4.47:80",
+                "--name", "testcontroller", "--vendor", "testvendor", "--sdnc-version", "v1", "--description",
+                "testingSDNC", "--type", "string", "--url", "openoapi/extsys/v1", "--username",
+                "test", "--password", "test", "--product-name", "testproduct", "--protocol", "http", "-d" });
+    }
+
+    @Test
+    @Ignore
+    public void testSdnclist() {
+
+        this.handle(
+                new String[] { "sdnc-list", "-p", "root123", "--msb-url", "http://192.168.4.47", "-u", "root1", "-d" });
+    }
+
+    @Test
+    @Ignore
+    public void testSdncdelete() {
+
+        this.handle(new String[] { "sdnc-delete", "-p", "root123", "--msb-url", "http://192.168.4.47", "-u", "root1",
+                "--id", "053104c1-0f8b-481d-9456-f7b02e87c0e7" });
+    }
+
+    @Test
+    @Ignore
     public void testServiceCreateHelpCommand() {
         this.handle(new String[] { "microservice-create", "--help" });
     }

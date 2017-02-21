@@ -17,6 +17,7 @@
 package org.openo.client.cli.fw;
 
 import org.openo.client.cli.fw.conf.OpenOCommandConfg;
+import org.openo.client.cli.fw.error.OpenOCommandDiscoveryFailed;
 import org.openo.client.cli.fw.error.OpenOCommandHelpFailed;
 import org.openo.client.cli.fw.error.OpenOCommandInvalidParameterType;
 import org.openo.client.cli.fw.error.OpenOCommandInvalidPrintDirection;
@@ -37,6 +38,7 @@ import org.openo.client.cli.fw.output.OpenOCommandResultAttribute;
 import org.openo.client.cli.fw.output.OpenOCommandResultAttributeScope;
 import org.openo.client.cli.fw.output.PrintDirection;
 import org.openo.client.cli.fw.output.ResultType;
+import org.openo.client.cli.fw.utils.ExternalSchema;
 import org.openo.client.cli.fw.utils.OpenOCommandUtils;
 
 import java.lang.reflect.Constructor;
@@ -56,7 +58,7 @@ public class OpenOCommandRegistrar {
         new OpenOCommandLogger();
     }
 
-    private Map<String, Class<OpenOCommand>> registry = new HashMap<>();
+    private Map<String, Class<? extends OpenOCommand>> registry = new HashMap<>();
 
     private static OpenOCommandRegistrar registrar = null;
 
@@ -70,7 +72,7 @@ public class OpenOCommandRegistrar {
      * @throws OpenOCommandInvalidRegistration
      *             Invalid registration exception
      */
-    public void register(String name, Class<OpenOCommand> cmd) throws OpenOCommandInvalidRegistration {
+    public void register(String name, Class<? extends OpenOCommand> cmd) throws OpenOCommandInvalidRegistration {
         if (!OpenOCommand.class.isAssignableFrom(cmd)) {
             throw new OpenOCommandInvalidRegistration(cmd);
         }
@@ -83,11 +85,15 @@ public class OpenOCommandRegistrar {
      * @return OpenOCommandRegistrar
      * @throws OpenOCommandInvalidRegistration
      *             Invalid registration exception
+     * @throws OpenOCommandInvalidSchema exception
+     * @throws OpenOCommandDiscoveryFailed exception
      */
-    public static OpenOCommandRegistrar getRegistrar() throws OpenOCommandInvalidRegistration {
+    public static OpenOCommandRegistrar getRegistrar()
+            throws OpenOCommandInvalidRegistration, OpenOCommandDiscoveryFailed, OpenOCommandInvalidSchema {
         if (registrar == null) {
             registrar = new OpenOCommandRegistrar();
             registrar.autoDiscover();
+            registrar.autoDiscoverHttpSchemas();
         }
 
         return registrar;
@@ -114,7 +120,7 @@ public class OpenOCommandRegistrar {
             throws OpenOCommandNotFound, OpenOCommandRegistrationFailed, OpenOCommandInvalidParameterType,
             OpenOCommandInvalidPrintDirection, OpenOCommandInvalidResultAttributeScope {
         OpenOCommand cmd = null;
-        Class<OpenOCommand> cls = registry.get(cmdName);
+        Class<? extends OpenOCommand> cls = registry.get(cmdName);
         if (cls == null) {
             throw new OpenOCommandNotFound(cmdName);
         }
@@ -122,11 +128,18 @@ public class OpenOCommandRegistrar {
         try {
             Constructor<?> constr = cls.getConstructor();
             cmd = (OpenOCommand) constr.newInstance();
-            cmd.initializeSchema(this.getSchemaFileName(cls));
+
+            String schemaName = null;
+            if (cmd.getClass().getName().equals(OpenOHttpCommand.class.getName())) {
+                schemaName = OpenOCommandUtils.loadExternalSchemaFromJson(cmdName).getSchemaName();
+            } else {
+                schemaName = this.getSchemaFileName(cls);
+            }
+            cmd.initializeSchema(schemaName);
         } catch (NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException
                 | IllegalArgumentException | InvocationTargetException | OpenOCommandSchemaNotFound
                 | OpenOCommandInvalidSchema | OpenOCommandParameterOptionConflict | OpenOCommandParameterNameConflict
-                | OpenOCommandInvalidSchemaVersion e) {
+                | OpenOCommandInvalidSchemaVersion | OpenOCommandDiscoveryFailed e) {
             throw new OpenOCommandRegistrationFailed(cmdName, e.getMessage());
         }
 
@@ -144,14 +157,15 @@ public class OpenOCommandRegistrar {
         }
     }
 
-    private void autoDiscoverHttpSchemas() throws OpenOCommandInvalidRegistration {
-        //TODO(auto discover the schema in classpath and register them using OpenOHttpCommand
-
-        this.getClass().getClassLoader().getResourceAsStream("openo-*-schema.yaml");
-
+    private void autoDiscoverHttpSchemas()
+            throws OpenOCommandInvalidRegistration, OpenOCommandDiscoveryFailed, OpenOCommandInvalidSchema {
+        List<ExternalSchema> schemas = OpenOCommandUtils.loadExternalSchemasFromJson();
+        for (ExternalSchema schema : schemas) {
+            this.register(schema.getCmdName(), OpenOHttpCommand.class);
+        }
     }
 
-    private String getSchemaFileName(Class<OpenOCommand> cmd) {
+    private String getSchemaFileName(Class<? extends OpenOCommand> cmd) {
         OpenOCommandSchema ano = (OpenOCommandSchema) cmd.getAnnotation(OpenOCommandSchema.class);
         if (ano.schema().isEmpty()) {
             return "openo-" + ano.name() + "-schema.yaml";

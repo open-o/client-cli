@@ -127,7 +127,7 @@ public class OpenOCommandParameter {
             String envVar = this.getEnvVarNameFromDefaultValue();
             this.defaultValue = System.getenv(envVar);
         } else if (this.getParameterType().equals(ParameterType.BOOL)) {
-            // For bool type always the default param is false            
+            // For bool type always the default param is false
             this.defaultValue = "false";
         }
 
@@ -163,6 +163,11 @@ public class OpenOCommandParameter {
      */
     public String getValue() {
         if (value != null) {
+            if (ParameterType.URL.equals(parameterType) && !value.startsWith("http")
+                    && !value.startsWith("/")) {
+                value = "/" + value;
+            }
+
             return value;
         }
         return getDefaultValue();

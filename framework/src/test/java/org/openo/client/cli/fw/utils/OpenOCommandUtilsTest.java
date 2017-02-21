@@ -20,6 +20,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
+import org.junit.Ignore;
 import org.junit.Test;
 import org.openo.client.cli.fw.OpenOCommand;
 import org.openo.client.cli.fw.OpenOCommandSchema;
@@ -66,6 +67,7 @@ public class OpenOCommandUtilsTest {
     }
 
     @Test
+    @Ignore
     public void invalidSchemaFileTest() {
         Map<String, ?> map = null;
         try {

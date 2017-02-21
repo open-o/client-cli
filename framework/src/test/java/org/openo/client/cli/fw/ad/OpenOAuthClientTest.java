@@ -120,11 +120,11 @@ public class OpenOAuthClientTest {
         } catch (OpenOCommandLoginFailed e) {
             assertEquals("0x0009::Login failed, 0x0025::Post Request Failed", e.getMessage());
         }
-        
+
         HttpResult postResult = new HttpResult();
         postResult.setStatus(401);
         mockHttpGetPost(result,postResult);
-        
+
         try {
             client.login();
         } catch (OpenOCommandLoginFailed e) {
@@ -141,18 +141,18 @@ public class OpenOAuthClientTest {
         HttpResult result = new HttpResult();
         result.setBody("{\"url\":\"http://192.168.4.47\"}");
         result.setStatus(200);
-        
+
         HttpResult postResult = new HttpResult();
         postResult.setStatus(200);
 
         Map<String, String> respHeaders = new HashMap<>();
         respHeaders.put(OpenOHttpConnection.X_AUTH_TOKEN, "authtoken");
         postResult.setRespHeaders(respHeaders);
-        
+
         Map<String, String> respCookies = new HashMap<>();
         respHeaders.put(OpenOHttpConnection.X_AUTH_TOKEN, "authtoken");
         postResult.setRespCookies(respCookies);
-        
+
         mockHttpGetPost(result,postResult);
 
 
@@ -191,7 +191,7 @@ public class OpenOAuthClientTest {
                     return inv.proceed(input);
                 }
             }
-            
+
             @Mock
             public HttpResult post(Invocation inv, final HttpInput input) throws OpenOCommandHttpFailure {
                 System.out.println("mockHttpPost : " + isMock);

@@ -16,14 +16,17 @@
 
 package org.openo.client.cli.fw.utils;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jayway.jsonpath.JsonPath;
 import net.minidev.json.JSONArray;
+
 import org.openo.client.cli.fw.OpenOCommand;
 import org.openo.client.cli.fw.OpenOHttpCommand;
 import org.openo.client.cli.fw.ad.OpenOCredentials;
 import org.openo.client.cli.fw.ad.OpenOService;
 import org.openo.client.cli.fw.cmd.OpenOSwaggerBasedCommand;
 import org.openo.client.cli.fw.conf.OpenOCommandConfg;
+import org.openo.client.cli.fw.error.OpenOCommandDiscoveryFailed;
 import org.openo.client.cli.fw.error.OpenOCommandException;
 import org.openo.client.cli.fw.error.OpenOCommandHelpFailed;
 import org.openo.client.cli.fw.error.OpenOCommandHttpHeaderNotFound;
@@ -50,10 +53,16 @@ import org.openo.client.cli.fw.output.OpenOCommandResultAttributeScope;
 import org.openo.client.cli.fw.output.PrintDirection;
 import org.openo.client.cli.fw.output.ResultType;
 import org.openo.client.cli.fw.run.OpenOCommandExecutor;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
+import org.springframework.core.io.support.ResourcePatternResolver;
 import org.yaml.snakeyaml.Yaml;
 
+import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -66,6 +75,11 @@ import java.util.Set;
  *
  */
 public class OpenOCommandUtils {
+
+    private static String EXTERNAL_SCHEMA_PATH_PATERN="openo-cli-schema/**/*.yaml";
+    private static String EXTERNAL_SCHEMA_DIRECTORY="openo-cli-schema";
+    private static String EXTERNAL_DISCOVERY_DIRECTORY="discovery";
+    private static String EXTERNAL_DISCOVERY_FILE="external-schema.json";
 
     /**
      * Validates schema version.
@@ -87,7 +101,14 @@ public class OpenOCommandUtils {
         InputStream inputStream = OpenOCommandUtils.class.getClassLoader().getResourceAsStream(schemaName);
 
         if (inputStream == null) {
+            try {
+                inputStream = getExternalResource(schemaName, "openo-cli-schema").getInputStream();
+            } catch (IOException e) {
+                throw new OpenOCommandSchemaNotFound(schemaName);
+            }
+            if (inputStream == null) {
             throw new OpenOCommandSchemaNotFound(schemaName);
+        }
         }
 
         Map<String, ?> values = null;
@@ -818,5 +839,191 @@ public class OpenOCommandUtils {
         }
 
         return resultsProcessed;
+    }
+
+
+
+
+
+    /**
+     * Find external schema files.
+     *
+     * @return list ExternalSchema
+     * @throws OpenOCommandDiscoveryFailed
+     *             exception
+     * @throws OpenOCommandInvalidSchema
+     *             exception
+     */
+    public static List<ExternalSchema> findAllExternalSchemas()
+            throws OpenOCommandDiscoveryFailed, OpenOCommandInvalidSchema {
+        List<ExternalSchema> extSchemas = new ArrayList<>();
+        try {
+            Resource[] res = getExternalResources(EXTERNAL_SCHEMA_PATH_PATERN);
+            if (res != null && res.length > 0) {
+                Map<String, ?> resourceMap = null;
+                for (Resource resource : res) {
+                    resourceMap = getExternalSchemaMap(resource);
+                    if (resourceMap != null && resourceMap.size() > 0) {
+                        ExternalSchema schema = new ExternalSchema();
+                        schema.setSchemaName(resource.getFilename());
+                        schema.setCmdName((String) resourceMap.get(OpenOCommand.NAME));
+                        Object obj = resourceMap.get(OpenOCommand.OPENO_CMD_SCHEMA_VERSION);
+                        schema.setVersion(obj.toString());
+                        extSchemas.add(schema);
+                    }
+                }
+            }
+        } catch (IOException e) {
+            new OpenOCommandDiscoveryFailed(EXTERNAL_SCHEMA_DIRECTORY);
+        }
+
+        return extSchemas;
+    }
+
+    /**
+     * Returns all resources available under certain directory in class-path.
+     * @param pattern search pattern
+     * @return resources found resources
+     * @throws IOException exception
+     */
+    public static Resource[] getExternalResources(String pattern) throws IOException {
+        ClassLoader cl = OpenOCommandUtils.class.getClassLoader();
+        ResourcePatternResolver resolver = new PathMatchingResourcePatternResolver(cl);
+        return resolver.getResources("classpath*:" + pattern);
+    }
+
+    /**
+     * Returns a resource available under certain directory in class-path.
+     *
+     * @param pattern
+     *            search pattern
+     * @return found resource
+     * @throws IOException
+     *             exception
+     */
+    public static Resource getExternalResource(String fileName, String pattern) throws IOException {
+        Resource[] resources = getExternalResources(pattern + "/*");
+        if (resources != null && resources.length > 0) {
+            for (Resource res : resources) {
+                if (res.getFilename().equals(fileName)) {
+                    return res;
+                }
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * Get schema map.
+     *
+     * @param resource
+     *            resource obj
+     * @return map
+     * @throws OpenOCommandInvalidSchema
+     *             exception
+     */
+    public static Map<String, ?> getExternalSchemaMap(Resource resource) throws OpenOCommandInvalidSchema {
+        Map<String, ?> values = null;
+        try {
+            values = (Map<String, ?>) new Yaml().load(resource.getInputStream());
+        } catch (Exception e) {
+            throw new OpenOCommandInvalidSchema(resource.getFilename(), e.getMessage());
+        }
+        return values;
+    }
+
+    /**
+     * Persist the external schema details.
+     * @param schemas list
+     * @throws OpenOCommandDiscoveryFailed exception
+     */
+    public static void persist(List<ExternalSchema> schemas) throws OpenOCommandDiscoveryFailed {
+        if (schemas != null) {
+            try {
+                Resource[] resources = getExternalResources(EXTERNAL_DISCOVERY_DIRECTORY);
+                if (resources != null && resources.length == 1) {
+                    String path = resources[0].getURI().getPath();
+                    File file = new File(path + File.separator + EXTERNAL_DISCOVERY_FILE);
+                    ObjectMapper mapper = new ObjectMapper();
+                    mapper.writerWithDefaultPrettyPrinter().writeValue(file, schemas);
+                }
+            } catch (IOException e1) {
+                throw new OpenOCommandDiscoveryFailed(EXTERNAL_DISCOVERY_DIRECTORY, EXTERNAL_DISCOVERY_FILE);
+            }
+        }
+    }
+
+    /**
+     * Check if json file discovered or not.
+     * @return boolean
+     */
+    public static boolean isJsonFileDiscovered() {
+        Resource resource = null;
+        try {
+            resource = getExternalResource(EXTERNAL_DISCOVERY_FILE, EXTERNAL_DISCOVERY_DIRECTORY);
+            if (resource != null) {
+                if (EXTERNAL_DISCOVERY_FILE.equals(resource.getFilename())) {
+                    return true;
+                }
+            }
+        } catch (IOException e) {
+            new OpenOCommandDiscoveryFailed(EXTERNAL_DISCOVERY_DIRECTORY, "external-schema.json");
+        }
+
+        return false;
+    }
+
+    /**
+     * Load the previous discovered json file.
+     * @return list
+     * @throws OpenOCommandInvalidSchema
+     * @throws OpenOCommandDiscoveryFailed
+     */
+    public static List<ExternalSchema> loadExternalSchemasFromJson() throws OpenOCommandDiscoveryFailed, OpenOCommandInvalidSchema {
+        List<ExternalSchema> schemas = new ArrayList<>();
+        if (!isJsonFileDiscovered()) {
+            schemas = findAllExternalSchemas();
+            if (!schemas.isEmpty()) {
+                persist(schemas);
+            }
+        } else {
+            try {
+                Resource resource = getExternalResource(EXTERNAL_DISCOVERY_FILE,EXTERNAL_DISCOVERY_DIRECTORY);
+                if (resource != null) {
+                    if (EXTERNAL_DISCOVERY_FILE.equals(resource.getFilename())) {
+                        File file = new File(resource.getURI().getPath());
+                        ObjectMapper mapper = new ObjectMapper();
+                        ExternalSchema[] list =  mapper.readValue(file, ExternalSchema[].class);
+                        schemas.addAll(Arrays.asList(list));
+                    }
+                }
+            } catch (IOException e) {
+                new OpenOCommandDiscoveryFailed(EXTERNAL_DISCOVERY_DIRECTORY, EXTERNAL_DISCOVERY_FILE);
+            }
+        }
+
+        return schemas;
+    }
+
+    /**
+     * Fetch a particular schema details.
+     *
+     * @param cmd
+     *            command name
+     * @return ExternalSchema obj
+     * @throws OpenOCommandInvalidSchema
+     * @throws OpenOCommandDiscoveryFailed
+     */
+    public static ExternalSchema loadExternalSchemaFromJson(String cmd) throws OpenOCommandDiscoveryFailed, OpenOCommandInvalidSchema {
+        List<ExternalSchema> list = loadExternalSchemasFromJson();
+        if (list != null) {
+            for (ExternalSchema schema : list) {
+                if (cmd.equals(schema.getCmdName())) {
+                    return schema;
+                }
+            }
+        }
+        return null;
     }
 }

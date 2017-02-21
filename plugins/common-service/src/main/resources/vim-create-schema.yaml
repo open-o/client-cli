@@ -26,13 +26,6 @@ parameters:
     short_option: y
     long_option: type
     is_optional: false
-  - name: category
-    description: Open-O VIM category
-    scope: short
-    type: string
-    short_option: c
-    long_option: category
-    is_optional: false
   - name: vim-version
     description: Open-O VIM version
     scope: short
@@ -139,7 +132,7 @@ http:
   request:
     uri: /vims
     method: POST
-    body: '{"name":"${name}","vendor":"${vendor}","version":"${vim-version}","description":"${description}","type":"${type}","category":"${category}","url":"${url}","userName":"${username}","password":"${password}","domain":"${domain}","tenant":"${tenant}"}'
+    body: '{"name":"${name}","vendor":"${vendor}","version":"${vim-version}","description":"${description}","type":"${type}","url":"${url}","userName":"${username}","password":"${password}","domain":"${domain}","tenant":"${tenant}"}'
     headers:
   success_codes:
     - 201
@@ -158,4 +151,4 @@ http:
     tenant: $b{$.tenant}
     create-time: $b{$.createTime}
   sample_response:
-    body:'{"id":"string","name":"string","vendor":"string","version":"string","description":"string","type":"string","createTime":"string","category":"string","url":"string","userName":"string","password":"string","domain":"string","tenant":"string"}'
+    body:'{"id":"string","name":"string","vendor":"string","version":"string","description":"string","type":"string","createTime":"string","url":"string","userName":"string","password":"string","domain":"string","tenant":"string"}'

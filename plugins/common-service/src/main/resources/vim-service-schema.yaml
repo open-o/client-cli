@@ -1,4 +1,4 @@
-openo_cmd_service_schema_version: 1.0
+openo_cmd_schema_version: 2.0
 cmd_name: vim
 name: extsys
 description: Open-O ESR Virtual Infrastructure Manager (VIM)
@@ -23,12 +23,6 @@ attributes:
     description: Open-O VIM type
     type: string
     default_value: openstack
-  - name: category
-    description: Open-O VIM category
-    type: string
-    short_option: c
-    long_option: category
-    is_optional: true
   - name: version
     description: Open-O VIM version
     type: string
@@ -71,7 +65,6 @@ create:
     - name: ${name}
     - name: ${vendor}
     - name: ${type}
-    - name: ${category}
     - name: ${version}
       short_name: vim-version
     - name: ${url}
@@ -94,8 +87,6 @@ list:
     - name: ${vendor}
       scope: long
     - name: ${type}
-    - name: ${category}
-      scope: long
     - name: ${vim-version}
     - name: ${url}
     - name: ${description}

@@ -26,13 +26,6 @@ parameters:
     short_option: y
     long_option: type
     is_optional: false
-  - name: category
-    description: Open-O VNFM category
-    scope: short
-    type: string
-    short_option: c
-    long_option: category
-    is_optional: false
   - name: vnfm-version
     description: Open-O VNFM version
     scope: short
@@ -139,7 +132,7 @@ http:
   request:
     uri: /vnfms
     method: POST
-    body: '{"name":"${name}","vendor":"${vendor}","version":"${vnfm-version}","description":"${description}","type":"${type}","category":"${category}","url":"${url}","userName":"${username}","password":"${password}","vimId":"${vim-id}","certificateUrl":"${certificate-url}"}'
+    body: '{"name":"${name}","vendor":"${vendor}","version":"${vnfm-version}","description":"${description}","type":"${type}","url":"${url}","userName":"${username}","password":"${password}","vimId":"${vim-id}","certificateUrl":"${certificate-url}"}'
     headers:
   success_codes:
     - 201
@@ -158,4 +151,4 @@ http:
     certificate-url: $b{$.certificateUrl}
     create-time: $b{$.createTime}
   sample_response:
-    body:'{"id":"string","name":"string","vendor":"string","version":"string","description":"string","type":"string","createTime":"string","category":"string","url":"string","userName":"string","password":"string","vimId":"string","certificateUrl":"string"}'
+    body:'{"id":"string","name":"string","vendor":"string","version":"string","description":"string","type":"string","createTime":"string","url":"string","userName":"string","password":"string","vimId":"string","certificateUrl":"string"}'

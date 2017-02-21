@@ -22,5 +22,10 @@ then
     exit 1
 fi
 
-java -jar $OPENO_CLI_HOME/lib/client-cli-main-1.1.0-SNAPSHOT.jar "$@"
+CLASSPATH=$OPENO_CLI_HOME
+for entry in "$OPENO_CLI_HOME/lib"/*
+do
+  CLASSPATH=$CLASSPATH:$entry
+done
 
+java -classpath $CLASSPATH org.openo.client.cli.main.OpenOCli "$@"

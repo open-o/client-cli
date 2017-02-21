@@ -183,6 +183,11 @@ public class OpenOCommandResult {
      */
     public String print() throws OpenOCommandOutputFormatNotsupported, OpenOCommandOutputPrintingFailed {
         String printOutput = "";
+
+        if(this.getRecords().isEmpty()){
+            return printOutput;
+        }
+
         OpenOCommandPrint print = new OpenOCommandPrint();
         print.setPrintTitle(this.isIncludeTitle());
         if (this.getPrintDirection().equals(PrintDirection.LANDSCAPE)) {
