@@ -17,7 +17,7 @@
 package org.openo.client.cli.cmd.cs.esr.vnfm;
 
 import org.openo.client.cli.fw.OpenOCommandSchema;
-import org.openo.client.cli.fw.OpenOHttpCommand;
+import org.openo.client.cli.fw.cmd.OpenOHttpCommand;
 
 @OpenOCommandSchema(name = "vnfm-show", schema = "vnfm-show-schema.yaml")
 public class OpenOVnfmShowCommand extends OpenOHttpCommand {

@@ -24,9 +24,9 @@ import org.junit.Ignore;
 import org.junit.Test;
 import org.openo.client.cli.fw.OpenOCommand;
 import org.openo.client.cli.fw.OpenOCommandSchema;
-import org.openo.client.cli.fw.OpenOHttpCommand;
 import org.openo.client.cli.fw.ad.OpenOCredentials;
-import org.openo.client.cli.fw.cmd.OpenOSwaggerBasedCommand;
+import org.openo.client.cli.fw.cmd.OpenOHttpCommand;
+import org.openo.client.cli.fw.cmd.OpenOSwaggerCommand;
 import org.openo.client.cli.fw.error.OpenOCommandException;
 import org.openo.client.cli.fw.error.OpenOCommandHelpFailed;
 import org.openo.client.cli.fw.error.OpenOCommandHttpHeaderNotFound;
@@ -137,7 +137,7 @@ public class OpenOCommandUtilsTest {
     public void loadSwaggerBasedSchemaExceptionTest() throws OpenOCommandParameterNameConflict,
             OpenOCommandParameterOptionConflict, OpenOCommandInvalidParameterType, OpenOCommandInvalidPrintDirection,
             OpenOCommandInvalidResultAttributeScope, OpenOCommandSchemaNotFound, OpenOCommandInvalidSchemaVersion {
-        OpenOSwaggerBasedCommand cmd = new OpenOSwaggerBasedCommandSample();
+        OpenOSwaggerCommand cmd = new OpenOSwaggerBasedCommandSample();
         try {
             OpenOCommandUtils.loadSchema(cmd, "sample-test-schema.yaml");
         } catch (OpenOCommandInvalidSchema e) {
@@ -149,7 +149,7 @@ public class OpenOCommandUtilsTest {
     public void loadSwaggerBasedSchemaTest() throws OpenOCommandParameterNameConflict,
             OpenOCommandParameterOptionConflict, OpenOCommandInvalidParameterType, OpenOCommandInvalidPrintDirection,
             OpenOCommandInvalidResultAttributeScope, OpenOCommandSchemaNotFound, OpenOCommandInvalidSchemaVersion {
-        OpenOSwaggerBasedCommand cmd = new OpenOSwaggerBasedCommandSample();
+        OpenOSwaggerCommand cmd = new OpenOSwaggerBasedCommandSample();
         try {
             OpenOCommandUtils.loadSchema(cmd, "sample-test-schema-swagger.yaml");
             OpenOCommandExecutor exe = cmd.getExecutor();
@@ -326,7 +326,7 @@ public class OpenOCommandUtilsTest {
     }
 
     @OpenOCommandSchema(name = "sample-swagger-test", schema = "sample-test-schema-swagger.yaml")
-    class OpenOSwaggerBasedCommandSample extends OpenOSwaggerBasedCommand {
+    class OpenOSwaggerBasedCommandSample extends OpenOSwaggerCommand {
 
         @Override
         protected void run() throws OpenOCommandException {

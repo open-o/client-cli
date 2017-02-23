@@ -17,7 +17,7 @@
 package org.openo.client.cli.cmd.cs.esr.vnfm;
 
 import org.openo.client.cli.fw.OpenOCommandSchema;
-import org.openo.client.cli.fw.OpenOHttpCommand;
+import org.openo.client.cli.fw.cmd.OpenOHttpCommand;
 
 @OpenOCommandSchema(name = "vnfm-create", schema = "vnfm-create-schema.yaml")
 public class OpenOVnfmCreateCommand extends OpenOHttpCommand {

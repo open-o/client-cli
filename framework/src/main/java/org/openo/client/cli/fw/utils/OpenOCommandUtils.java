@@ -21,10 +21,10 @@ import com.jayway.jsonpath.JsonPath;
 import net.minidev.json.JSONArray;
 
 import org.openo.client.cli.fw.OpenOCommand;
-import org.openo.client.cli.fw.OpenOHttpCommand;
 import org.openo.client.cli.fw.ad.OpenOCredentials;
 import org.openo.client.cli.fw.ad.OpenOService;
-import org.openo.client.cli.fw.cmd.OpenOSwaggerBasedCommand;
+import org.openo.client.cli.fw.cmd.OpenOHttpCommand;
+import org.openo.client.cli.fw.cmd.OpenOSwaggerCommand;
 import org.openo.client.cli.fw.conf.OpenOCommandConfg;
 import org.openo.client.cli.fw.error.OpenOCommandDiscoveryFailed;
 import org.openo.client.cli.fw.error.OpenOCommandException;
@@ -311,14 +311,14 @@ public class OpenOCommandUtils {
      * @throws OpenOCommandInvalidSchemaVersion
      *             invalid schema version
      */
-    public static void loadSchema(OpenOSwaggerBasedCommand cmd, String schemaName)
+    public static void loadSchema(OpenOSwaggerCommand cmd, String schemaName)
             throws OpenOCommandParameterNameConflict, OpenOCommandParameterOptionConflict,
             OpenOCommandInvalidParameterType, OpenOCommandInvalidPrintDirection,
             OpenOCommandInvalidResultAttributeScope, OpenOCommandSchemaNotFound, OpenOCommandInvalidSchema,
             OpenOCommandInvalidSchemaVersion {
         try {
             Map<String, ?> values = (Map<String, ?>) validateSchemaVersion(schemaName, cmd.getSchemaVersion());
-            Map<String, String> valueMap = (Map<String, String>) values.get(OpenOSwaggerBasedCommand.EXECUTOR);
+            Map<String, String> valueMap = (Map<String, String>) values.get(OpenOSwaggerCommand.EXECUTOR);
             OpenOCommandExecutor exec = new OpenOCommandExecutor();
 
             for (String key1 : valueMap.keySet()) {

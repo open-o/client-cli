@@ -17,7 +17,7 @@
 package org.openo.client.cli.cmd.cs.esr.sdnc;
 
 import org.openo.client.cli.fw.OpenOCommandSchema;
-import org.openo.client.cli.fw.OpenOHttpCommand;
+import org.openo.client.cli.fw.cmd.OpenOHttpCommand;
 
 @OpenOCommandSchema(name = "sdnc-list", schema = "sdnc-list-schema.yaml")
 public class OpenOSdncListCommand extends OpenOHttpCommand {

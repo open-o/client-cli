@@ -22,16 +22,15 @@ import org.openo.client.cli.fw.error.OpenOCommandExecutorInfoMissing;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.Arrays;
+import java.util.List;
 
 /**
- * Helps to make list rest calls on top of swagger generated java client. For example following one shows how MSB
- * service list is achived here exec: api:
- * org.openo.common_services.microservice_bus.apiroute_service.client.api.MSBServiceResourceApi client:
- * org.openo.common_services.microservice_bus.apiroute_service.client.invoker.ApiClient method: getMicroService
- * exception: org.openo.common_services.microservice_bus.apiroute_service.client.invoker.ApiException
+ * Helps to make get rest calls on top of swagger generated java client. For example following one shows how MSB service
+ * list is achieved here exec: ... method: getMicroService, [input param name given under Parameters]
  *
  */
-public class OpenOListSwaggerBasedCommand extends OpenOSwaggerBasedCommand {
+public class OpenOGetSwaggerBasedCommand extends OpenOSwaggerCommand {
 
     @Override
     protected void run() throws OpenOCommandException {
@@ -50,8 +49,10 @@ public class OpenOListSwaggerBasedCommand extends OpenOSwaggerBasedCommand {
             Object api = apiCls.getConstructor(clientCls).newInstance(client);
 
             // invoke method
-            Method method = api.getClass().getMethod(this.getExecutor().getMethod());
-            Object result = method.invoke(api);
+            List<String> methodTokens = Arrays.asList(this.getExecutor().getMethod().split(","));
+
+            Method method = api.getClass().getMethod(methodTokens.get(0), String.class);
+            Object result = method.invoke(api, this.getParametersMap().get(methodTokens.get(1)).getValue());
 
             // initialize result
             this.initializeResult(result);

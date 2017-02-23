@@ -30,7 +30,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.List;
 
-public abstract class OpenOSwaggerBasedCommand extends OpenOCommand {
+public abstract class OpenOSwaggerCommand extends OpenOCommand {
 
     // TODO(mrkanag): change this different value
     public static final String OPENO_CMD_SCHEMA_VERSION_VALUE = "1.0"; // cli-swagger-

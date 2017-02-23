@@ -17,7 +17,7 @@
 package org.openo.client.cli.cmd.cs.auth;
 
 import org.openo.client.cli.fw.OpenOCommandSchema;
-import org.openo.client.cli.fw.OpenOHttpCommand;
+import org.openo.client.cli.fw.cmd.OpenOHttpCommand;
 
 @OpenOCommandSchema(name = "user-create", schema = "user-create-schema.yaml")
 public class OpenOUserCreateCommand extends OpenOHttpCommand {

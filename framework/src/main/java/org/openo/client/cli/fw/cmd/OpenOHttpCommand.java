@@ -14,8 +14,9 @@
  * limitations under the License.
  */
 
-package org.openo.client.cli.fw;
+package org.openo.client.cli.fw.cmd;
 
+import org.openo.client.cli.fw.OpenOCommand;
 import org.openo.client.cli.fw.error.OpenOCommandException;
 import org.openo.client.cli.fw.error.OpenOCommandExecutionFailed;
 import org.openo.client.cli.fw.error.OpenOCommandInvalidParameterType;

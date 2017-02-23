@@ -16,6 +16,7 @@
 
 package org.openo.client.cli.fw;
 
+import org.openo.client.cli.fw.cmd.OpenOHttpCommand;
 import org.openo.client.cli.fw.conf.OpenOCommandConfg;
 import org.openo.client.cli.fw.error.OpenOCommandDiscoveryFailed;
 import org.openo.client.cli.fw.error.OpenOCommandHelpFailed;

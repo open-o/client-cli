@@ -14,7 +14,7 @@ parameters:
     long_option: openo-password
     default_value: ${OPENO_PASSWORD}
     is_secured: true
-  - name: msb_url
+  - name: msb-url
     type: url
     description: Open-O MSB url
     short_option: m

@@ -19,18 +19,37 @@ package org.openo.client.cli.fw.cmd;
 import org.openo.client.cli.fw.error.OpenOCommandException;
 import org.openo.client.cli.fw.error.OpenOCommandExecutionFailed;
 import org.openo.client.cli.fw.error.OpenOCommandExecutorInfoMissing;
+import org.openo.client.cli.fw.error.OpenOCommandResultInitialzationFailed;
+import org.openo.client.cli.fw.utils.OpenOCommandUtils;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.List;
 
-/**
- * Helps to make delete rest calls on top of swagger generated java client. For example following one shows how MSB
- * service list is achieved here exec: ... method: deleteMicroService, [input param name given under Parameters]
- *
- */
-public class OpenODeleteSwaggerBasedCommand extends OpenOSwaggerBasedCommand {
+public class OpenOCreateSwaggerBasedCommand extends OpenOSwaggerCommand {
+
+    private <T> T initializeEntity(T obj, List<String> prps) throws OpenOCommandResultInitialzationFailed {
+        for (int i = 1; i < prps.size(); i++) {
+            String paramName = prps.get(i).trim();
+            String prpName = paramName;
+            // paramName(prpName)
+            if (prpName.contains("(")) {
+                paramName = prpName.substring(0, prpName.indexOf("("));
+                prpName = prpName.substring(prpName.indexOf("(") + 1, prpName.indexOf(")"));
+            }
+            String methodName = OpenOCommandUtils.formMethodNameFromAttributeName(prpName, "set");
+
+            try {
+                Method set = obj.getClass().getMethod(methodName, String.class);
+                set.invoke(obj, this.getParametersMap().get(paramName).getValue());
+            } catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException
+                    | InvocationTargetException e) {
+                throw new OpenOCommandResultInitialzationFailed(this.getName(), e.getMessage());
+            }
+        }
+        return obj;
+    }
 
     @Override
     protected void run() throws OpenOCommandException {
@@ -40,19 +59,25 @@ public class OpenODeleteSwaggerBasedCommand extends OpenOSwaggerBasedCommand {
 
         try {
             // Initialize client
-            Class clientCls = Class.forName(this.getExecutor().getClient());
-            Object client = clientCls.getConstructor().newInstance();
+            Class clientClaz = Class.forName(this.getExecutor().getClient());
+            Object client = clientClaz.getConstructor().newInstance();
             this.initializeApiClient(client);
 
             // Initialize api
             Class apiCls = Class.forName(this.getExecutor().getApi());
-            Object api = apiCls.getConstructor(clientCls).newInstance(client);
+            Object api = apiCls.getConstructor(clientClaz).newInstance(client);
 
             // invoke method
             List<String> methodTokens = Arrays.asList(this.getExecutor().getMethod().split(","));
 
-            Method method = api.getClass().getMethod(methodTokens.get(0), String.class);
-            method.invoke(api, this.getParametersMap().get(methodTokens.get(1)).getValue());
+            List<String> entityTokens = Arrays.asList(this.getExecutor().getEntity().split(","));
+            Class entityCls = Class.forName(entityTokens.get(0));
+            Object entity = entityCls.newInstance();
+            Method method = api.getClass().getMethod(methodTokens.get(0), entityCls);
+            Object result = method.invoke(api, this.initializeEntity(entity, entityTokens));
+
+            // initialize result
+            this.initializeResult(result);
         } catch (NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException
                 | IllegalArgumentException | InvocationTargetException e) {
             throw new OpenOCommandExecutionFailed(this.getName(), e.getMessage());

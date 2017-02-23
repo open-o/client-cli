@@ -17,7 +17,7 @@
 package org.openo.client.cli.cmd.cs.msb;
 
 import org.openo.client.cli.fw.OpenOCommandSchema;
-import org.openo.client.cli.fw.OpenOHttpCommand;
+import org.openo.client.cli.fw.cmd.OpenOHttpCommand;
 
 @OpenOCommandSchema(name = "microservice-create", schema = "microservice-create-schema.yaml")
 public class OpenOServiceCreateCommand extends OpenOHttpCommand {
