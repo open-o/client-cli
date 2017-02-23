@@ -30,7 +30,7 @@ public class OpenOCommandConfg {
     //Common parameters used across all commands.
     public static String DEAFULT_PARAMETER_USERNAME = "openo-username";
     public static String DEAFULT_PARAMETER_PASSWORD = "openo-password";
-    public static String DEAFULT_PARAMETER_MSB_URL = "msb_url";
+    public static String DEAFULT_PARAMETER_MSB_URL = "msb-url";
     public static String DEFAULT_PARAMETER_HELP = "help";
     public static String DEFAULT_PARAMETER_VERSION = "version";
     public static String DEFAULT_PARAMETER_DEBUG = "debug";
