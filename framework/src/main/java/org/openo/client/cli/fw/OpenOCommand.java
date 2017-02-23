@@ -234,7 +234,8 @@ public abstract class OpenOCommand {
         this.validate();
 
         // -f or --format
-        this.result.setType(ResultType.get(paramMap.get(OpenOCommandConfg.DEFAULT_PARAMETER_OUTPUT_FORMAT).getValue()));
+        this.result.setType(
+                ResultType.get(paramMap.get(OpenOCommandConfg.DEFAULT_PARAMETER_OUTPUT_FORMAT).getValue().toString()));
         if (paramMap.get(OpenOCommandConfg.DEFAULT_PARAMETER_OUTPUT_ATTR_LONG).getValue().equals("true")) {
             this.result.setScope(OpenOCommandResultAttributeScope.LONG);
         }

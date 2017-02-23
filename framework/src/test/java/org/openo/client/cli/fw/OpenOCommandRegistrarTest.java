@@ -58,9 +58,9 @@ public class OpenOCommandRegistrarTest {
     }
 
     @Test
-    public void openOCommandNotFoundTest()
-            throws OpenOCommandRegistrationFailed, OpenOCommandInvalidParameterType, OpenOCommandInvalidPrintDirection,
-            OpenOCommandInvalidResultAttributeScope, OpenOCommandInvalidRegistration, OpenOCommandDiscoveryFailed, OpenOCommandInvalidSchema {
+    public void openOCommandNotFoundTest() throws OpenOCommandRegistrationFailed, OpenOCommandInvalidParameterType,
+            OpenOCommandInvalidPrintDirection, OpenOCommandInvalidResultAttributeScope, OpenOCommandInvalidRegistration,
+            OpenOCommandDiscoveryFailed, OpenOCommandInvalidSchema {
         try {
             registerar = OpenOCommandRegistrar.getRegistrar();
             registerar.get("Test1");

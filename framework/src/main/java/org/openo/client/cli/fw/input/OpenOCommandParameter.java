@@ -75,7 +75,7 @@ public class OpenOCommandParameter {
     /*
      * Parameter Value
      */
-    public String value;
+    public Object value;
 
     public String getName() {
         return name;
@@ -161,10 +161,10 @@ public class OpenOCommandParameter {
      *
      * @return value
      */
-    public String getValue() {
+    public Object getValue() {
         if (value != null) {
-            if (ParameterType.URL.equals(parameterType) && !value.startsWith("http")
-                    && !value.startsWith("/")) {
+            if (ParameterType.URL.equals(parameterType) && !value.toString().startsWith("http")
+                    && !value.toString().startsWith("/")) {
                 value = "/" + value;
             }
 
@@ -173,7 +173,7 @@ public class OpenOCommandParameter {
         return getDefaultValue();
     }
 
-    public void setValue(String value) {
+    public void setValue(Object value) {
         this.value = value;
     }
 
@@ -208,8 +208,9 @@ public class OpenOCommandParameter {
      *             exception
      */
     public void validate() throws OpenOCommandParameterMissing {
+        // TODO(mrkanag): empty check needs to revisit
         if (!this.isOptional()) {
-            if (this.getValue() == null || this.getValue().isEmpty()) {
+            if (this.getValue() == null || this.getValue().toString().isEmpty()) {
                 throw new OpenOCommandParameterMissing(this.getName());
             }
         }

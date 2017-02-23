@@ -23,6 +23,12 @@ import java.io.IOException;
 
 public class FileUtil {
 
+    /**
+     * Load file.
+     * @param srcName dir
+     * @return string
+     * @throws IOException exception
+     */
     public static String loadResource(String srcName) throws IOException {
         ClassLoader classLoader = FileUtil.class.getClassLoader();
         File file = new File(classLoader.getResource(srcName).getFile());

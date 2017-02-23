@@ -18,9 +18,9 @@ package org.openo.client.cli.fw.ad;
 
 import static org.junit.Assert.assertEquals;
 
-import java.util.HashMap;
-import java.util.Map;
-
+import mockit.Invocation;
+import mockit.Mock;
+import mockit.MockUp;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -33,9 +33,8 @@ import org.openo.client.cli.fw.http.HttpInput;
 import org.openo.client.cli.fw.http.HttpResult;
 import org.openo.client.cli.fw.http.OpenOHttpConnection;
 
-import mockit.Invocation;
-import mockit.Mock;
-import mockit.MockUp;
+import java.util.HashMap;
+import java.util.Map;
 
 public class OpenOAuthClientTest {
 
@@ -205,7 +204,7 @@ public class OpenOAuthClientTest {
         };
     }
 
-    private void mockHttpPostException(Exception e) {
+    private void mockHttpPostException(Exception exp) {
         new MockUp<OpenOHttpConnection>() {
             boolean isMock = true;
 
@@ -214,25 +213,11 @@ public class OpenOAuthClientTest {
                 System.out.println("mockHttpPostException : " + isMock);
                 if (isMock) {
                     isMock = false;
-                    throw e;
+                    throw exp;
                 } else {
                     return inv.proceed(input);
                 }
             }
         };
     }
-
-    /*
-     * @Test public void test() throws OpenOCommandHttpFailure { OpenOCredentials creds = new OpenOCredentials("admin",
-     * "Changeme_123", "https://192.168.99.100:80"); OpenOAuthClient client = new OpenOAuthClient(creds, false); try {
-     * client.login(); } catch (OpenOCommandExecutionFailed | OpenOCommandServiceNotFound | OpenOCommandLoginFailed |
-     * OpenOCommandHttpFailure e) { e.printStackTrace(); } }
-     *
-     * @Test public void testGetServiceBasePath() throws OpenOCommandHttpFailure { OpenOCredentials creds = new
-     * OpenOCredentials("admin", "Changeme_123", "http://192.168.99.100:80"); OpenOAuthClient client = new
-     * OpenOAuthClient(creds, true); try { OpenOService srv = new OpenOService();
-     * srv.setName(OpenOAuthClient.AUTH_SERVICE); srv.setVersion(OpenOAuthClient.AUTH_SERVICE_VERSION);
-     * System.out.println(client.getServiceBasePath(srv)); } catch (OpenOCommandExecutionFailed |
-     * OpenOCommandServiceNotFound | OpenOCommandHttpFailure e) { e.printStackTrace(); } }
-     */
 }

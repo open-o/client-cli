@@ -101,8 +101,8 @@ public class OpenOCommandUtils {
                 throw new OpenOCommandSchemaNotFound(schemaName);
             }
             if (inputStream == null) {
-            throw new OpenOCommandSchemaNotFound(schemaName);
-        }
+                throw new OpenOCommandSchemaNotFound(schemaName);
+            }
         }
 
         Map<String, ?> values = null;
@@ -548,7 +548,7 @@ public class OpenOCommandUtils {
         Map<String, String> paramMap = new HashMap<>();
 
         for (OpenOCommandParameter param : params) {
-            paramMap.put(param.getName(), param.getValue());
+            paramMap.put(param.getName(), param.getValue().toString());
         }
 
         return new OpenOCredentials(paramMap.get(OpenOCommandConfg.DEAFULT_PARAMETER_USERNAME),
@@ -663,7 +663,7 @@ public class OpenOCommandUtils {
             if (!params.containsKey(paramName)) {
                 throw new OpenOCommandParameterNotFound(paramName);
             }
-            String value = params.get(paramName).getValue();
+            String value = params.get(paramName).getValue().toString();
 
             result += line.substring(currentIdx, idxS) + value;
             currentIdx = idxE + 1;
@@ -835,10 +835,6 @@ public class OpenOCommandUtils {
         return resultsProcessed;
     }
 
-
-
-
-
     /**
      * Find external schema files.
      *
@@ -971,8 +967,8 @@ public class OpenOCommandUtils {
     /**
      * Load the previous discovered json file.
      * @return list
-     * @throws OpenOCommandInvalidSchema
-     * @throws OpenOCommandDiscoveryFailed
+     * @throws OpenOCommandInvalidSchema exception
+     * @throws OpenOCommandDiscoveryFailed exception
      */
     public static List<ExternalSchema> loadExternalSchemasFromJson() throws OpenOCommandDiscoveryFailed, OpenOCommandInvalidSchema {
         List<ExternalSchema> schemas = new ArrayList<>();
@@ -988,7 +984,7 @@ public class OpenOCommandUtils {
                     if (OpenOCommandConfg.EXTERNAL_DISCOVERY_FILE.equals(resource.getFilename())) {
                         File file = new File(resource.getURI().getPath());
                         ObjectMapper mapper = new ObjectMapper();
-                        ExternalSchema[] list =  mapper.readValue(file, ExternalSchema[].class);
+                        ExternalSchema[] list = mapper.readValue(file, ExternalSchema[].class);
                         schemas.addAll(Arrays.asList(list));
                     }
                 }
@@ -1006,8 +1002,8 @@ public class OpenOCommandUtils {
      * @param cmd
      *            command name
      * @return ExternalSchema obj
-     * @throws OpenOCommandInvalidSchema
-     * @throws OpenOCommandDiscoveryFailed
+     * @throws OpenOCommandInvalidSchema exception
+     * @throws OpenOCommandDiscoveryFailed exception
      */
     public static ExternalSchema loadExternalSchemaFromJson(String cmd) throws OpenOCommandDiscoveryFailed, OpenOCommandInvalidSchema {
         List<ExternalSchema> list = loadExternalSchemasFromJson();

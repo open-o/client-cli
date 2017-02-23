@@ -29,4 +29,8 @@ public class OpenOCliInvalidArgument extends OpenOCommandException {
     public OpenOCliInvalidArgument(String arg) {
         super("0x1000", "Invalid argument " + arg);
     }
+
+    public OpenOCliInvalidArgument(String arg, String errorMessage) {
+        super("0x1000", "Invalid argument " + arg + " , " + errorMessage);
+    }
 }

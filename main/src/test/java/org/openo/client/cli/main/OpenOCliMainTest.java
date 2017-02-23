@@ -24,6 +24,9 @@ public class OpenOCliMainTest {
 
     OpenOCli cli = null;
 
+    /**
+     * Clean up.
+     */
     @After(value = "")
     public void cleanup() {
         if (this.cli != null) {

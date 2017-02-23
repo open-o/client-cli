@@ -127,6 +127,11 @@ public class OpenOCommandUtilsTest {
         OpenOCommand cmd = new OpenOCommandSample();
         OpenOCommandUtils.loadSchema(cmd, "sample-test-schema.yaml", true);
         assertTrue("sample-test".equals(cmd.getName()) && cmd.getParameters().size() > 9);
+
+        for (OpenOCommandParameter com : cmd.getParameters()) {
+            com.setValue("value");
+        }
+
         OpenOCredentials cre = OpenOCommandUtils.fromParameters(cmd.getParameters());
         assertTrue(cre != null);
         Map<String, OpenOCommandParameter> map = OpenOCommandUtils.getInputMap(cmd.getParameters());

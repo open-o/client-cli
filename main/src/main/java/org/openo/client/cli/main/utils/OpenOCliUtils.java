@@ -21,6 +21,12 @@ import org.openo.client.cli.fw.input.ParameterType;
 import org.openo.client.cli.main.error.OpenOCliArgumentValueMissing;
 import org.openo.client.cli.main.error.OpenOCliInvalidArgument;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import net.minidev.json.JSONObject;
+
+import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -84,6 +90,13 @@ public class OpenOCliUtils {
                     throw new OpenOCliArgumentValueMissing(args.get(i));
                 }
 
+                if (paramMap.get(shortOptionMap.get(args.get(i))).getParameterType().equals(ParameterType.JSON)) {
+                    paramMap.get(shortOptionMap.get(args.get(i))).setValue(readJsonStringFromUrl(args.get(i + 1),
+                            paramMap.get(shortOptionMap.get(args.get(i))).getName()));
+                    i++;
+                    continue;
+                }
+
                 paramMap.get(shortOptionMap.get(args.get(i))).setValue(args.get(i + 1));
 
                 i++;
@@ -99,6 +112,13 @@ public class OpenOCliUtils {
                         continue;
                     }
                     throw new OpenOCliArgumentValueMissing(args.get(i));
+                }
+
+                if (paramMap.get(longOptionMap.get(args.get(i))).getParameterType().equals(ParameterType.JSON)) {
+                    paramMap.get(longOptionMap.get(args.get(i))).setValue(readJsonStringFromUrl(args.get(i + 1),
+                            paramMap.get(longOptionMap.get(args.get(i))).getName()));
+                    i++;
+                    continue;
                 }
 
                 paramMap.get(longOptionMap.get(args.get(i))).setValue(args.get(i + 1));
@@ -120,5 +140,19 @@ public class OpenOCliUtils {
         params.clear();
         Collection<OpenOCommandParameter> param1 = paramMap.values();
         params.addAll(paramMap.values());
+    }
+
+    private static String readJsonStringFromUrl(String input, String argName) throws OpenOCliInvalidArgument {
+        ObjectMapper mapper = new ObjectMapper();
+        try {
+            if (input.startsWith("file:") || input.startsWith("http:") || input.startsWith("ftp:")) {
+                URL jsonUrl = new URL(input);
+                return mapper.readValue(jsonUrl, JSONObject.class).toJSONString();
+            } else {
+                return mapper.readValue(input, JSONObject.class).toJSONString();
+            }
+        } catch (IOException e) {
+            throw new OpenOCliInvalidArgument(argName, e.getMessage());
+        }
     }
 }
