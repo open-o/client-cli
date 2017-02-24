@@ -4,6 +4,7 @@ description: Register microservice into Open-O
 service:
   name: msb
   version: v1
+  no-auth: true
 parameters:
   - name: service-name
     description: Open-O service name

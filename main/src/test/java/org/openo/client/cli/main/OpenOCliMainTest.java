@@ -73,7 +73,7 @@ public class OpenOCliMainTest {
 
     @Test
     public void testHelpServiceListCommandShort() {
-        this.handle(new String[] { "sample-test", "-h" });
+        this.handle(new String[] { "microservice-list", "-h" });
     }
 
     @Test
@@ -108,11 +108,6 @@ public class OpenOCliMainTest {
     @Test
     public void tesVersionServiceListCommandShort() {
         this.handle(new String[] { "microservice-list", "-v" });
-    }
-
-    @Test
-    public void tesVersionServiceListCommandShort1() {
-        this.handle(new String[] { "microservice-list", "-h" });
     }
 
     @Test

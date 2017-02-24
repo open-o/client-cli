@@ -4,6 +4,7 @@ description: Lists the registetred micro services in Open-O
 service:
   name: msb
   version: v1
+  no-auth: true
 results:
   direction: landscape
   attributes:

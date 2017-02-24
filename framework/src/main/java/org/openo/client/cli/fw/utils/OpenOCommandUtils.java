@@ -191,6 +191,9 @@ public class OpenOCommandUtils {
                             srv.setName(map.get(key1));
                         } else if (OpenOService.VERSION.equals(key1)) {
                             srv.setVersion(map.get(key1));
+                        } else if (OpenOService.NO_AUTH.equals(key1)) {
+                            Object obj = map.get(key1);
+                            srv.setNoAuth("true".equalsIgnoreCase(obj.toString()));
                         }
                     }
 

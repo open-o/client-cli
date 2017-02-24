@@ -23,6 +23,7 @@ public class OpenOService {
     public static final String NAME = "name";
     public static final String VERSION = "version";
     public static final String BASE_PATH = "base_path";
+    public static final String NO_AUTH = "no-auth";
     /*
      * OpenO Service name like gso.
      */
@@ -34,6 +35,16 @@ public class OpenOService {
     private String version;
 
     private String basePath;
+
+    private boolean noAuth = false;
+
+    public boolean isNoAuth() {
+        return noAuth;
+    }
+
+    public void setNoAuth(boolean noAuth) {
+        this.noAuth = noAuth;
+    }
 
     public String getName() {
         return name;

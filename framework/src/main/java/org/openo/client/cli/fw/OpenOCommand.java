@@ -252,7 +252,10 @@ public abstract class OpenOCommand {
         // login
         OpenOCredentials creds = OpenOCommandUtils.fromParameters(this.getParameters());
         this.authClient = new OpenOAuthClient(creds, this.getResult().isDebug());
-        this.authClient.login();
+
+        if (!this.service.isNoAuth()) {
+            this.authClient.login();
+        }
 
         // execute
         try {
@@ -265,7 +268,10 @@ public abstract class OpenOCommand {
         }
 
         // logout
-        this.authClient.logout();
+
+        if (!this.service.isNoAuth()) {
+            this.authClient.logout();
+        }
 
         if (this.result.isDebug()) {
             this.result.setDebugInfo(this.authClient.getDebugInfo());
