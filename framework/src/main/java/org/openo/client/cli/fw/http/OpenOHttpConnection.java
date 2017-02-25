@@ -292,6 +292,7 @@ public class OpenOHttpConnection {
         HttpResult result = new HttpResult();
 
         try {
+            this.debugDetails = "";
             CookieStore cookieStore = new BasicCookieStore();
             updateInputFromCookies(input, cookieStore);
             HttpContext localContext = new BasicHttpContext();

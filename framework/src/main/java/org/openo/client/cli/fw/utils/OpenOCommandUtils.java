@@ -32,6 +32,7 @@ import org.openo.client.cli.fw.error.OpenOCommandHelpFailed;
 import org.openo.client.cli.fw.error.OpenOCommandHttpHeaderNotFound;
 import org.openo.client.cli.fw.error.OpenOCommandHttpInvalidResponseBody;
 import org.openo.client.cli.fw.error.OpenOCommandInvalidParameterType;
+import org.openo.client.cli.fw.error.OpenOCommandInvalidParameterValue;
 import org.openo.client.cli.fw.error.OpenOCommandInvalidPrintDirection;
 import org.openo.client.cli.fw.error.OpenOCommandInvalidResultAttributeScope;
 import org.openo.client.cli.fw.error.OpenOCommandInvalidSchema;
@@ -96,7 +97,8 @@ public class OpenOCommandUtils {
 
         if (inputStream == null) {
             try {
-                inputStream = getExternalResource(schemaName, "openo-cli-schema").getInputStream();
+                inputStream = getExternalResource(schemaName, OpenOCommandConfg.EXTERNAL_SCHEMA_PATH_PATERN)
+                        .getInputStream();
             } catch (IOException e) {
                 throw new OpenOCommandSchemaNotFound(schemaName);
             }
@@ -314,9 +316,8 @@ public class OpenOCommandUtils {
      * @throws OpenOCommandInvalidSchemaVersion
      *             invalid schema version
      */
-    public static void loadSchema(OpenOSwaggerCommand cmd, String schemaName)
-            throws OpenOCommandParameterNameConflict, OpenOCommandParameterOptionConflict,
-            OpenOCommandInvalidParameterType, OpenOCommandInvalidPrintDirection,
+    public static void loadSchema(OpenOSwaggerCommand cmd, String schemaName) throws OpenOCommandParameterNameConflict,
+            OpenOCommandParameterOptionConflict, OpenOCommandInvalidParameterType, OpenOCommandInvalidPrintDirection,
             OpenOCommandInvalidResultAttributeScope, OpenOCommandSchemaNotFound, OpenOCommandInvalidSchema,
             OpenOCommandInvalidSchemaVersion {
         try {
@@ -546,8 +547,9 @@ public class OpenOCommandUtils {
      * @param params
      *            list of parameters
      * @return OpenOCredentials
+     * @throws OpenOCommandInvalidParameterValue
      */
-    public static OpenOCredentials fromParameters(List<OpenOCommandParameter> params) {
+    public static OpenOCredentials fromParameters(List<OpenOCommandParameter> params) throws OpenOCommandInvalidParameterValue {
         Map<String, String> paramMap = new HashMap<>();
 
         for (OpenOCommandParameter param : params) {
@@ -646,7 +648,7 @@ public class OpenOCommandUtils {
     }
 
     private static String replaceLineFromInputParameters(String line, Map<String, OpenOCommandParameter> params)
-            throws OpenOCommandParameterNotFound {
+            throws OpenOCommandParameterNotFound, OpenOCommandInvalidParameterValue {
         String result = "";
 
         if (!line.contains("${")) {
@@ -666,10 +668,19 @@ public class OpenOCommandUtils {
             if (!params.containsKey(paramName)) {
                 throw new OpenOCommandParameterNotFound(paramName);
             }
+
             String value = params.get(paramName).getValue().toString();
 
-            result += line.substring(currentIdx, idxS) + value;
-            currentIdx = idxE + 1;
+            OpenOCommandParameter param = params.get(paramName);
+            if (ParameterType.ARRAY.equals(param.getParameterType())
+                    || ParameterType.MAP.equals(param.getParameterType())) {
+                //ignore the front and back double quotes in json body
+                result += line.substring(currentIdx, idxS - 1) + value;
+                currentIdx = idxE + 2;
+            } else {
+                result += line.substring(currentIdx, idxS) + value;
+                currentIdx = idxE + 1;
+            }
         }
 
         return result;
@@ -790,9 +801,10 @@ public class OpenOCommandUtils {
      * @return HttpInput
      * @throws OpenOCommandParameterNotFound
      *             exception
+     * @throws OpenOCommandInvalidParameterValue
      */
     public static HttpInput populateParameters(Map<String, OpenOCommandParameter> params, HttpInput input)
-            throws OpenOCommandParameterNotFound {
+            throws OpenOCommandParameterNotFound, OpenOCommandInvalidParameterValue {
         HttpInput inp = new HttpInput();
 
         inp.setBody(replaceLineFromInputParameters(input.getBody(), params));
@@ -875,9 +887,12 @@ public class OpenOCommandUtils {
 
     /**
      * Returns all resources available under certain directory in class-path.
-     * @param pattern search pattern
+     *
+     * @param pattern
+     *            search pattern
      * @return resources found resources
-     * @throws IOException exception
+     * @throws IOException
+     *             exception
      */
     public static Resource[] getExternalResources(String pattern) throws IOException {
         ClassLoader cl = OpenOCommandUtils.class.getClassLoader();
@@ -895,7 +910,7 @@ public class OpenOCommandUtils {
      *             exception
      */
     public static Resource getExternalResource(String fileName, String pattern) throws IOException {
-        Resource[] resources = getExternalResources(pattern + "/*");
+        Resource[] resources = getExternalResources(pattern);
         if (resources != null && resources.length > 0) {
             for (Resource res : resources) {
                 if (res.getFilename().equals(fileName)) {
@@ -928,8 +943,11 @@ public class OpenOCommandUtils {
 
     /**
      * Persist the external schema details.
-     * @param schemas list
-     * @throws OpenOCommandDiscoveryFailed exception
+     *
+     * @param schemas
+     *            list
+     * @throws OpenOCommandDiscoveryFailed
+     *             exception
      */
     public static void persist(List<ExternalSchema> schemas) throws OpenOCommandDiscoveryFailed {
         if (schemas != null) {
@@ -942,26 +960,28 @@ public class OpenOCommandUtils {
                     mapper.writerWithDefaultPrettyPrinter().writeValue(file, schemas);
                 }
             } catch (IOException e1) {
-                throw new OpenOCommandDiscoveryFailed(OpenOCommandConfg.EXTERNAL_DISCOVERY_DIRECTORY, OpenOCommandConfg.EXTERNAL_DISCOVERY_FILE);
+                throw new OpenOCommandDiscoveryFailed(OpenOCommandConfg.EXTERNAL_DISCOVERY_DIRECTORY,
+                        OpenOCommandConfg.EXTERNAL_DISCOVERY_FILE);
             }
         }
     }
 
     /**
      * Check if json file discovered or not.
+     *
      * @return boolean
      */
     public static boolean isJsonFileDiscovered() {
         Resource resource = null;
         try {
-            resource = getExternalResource(OpenOCommandConfg.EXTERNAL_DISCOVERY_FILE, OpenOCommandConfg.EXTERNAL_DISCOVERY_DIRECTORY);
+            resource = getExternalResource(OpenOCommandConfg.EXTERNAL_DISCOVERY_FILE,
+                    OpenOCommandConfg.EXTERNAL_DISCOVERY_DIRECTORY_PATTERN);
             if (resource != null) {
-                if (OpenOCommandConfg.EXTERNAL_DISCOVERY_FILE.equals(resource.getFilename())) {
-                    return true;
-                }
+                return true;
             }
         } catch (IOException e) {
-            new OpenOCommandDiscoveryFailed(OpenOCommandConfg.EXTERNAL_DISCOVERY_DIRECTORY, "external-schema.json");
+            new OpenOCommandDiscoveryFailed(OpenOCommandConfg.EXTERNAL_DISCOVERY_DIRECTORY,
+                    OpenOCommandConfg.EXTERNAL_DISCOVERY_FILE);
         }
 
         return false;
@@ -969,11 +989,15 @@ public class OpenOCommandUtils {
 
     /**
      * Load the previous discovered json file.
+     *
      * @return list
-     * @throws OpenOCommandInvalidSchema exception
-     * @throws OpenOCommandDiscoveryFailed exception
+     * @throws OpenOCommandInvalidSchema
+     *             exception
+     * @throws OpenOCommandDiscoveryFailed
+     *             exception
      */
-    public static List<ExternalSchema> loadExternalSchemasFromJson() throws OpenOCommandDiscoveryFailed, OpenOCommandInvalidSchema {
+    public static List<ExternalSchema> loadExternalSchemasFromJson()
+            throws OpenOCommandDiscoveryFailed, OpenOCommandInvalidSchema {
         List<ExternalSchema> schemas = new ArrayList<>();
         if (!isJsonFileDiscovered()) {
             schemas = findAllExternalSchemas();
@@ -982,17 +1006,17 @@ public class OpenOCommandUtils {
             }
         } else {
             try {
-                Resource resource = getExternalResource(OpenOCommandConfg.EXTERNAL_DISCOVERY_FILE,OpenOCommandConfg.EXTERNAL_DISCOVERY_DIRECTORY);
+                Resource resource = getExternalResource(OpenOCommandConfg.EXTERNAL_DISCOVERY_FILE,
+                        OpenOCommandConfg.EXTERNAL_DISCOVERY_DIRECTORY_PATTERN);
                 if (resource != null) {
-                    if (OpenOCommandConfg.EXTERNAL_DISCOVERY_FILE.equals(resource.getFilename())) {
-                        File file = new File(resource.getURI().getPath());
-                        ObjectMapper mapper = new ObjectMapper();
-                        ExternalSchema[] list = mapper.readValue(file, ExternalSchema[].class);
-                        schemas.addAll(Arrays.asList(list));
-                    }
+                    File file = new File(resource.getURI().getPath());
+                    ObjectMapper mapper = new ObjectMapper();
+                    ExternalSchema[] list = mapper.readValue(file, ExternalSchema[].class);
+                    schemas.addAll(Arrays.asList(list));
                 }
             } catch (IOException e) {
-                new OpenOCommandDiscoveryFailed(OpenOCommandConfg.EXTERNAL_DISCOVERY_DIRECTORY, OpenOCommandConfg.EXTERNAL_DISCOVERY_FILE);
+                new OpenOCommandDiscoveryFailed(OpenOCommandConfg.EXTERNAL_DISCOVERY_DIRECTORY,
+                        OpenOCommandConfg.EXTERNAL_DISCOVERY_FILE);
             }
         }
 
@@ -1005,10 +1029,13 @@ public class OpenOCommandUtils {
      * @param cmd
      *            command name
      * @return ExternalSchema obj
-     * @throws OpenOCommandInvalidSchema exception
-     * @throws OpenOCommandDiscoveryFailed exception
+     * @throws OpenOCommandInvalidSchema
+     *             exception
+     * @throws OpenOCommandDiscoveryFailed
+     *             exception
      */
-    public static ExternalSchema loadExternalSchemaFromJson(String cmd) throws OpenOCommandDiscoveryFailed, OpenOCommandInvalidSchema {
+    public static ExternalSchema loadExternalSchemaFromJson(String cmd)
+            throws OpenOCommandDiscoveryFailed, OpenOCommandInvalidSchema {
         List<ExternalSchema> list = loadExternalSchemasFromJson();
         if (list != null) {
             for (ExternalSchema schema : list) {

@@ -34,7 +34,8 @@ public enum ParameterType {
     /**
      * URL location.
      */
-    URL, BOOL;
+    URL, BOOL,
+    ARRAY, MAP,;
 
     /**
      * Get parameter type.
@@ -58,6 +59,10 @@ public enum ParameterType {
             return URL;
         } else if (BOOL.name().toLowerCase().equals(name)) {
             return BOOL;
+        }  else if (ARRAY.name().toLowerCase().equals(name)) {
+            return ARRAY;
+        } else if (MAP.name().toLowerCase().equals(name)) {
+            return MAP;
         } else {
             throw new OpenOCommandInvalidParameterType(name);
         }

@@ -115,8 +115,8 @@ public class HttpInput {
 
     @Override
     public String toString() {
-        return "\nURL: " + this.getUri() + "\nMethod: " + this.getMethod() + "\nQueries: " + this.getReqQueries()
+        return "\nURL: " + this.getUri() + "\nMethod: " + this.getMethod() + "\nRequest Queries: " + this.getReqQueries()
                 + "\nRequest Body: " + this.getBody() + "\nRequest Headers: " + this.getReqHeaders().toString()
-                + "\nRequest Cookies: " + this.getReqQueries().toString();
+                + "\nRequest Cookies: " + this.getReqCookies().toString();
     }
 }

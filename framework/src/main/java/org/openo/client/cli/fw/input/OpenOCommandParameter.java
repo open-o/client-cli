@@ -16,7 +16,14 @@
 
 package org.openo.client.cli.fw.input;
 
+import java.util.List;
+import java.util.Map;
+
+import org.openo.client.cli.fw.error.OpenOCommandInvalidParameterValue;
 import org.openo.client.cli.fw.error.OpenOCommandParameterMissing;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 /**
  * Open-O Command's input parameter.
@@ -160,12 +167,37 @@ public class OpenOCommandParameter {
      * Returns param value.
      *
      * @return value
+     * @throws OpenOCommandInvalidParameterValue
      */
-    public Object getValue() {
+    public Object getValue() throws OpenOCommandInvalidParameterValue {
         if (value != null) {
             if (ParameterType.URL.equals(parameterType) && !value.toString().startsWith("http")
                     && !value.toString().startsWith("/")) {
                 value = "/" + value;
+            } else if (ParameterType.ARRAY.equals(parameterType)) {
+                if (value != null && !(value instanceof List)) {
+                    throw new OpenOCommandInvalidParameterValue(this.getName());
+                }
+
+                List<String> list = (List<String>) value;
+                ObjectMapper mapper = new ObjectMapper();
+                try {
+                    return mapper.writeValueAsString(list);
+                } catch (JsonProcessingException e) {
+                    throw new OpenOCommandInvalidParameterValue(this.getName());
+                }
+            } else if (ParameterType.MAP.equals(parameterType)) {
+                if (value != null && !(value instanceof Map)) {
+                    throw new OpenOCommandInvalidParameterValue(this.getName());
+                }
+
+                Map<String, String> map = (Map<String, String>) value;
+                ObjectMapper mapper = new ObjectMapper();
+                try {
+                    return mapper.writeValueAsString(map);
+                } catch (JsonProcessingException e) {
+                    throw new OpenOCommandInvalidParameterValue(this.getName());
+                }
             }
 
             return value;
@@ -206,8 +238,9 @@ public class OpenOCommandParameter {
      *
      * @throws OpenOCommandParameterMissing
      *             exception
+     * @throws OpenOCommandInvalidParameterValue
      */
-    public void validate() throws OpenOCommandParameterMissing {
+    public void validate() throws OpenOCommandParameterMissing, OpenOCommandInvalidParameterValue {
         // TODO(mrkanag): empty check needs to revisit
         if (!this.isOptional()) {
             if (this.getValue() == null || this.getValue().toString().isEmpty()) {
@@ -216,9 +249,5 @@ public class OpenOCommandParameter {
         }
 
         // TODO(mrkanag): validate for type supported ParameterType using constraints
-
-        if (this.getParameterType().equals(ParameterType.JSON) || this.getParameterType().equals(ParameterType.YAML)) {
-            // TODO(mrkanag): On type=JSON/YAML, successful validation, set the value to the content of file
-        }
     }
 }

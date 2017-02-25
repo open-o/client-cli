@@ -249,17 +249,26 @@ public abstract class OpenOCommand {
             this.result.setDebug(true);
         }
 
-        // login
-        OpenOCredentials creds = OpenOCommandUtils.fromParameters(this.getParameters());
-        this.authClient = new OpenOAuthClient(creds, this.getResult().isDebug());
-
-        if (!this.service.isNoAuth()) {
-            this.authClient.login();
-        }
-
-        // execute
         try {
+            // login
+            OpenOCredentials creds = OpenOCommandUtils.fromParameters(this.getParameters());
+            this.authClient = new OpenOAuthClient(creds, this.getResult().isDebug());
+
+            if (!this.service.isNoAuth()) {
+                this.authClient.login();
+            }
+
+            // execute
             this.run();
+
+            // logout
+            if (!this.service.isNoAuth()) {
+                this.authClient.logout();
+            }
+
+            if (this.result.isDebug()) {
+                this.result.setDebugInfo(this.authClient.getDebugInfo());
+            }
         } catch (OpenOCommandException e) {
             if (this.result.isDebug()) {
                 this.result.setDebugInfo(this.authClient.getDebugInfo());
@@ -267,15 +276,6 @@ public abstract class OpenOCommand {
             throw e;
         }
 
-        // logout
-
-        if (!this.service.isNoAuth()) {
-            this.authClient.logout();
-        }
-
-        if (this.result.isDebug()) {
-            this.result.setDebugInfo(this.authClient.getDebugInfo());
-        }
 
         return this.result;
     }

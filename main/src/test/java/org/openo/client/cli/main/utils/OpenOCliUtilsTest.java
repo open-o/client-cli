@@ -19,6 +19,7 @@ package org.openo.client.cli.main.utils;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.openo.client.cli.fw.error.OpenOCommandInvalidParameterValue;
 import org.openo.client.cli.fw.input.OpenOCommandParameter;
 import org.openo.client.cli.fw.input.ParameterType;
 import org.openo.client.cli.main.error.OpenOCliArgumentValueMissing;
@@ -39,7 +40,7 @@ public class OpenOCliUtilsTest {
     }
 
     @Test
-    public void testpopulateParamsLong() throws OpenOCliArgumentValueMissing, OpenOCliInvalidArgument  {
+    public void testpopulateParamsLong() throws OpenOCliArgumentValueMissing, OpenOCliInvalidArgument, OpenOCommandInvalidParameterValue  {
         OpenOCommandParameter param1 = new OpenOCommandParameter();
         param1.setLongOption("openo-username");
         param1.setName("openo-username");
@@ -88,7 +89,7 @@ public class OpenOCliUtilsTest {
     }
 
     @Test
-    public void testpopulateParamsShort() throws OpenOCliArgumentValueMissing, OpenOCliInvalidArgument  {
+    public void testpopulateParamsShort() throws OpenOCliArgumentValueMissing, OpenOCliInvalidArgument, OpenOCommandInvalidParameterValue  {
 
         OpenOCommandParameter param1 = new OpenOCommandParameter();
         param1.setShortOption("u");

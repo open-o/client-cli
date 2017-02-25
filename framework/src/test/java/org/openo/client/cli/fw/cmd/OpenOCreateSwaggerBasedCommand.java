@@ -19,6 +19,7 @@ package org.openo.client.cli.fw.cmd;
 import org.openo.client.cli.fw.error.OpenOCommandException;
 import org.openo.client.cli.fw.error.OpenOCommandExecutionFailed;
 import org.openo.client.cli.fw.error.OpenOCommandExecutorInfoMissing;
+import org.openo.client.cli.fw.error.OpenOCommandInvalidParameterValue;
 import org.openo.client.cli.fw.error.OpenOCommandResultInitialzationFailed;
 import org.openo.client.cli.fw.utils.OpenOCommandUtils;
 
@@ -44,7 +45,7 @@ public class OpenOCreateSwaggerBasedCommand extends OpenOSwaggerCommand {
                 Method set = obj.getClass().getMethod(methodName, String.class);
                 set.invoke(obj, this.getParametersMap().get(paramName).getValue());
             } catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException
-                    | InvocationTargetException e) {
+                    | InvocationTargetException | OpenOCommandInvalidParameterValue e) {
                 throw new OpenOCommandResultInitialzationFailed(this.getName(), e.getMessage());
             }
         }

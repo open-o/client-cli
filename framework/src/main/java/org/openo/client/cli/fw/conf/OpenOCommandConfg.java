@@ -50,9 +50,12 @@ public class OpenOCommandConfg {
     public static String PORTRAINT_COLUMN_NAME_VALUE = "value";
 
     public static String EXTERNAL_SCHEMA_DIRECTORY = "openo-cli-schema";
-    public static String EXTERNAL_SCHEMA_PATH_PATERN = EXTERNAL_SCHEMA_DIRECTORY + "/**/*.yaml";
+    public static String EXTERNAL_YAML_PATTERN = "/**/*.yaml";
+    public static String EXTERNAL_JSON_PATTERN = "/**/*.json";
+    public static String EXTERNAL_SCHEMA_PATH_PATERN = EXTERNAL_SCHEMA_DIRECTORY + EXTERNAL_YAML_PATTERN;
     public static String EXTERNAL_DISCOVERY_DIRECTORY = "data";
     public static String EXTERNAL_DISCOVERY_FILE = "external-schema.json";
+    public static String EXTERNAL_DISCOVERY_DIRECTORY_PATTERN = EXTERNAL_DISCOVERY_DIRECTORY + EXTERNAL_JSON_PATTERN;
 
     private static Properties prps = new Properties();
 

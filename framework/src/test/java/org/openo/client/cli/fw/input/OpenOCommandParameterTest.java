@@ -19,12 +19,13 @@ package org.openo.client.cli.fw.input;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
+import org.openo.client.cli.fw.error.OpenOCommandInvalidParameterValue;
 import org.openo.client.cli.fw.error.OpenOCommandParameterMissing;
 
 public class OpenOCommandParameterTest {
 
     @Test
-    public void parameterObjTest() {
+    public void parameterObjTest() throws OpenOCommandInvalidParameterValue {
         OpenOCommandParameter param = new OpenOCommandParameter();
         param.setDefaultValue("defaultValue");
         param.setDescription("description");
@@ -63,7 +64,7 @@ public class OpenOCommandParameterTest {
         param.setParameterType(ParameterType.STRING);
         try {
             param.validate();
-        } catch (OpenOCommandParameterMissing e) {
+        } catch (OpenOCommandParameterMissing | OpenOCommandInvalidParameterValue e) {
             assertTrue("0x0015::Parameter null is mandatory".equals(e.getMessage()));
         }
     }

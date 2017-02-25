@@ -32,6 +32,7 @@ import org.openo.client.cli.fw.error.OpenOCommandHelpFailed;
 import org.openo.client.cli.fw.error.OpenOCommandHttpHeaderNotFound;
 import org.openo.client.cli.fw.error.OpenOCommandHttpInvalidResponseBody;
 import org.openo.client.cli.fw.error.OpenOCommandInvalidParameterType;
+import org.openo.client.cli.fw.error.OpenOCommandInvalidParameterValue;
 import org.openo.client.cli.fw.error.OpenOCommandInvalidPrintDirection;
 import org.openo.client.cli.fw.error.OpenOCommandInvalidResultAttributeScope;
 import org.openo.client.cli.fw.error.OpenOCommandInvalidSchema;
@@ -123,7 +124,7 @@ public class OpenOCommandUtilsTest {
     public void loadOpenoCommandSchemaWithDefaultTest() throws OpenOCommandParameterNameConflict,
             OpenOCommandParameterOptionConflict, OpenOCommandInvalidParameterType, OpenOCommandInvalidPrintDirection,
             OpenOCommandInvalidResultAttributeScope, OpenOCommandSchemaNotFound, OpenOCommandInvalidSchema,
-            OpenOCommandInvalidSchemaVersion {
+            OpenOCommandInvalidSchemaVersion, OpenOCommandInvalidParameterValue {
         OpenOCommand cmd = new OpenOCommandSample();
         OpenOCommandUtils.loadSchema(cmd, "sample-test-schema.yaml", true);
         assertTrue("sample-test".equals(cmd.getName()) && cmd.getParameters().size() > 9);
@@ -256,7 +257,7 @@ public class OpenOCommandUtilsTest {
     }
 
     @Test
-    public void populateParametersTest() throws OpenOCommandParameterNotFound {
+    public void populateParametersTest() throws OpenOCommandParameterNotFound, OpenOCommandInvalidParameterValue {
 
         HttpInput input = new HttpInput();
         input.setBody("body");
@@ -280,8 +281,8 @@ public class OpenOCommandUtilsTest {
         params.put("value3", param1);
 
         HttpInput input1 = OpenOCommandUtils.populateParameters(params, input);
-        String expected = "\nURL: uri\nMethod: method\nQueries: {key3=defaultValue3}\n"
-                + "Request Body: body\nRequest Headers: {key2=defaultValue2}\nRequest Cookies: {key3=defaultValue3}";
+        String expected = "\nURL: uri\nMethod: method\nRequest Queries: {key3=defaultValue3}\n"
+                + "Request Body: body\nRequest Headers: {key2=defaultValue2}\nRequest Cookies: {}";
         assertEquals(expected, input1.toString());
 
         input.setBody("${body}");

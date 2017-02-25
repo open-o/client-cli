@@ -16,11 +16,13 @@
 
 package org.openo.client.cli.main.utils;
 
+import org.openo.client.cli.fw.error.OpenOCommandInvalidParameterValue;
 import org.openo.client.cli.fw.input.OpenOCommandParameter;
 import org.openo.client.cli.fw.input.ParameterType;
 import org.openo.client.cli.main.error.OpenOCliArgumentValueMissing;
 import org.openo.client.cli.main.error.OpenOCliInvalidArgument;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import net.minidev.json.JSONObject;
@@ -50,9 +52,10 @@ public class OpenOCliUtils {
      *             ArgumentValueMissing exception
      * @throws OpenOCliInvalidArgument
      *             Invalid argument exception
+     * @throws OpenOCommandInvalidParameterValue
      */
     public static void populateParams(List<OpenOCommandParameter> params, List<String> args)
-            throws OpenOCliArgumentValueMissing, OpenOCliInvalidArgument {
+            throws OpenOCliArgumentValueMissing, OpenOCliInvalidArgument, OpenOCommandInvalidParameterValue {
         Map<String, String> shortOptionMap = new HashMap<>();
         Map<String, String> longOptionMap = new HashMap<>();
         List<String> positionArgs = new ArrayList<>();
@@ -80,6 +83,8 @@ public class OpenOCliUtils {
         // Skip the first args openo cmd name, so start from 1
         for (int i = 1; i < args.size(); i++) {
             // check if short option exist
+            //TODO(mrkanag): Optimize the below code to handle short and long options in one iteration
+            //now its redundant
             if (shortOptionMap.containsKey(args.get(i))) {
                 // end of the list or if its option rather than a value
                 if ((i + 1) == args.size() || args.get(i + 1).startsWith("-")) {
@@ -93,6 +98,43 @@ public class OpenOCliUtils {
                 if (paramMap.get(shortOptionMap.get(args.get(i))).getParameterType().equals(ParameterType.JSON)) {
                     paramMap.get(shortOptionMap.get(args.get(i))).setValue(readJsonStringFromUrl(args.get(i + 1),
                             paramMap.get(shortOptionMap.get(args.get(i))).getName()));
+                    i++;
+                    continue;
+                } else if (paramMap.get(shortOptionMap.get(args.get(i))).getParameterType()
+                        .equals(ParameterType.ARRAY)) {
+                    Object value = paramMap.get(shortOptionMap.get(args.get(i))).getValue();
+                    List<String> list = null;
+                    if (value == "") {
+                        list = new ArrayList<>();
+                    } else {
+                        list = convertJsonToListString(paramMap.get(shortOptionMap.get(args.get(i))).getName(),
+                                value.toString());
+                    }
+                    list.add(args.get(i + 1));
+                    paramMap.get(shortOptionMap.get(args.get(i))).setValue(list);
+                    i++;
+                    continue;
+                } else if (paramMap.get(shortOptionMap.get(args.get(i))).getParameterType().equals(ParameterType.MAP)) {
+                    Object value = paramMap.get(shortOptionMap.get(args.get(i))).getValue();
+
+                    Map<String, String> map = null;
+
+                    if (value == "") {
+                        map = new HashMap<>();
+                    } else {
+                        map = convertJsonToMapString(paramMap.get(shortOptionMap.get(args.get(i))).getName(),
+                                value.toString());
+                    }
+
+                    String arg = args.get(i + 1);
+                    String[] argArr = arg.split("=");
+
+                    if (argArr.length != 2) {
+                        throw new OpenOCliInvalidArgument(paramMap.get(shortOptionMap.get(args.get(i))).getName());
+                    }
+
+                    map.put(argArr[0], argArr[1]);
+                    paramMap.get(shortOptionMap.get(args.get(i))).setValue(map);
                     i++;
                     continue;
                 }
@@ -117,6 +159,44 @@ public class OpenOCliUtils {
                 if (paramMap.get(longOptionMap.get(args.get(i))).getParameterType().equals(ParameterType.JSON)) {
                     paramMap.get(longOptionMap.get(args.get(i))).setValue(readJsonStringFromUrl(args.get(i + 1),
                             paramMap.get(longOptionMap.get(args.get(i))).getName()));
+                    i++;
+                    continue;
+                } else if (paramMap.get(longOptionMap.get(args.get(i))).getParameterType()
+                        .equals(ParameterType.ARRAY)) {
+                    Object value = paramMap.get(longOptionMap.get(args.get(i))).getValue();
+                    List<String> list = null;
+                    if (value == "") {
+                        list = new ArrayList<>();
+                    } else {
+                        list = convertJsonToListString(paramMap.get(longOptionMap.get(args.get(i))).getName(),
+                                value.toString());
+                    }
+                    list.add(args.get(i + 1));
+                    paramMap.get(longOptionMap.get(args.get(i))).setValue(list);
+                    i++;
+                    continue;
+                } else if (paramMap.get(longOptionMap.get(args.get(i))).getParameterType().equals(ParameterType.MAP)) {
+
+                    Object value = paramMap.get(longOptionMap.get(args.get(i))).getValue();
+
+                    Map<String, String> map = null;
+
+                    if (value == "") {
+                        map = new HashMap<>();
+                    } else {
+                        map = convertJsonToMapString(paramMap.get(longOptionMap.get(args.get(i))).getName(),
+                                value.toString());
+                    }
+
+                    String arg = args.get(i + 1);
+                    String[] argArr = arg.split("=");
+
+                    if (argArr.length != 2) {
+                        throw new OpenOCliInvalidArgument(paramMap.get(longOptionMap.get(args.get(i))).getName());
+                    }
+
+                    map.put(argArr[0], argArr[1]);
+                    paramMap.get(longOptionMap.get(args.get(i))).setValue(map);
                     i++;
                     continue;
                 }
@@ -153,6 +233,26 @@ public class OpenOCliUtils {
             }
         } catch (IOException e) {
             throw new OpenOCliInvalidArgument(argName, e.getMessage());
+        }
+    }
+
+    private static List<String> convertJsonToListString(String arg, String json) throws OpenOCliInvalidArgument {
+        TypeReference<List<String>> mapType = new TypeReference<List<String>>() {
+        };
+        try {
+            return new ObjectMapper().readValue(json, mapType);
+        } catch (IOException e) {
+            throw new OpenOCliInvalidArgument(arg, e.getMessage());
+        }
+    }
+
+    private static Map<String, String> convertJsonToMapString(String arg, String json) throws OpenOCliInvalidArgument {
+        TypeReference<Map<String, String>> mapType = new TypeReference<Map<String, String>>() {
+        };
+        try {
+            return new ObjectMapper().readValue(json, mapType);
+        } catch (IOException e) {
+            throw new OpenOCliInvalidArgument(arg, e.getMessage());
         }
     }
 }
