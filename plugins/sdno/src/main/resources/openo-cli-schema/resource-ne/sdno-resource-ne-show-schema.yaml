@@ -1,5 +1,5 @@
 openo_cmd_schema_version: 1.0
-name: sdno-resource-ne-show
+name: resource-ne-show
 description: Show network element details
 service:
   name: sdnobrs
