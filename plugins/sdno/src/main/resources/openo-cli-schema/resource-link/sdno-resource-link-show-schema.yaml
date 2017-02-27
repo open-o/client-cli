@@ -1,0 +1,64 @@
+openo_cmd_schema_version: 1.0
+name: resource-link-show
+description: Show sdno resource topological link
+service:
+  name: sdnobrs
+  version: v1
+parameters:
+  - name: id
+    description: Topological link id
+    type: string
+    short_option: i
+    long_option: id
+    is_optional: false
+results:
+  direction: landscape
+  attributes:
+  - name: id
+    description: Topological link ID
+    scope: short
+    type: string
+  - name: name
+    description: Topological link name
+    scope: short
+    type: string
+  - name: type
+    description: Topological link type
+    scope: short
+    type: string
+  - name: layer-rate
+    description: Topological link layer rate
+    scope: short
+    type: string
+  - name: source-port
+    description: Topological link source port
+    scope: short
+    type: string
+  - name: sink-port
+    description: Topological link sink port
+    scope: short
+    type: string
+  - name: source-ne
+    description: Topological link source ne
+    scope: short
+    type: string
+  - name: sink-ne
+    description: Topological sink ne
+    scope: short
+    type: string
+http:
+  request:
+    uri: /topological-links/{id}
+    method: GET
+  success_codes:
+    - 201
+  result_map:
+    id: $b{$.[*].id}
+    name: $b{$.[*].name}
+    type: $b{$.[*].logicalType}
+    layer-rate: $b{$.[*].layerRate}
+    source-port: $b{$.[*].sourcePort}
+    sink-port: $b{$.[*].sinkPort}
+    source-ne: $b{$.[*].sinkNe}
+  sample_response:
+     body:'[{"id":"string","name":"string","logicalType":"string","layerRate":"string","sourcePort":"string","sinkPort":"string","sinkNe":"string"}]'

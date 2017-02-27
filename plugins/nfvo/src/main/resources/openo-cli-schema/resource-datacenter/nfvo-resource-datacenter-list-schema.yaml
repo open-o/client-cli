@@ -1,0 +1,79 @@
+openo_cmd_schema_version: 1.0
+name: resource-datacenter-list
+description: List nfvo datacenters
+service:
+  name: resmgr
+  version: v1
+results:
+  direction: landscape
+  attributes:
+    - name: vim-id
+      description: NFVO datacenter vimId
+      scope: short
+      type: string
+    - name: vim-name
+      description: NFVO datacenter vimName
+      scope: short
+      type: string
+    - name: status
+      description: NFVO datacenter status
+      scope: short
+      type: string
+    - name: name
+      description: NFVO datacenter name
+      scope: short
+      type: string
+    - name: country
+      description: NFVO datacenter country
+      scope: short
+      type: string
+    - name: location
+      description: NFVO datacenter location
+      scope: short
+      type: string
+    - name: total-cpu
+      description: NFVO datacenter totalCPU
+      scope: short
+      type: string
+    - name: total-memory
+      description: NFVO datacenter totalMemory
+      scope: short
+      type: string
+    - name: total-disk
+      description: NFVO resource totalDisk
+      scope: short
+      type: string
+    - name: used-cpu
+      description: NFVO datacenter usedCPU
+      scope: short
+      type: string
+    - name: used-memory
+      description: NFVO datacenter usedMemory
+      scope: short
+      type: string
+    - name: used-disk
+      description: NFVO resource usedDisk
+      scope: short
+      type: string
+http:
+  request:
+    uri: /datacenters
+    method: GET
+  success_codes:
+    - 200
+  result_map:
+    id: $b{$.datacenters[*].id}
+    vim-id: $b{$.datacenters[*].vimId}
+    vim-name: $b{$.datacenters[*].vimName}
+    status: $b{$.datacenters[*].status}
+    name: $b{$.datacenters[*].name}
+    country: $b{$.datacenters[*].country}
+    location: $b{$.datacenters[*].location}
+    total-cpu: $b{$.datacenters[*].totalCPU}
+    total-memory: $b{$.datacenters[*].totalMemory}
+    total-disk: $b{$.datacenters[*].totalDisk}
+    used-cpu: $b{$.datacenters[*].usedCPU}
+    used-memory: $b{$.datacenters[*].usedMemory}
+    used-disk: $b{$.datacenters[*].usedDisk}
+  sample_response:
+    body:'{"datacenters":[{"id":"string","vimId":"string","vimName":"string","status":"string","name":"string","country":"string","location":"string","totalCPU":"string","totalMemory":"string","totalDisk":"string","usedCPU":"string","usedMemory":"string","usedDisk":"string"}]}'

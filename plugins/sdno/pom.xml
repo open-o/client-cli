@@ -23,30 +23,11 @@
 
     <parent>
         <groupId>org.openo.client.cli</groupId>
-        <artifactId>client-cli</artifactId>
+        <artifactId>client-cli-plugins</artifactId>
         <version>1.1.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>client-cli-plugins</artifactId>
-    <name>client-cli/plugins</name>
-    <packaging>pom</packaging>
-        <dependencies>
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>4.11</version>
-        </dependency>
-        <dependency>
-            <groupId>org.openo.client.cli</groupId>
-            <artifactId>client-cli-framework</artifactId>
-            <version>1.1.0-SNAPSHOT</version>
-        </dependency>
-    </dependencies>
-    <modules>
-        <module>common-service</module>
-        <module>common-tosca</module>
-        <module>sdno</module>
-        <module>nfvo</module>
-        <module>gso</module>
-    </modules>
+    <artifactId>client-cli-plugin-sdno</artifactId>
+    <name>client-cli/plugins/sdno</name>
+    <packaging>jar</packaging>
 </project>

@@ -486,6 +486,11 @@ public class OpenOCommandUtils {
                 optSecondCol += ".";
             }
             optSecondCol += " It is of type " + param.getParameterType().name() + ".";
+
+            if (param.getParameterType().equals(ParameterType.JSON) ||
+                    param.getParameterType().equals(ParameterType.YAML)) {
+                optSecondCol += " It's recommended to input the complete path of the file, which is having the value for it.";
+            }
             if (param.isOptional()) {
                 optSecondCol += " It is optional.";
             }

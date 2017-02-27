@@ -1,0 +1,126 @@
+openo_cmd_schema_version: 1.0
+name: catalog-csar-list
+description: List csar packages by filter condition from Open-O
+service:
+  name: catalog
+  version: v1
+parameters:
+  - name: name
+    description: Package name
+    scope: short
+    type: string
+    short_option: n
+    long_option: name
+    is_optional: false
+  - name: provider
+    description: Package provider
+    scope: short
+    type: string
+    short_option: o
+    long_option: provider
+    is_optional: true
+  - name: package-version
+    description: Package version
+    scope: short
+    type: string
+    short_option: e
+    long_option: package-version
+    is_optional: true
+  - name: deletion-pending
+    description: Package delay to delete
+    scope: short
+    type: bool
+    short_option: g
+    long_option: deletion-pending
+    is_optional: true
+  - name: type
+    description: Package type
+    scope: short
+    type: string
+    short_option: y
+    long_option: type
+    is_optional: true
+results:
+  direction: landscape
+  attributes:
+    - name: id
+      description: Package Id
+      scope: short
+      type: string
+    - name: name
+      description: Package name
+      scope: short
+      type: string
+    - name: download-uri
+      description: Package download uri
+      scope: short
+      type: string
+    - name: size
+      description: Package size
+      scope: short
+      type: string
+    - name: version
+      description: Package version
+      scope: short
+      type: string
+    - name: type
+      description: Package type
+      scope: short
+      type: string
+    - name: format
+      description: Package format
+      scope: short
+      type: string
+    - name: deletionPending
+      description: Package delay to delete
+      scope: short
+      type: string
+    - name: createTime
+      description: Package create time
+      scope: short
+      type: string
+    - name: modifyTime
+      description: Package modify time
+      scope: short
+      type: string
+    - name: operationalState
+      description: Package operational state
+      scope: short
+      type: string
+    - name: usageState
+      description: Package usage state
+      scope: short
+      type: string
+    - name: onBoardState
+      description: Package onboard state
+      scope: short
+      type: string
+    - name: processState
+      description: Package process state
+      scope: short
+      type: string
+http:
+  request:
+    uri: /csars
+    method: GET
+    body: '{"name":"${name}","provider":"${provider}","version":"${package-version}","deletionPending":"${deletion-pending}","type":"${type}"}'
+  success_codes:
+    - 201
+  result_map:
+    id: $b{$.csarId}
+    name: $b{$.name}
+    download-uri: $b{$.downloadUri}
+    size: $b{$.size}
+    version: $b{$.version}
+    provider: $b{$.provider}
+    type: $b{$.type}
+    format: $b{$.format}
+    deletionPending: $b{$.deletionPending}
+    createTime: $b{$.createTime}
+    modifyTime: $b{$.modifyTime}
+    operationalState: $b{$.operationalState}
+    usageState: $b{$.usageState}
+    onBoardState: $b{$.onBoardState}
+    processState: $b{$.processState}
+  sample_response:
+    body:'{"csarId":"string","name":"string","downloadUri":"string","size":"string","version":"string","provider":"string","type":"string","format":"string","deletionPending":"string","createTime":"string","modifyTime":"string","operationalState":"string","usageState":"string","onBoardState":"string","processState":"string"}'

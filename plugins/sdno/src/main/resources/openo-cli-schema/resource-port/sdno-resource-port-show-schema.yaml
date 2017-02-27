@@ -1,0 +1,66 @@
+openo_cmd_schema_version: 1.0
+name: resource-port-show
+description: Show port details
+service:
+  name: sdnobrs
+  version: v1
+parameters:
+  - name: id
+    description: SDNO port id
+    type: string
+    short_option: x
+    long_option: id
+    is_optional: false
+results:
+  direction: landscape
+  attributes:
+    - name: id
+      description: SDNO logicalTerminationPoint id
+      scope: short
+      type: string
+    - name: name
+      description: SDNO logicalTerminationPoint name
+      scope: short
+      type: string
+    - name: me
+      description: SDNO logicalTerminationPoint me
+      scope: short
+      type: string
+    - name: type
+      description: SDNO logicalTerminationPoint type
+      scope: short
+      type: string
+    - name: layer-rate
+      description: SDNO logicalTerminationPoint layerRate
+      scope: short
+      type: string
+    - name: edge-point
+      description: SDNO logicalTerminationPoint edgePoint
+      scope: short
+      type: string
+    - name: port-index
+      description: SDNO logicalTerminationPoint portIndex
+      scope: short
+      type: string
+    - name: ip-address
+      description: SDNO logicalTerminationPoint ipAddress
+      scope: short
+      type: string
+http:
+  request:
+    uri: /logical-termination-points/{id}
+    method: GET
+    body: '{"name":"${name}","me":"${me}","type":"${type}","layer-rate":"${layerRate}","edge-point":"${edgePoint}","port-index":"${portIndex}","ip-address":"${ipAddress}"}'
+  success_codes:
+    - 201
+  result_map:
+    id: $b{$.id}
+    name: $b{$.name}
+    me: $b{$.me}
+    type: $b{$.type}
+    layer-rate: $b{$.layerRate}
+    edge-point: $b{$.edgePoint}
+    port-index: $b{$.portIndex}
+    ip-address: $b{$.ipAddress}
+  sample_response:
+    body:'{"id":"id","name":"string","me":"string","type":"string","layerRate":"string","edgePoint":"string","portIndex":"string","ipAddress":"string"}'

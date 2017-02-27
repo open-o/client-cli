@@ -1,0 +1,65 @@
+openo_cmd_schema_version: 1.0
+name: service-create
+description: Create the network service
+service:
+  name: gso
+  version: v1
+parameters:
+  - name: name
+    description: Network service name
+    scope: short
+    type: string
+    short_option: n
+    long_option: name
+    is_optional: false
+  - name: description
+    description: Network service description
+    scope: short
+    type: string
+    short_option: x
+    long_option: description
+    is_optional: false
+  - name: service-def-id
+    description: Network service definition id
+    scope: short
+    type: string
+    short_option: r
+    long_option: service-def-id
+    is_optional: false
+  - name: template-id
+    description: Network service templateId
+    scope: short
+    type: string
+    short_option: z
+    long_option: template-id
+    is_optional: false
+  - name: parameters
+    description: Network service Parameters
+    scope: short
+    type: json
+    short_option: j
+    long_option: parameters
+    is_optional: false
+results:
+  direction: portrait
+  attributes:
+    - name: id
+      description: Network service Id
+      scope: short
+      type: string
+    - name: operations-id
+      description: Network service operationsId
+      scope: short
+      type: string
+http:
+  request:
+    uri: /services
+    method: POST
+    body: '{"service": {"name":"${name}","description":"${description}","serviceDefId":"${service-def-id}","templateId":"${template-id}","parameters":"${parameters}"}}'
+  success_codes:
+    - 201
+  result_map:
+    id: $b{$.serviceId}
+    operations-id: $b{$.operationsId}
+  sample_response:
+    body:'{"serviceId":"string","operationsId":"string"}'

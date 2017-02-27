@@ -1,0 +1,82 @@
+openo_cmd_schema_version: 1.0
+name: catalog-template-show
+description: Retrieves the details of template from Open-O
+service:
+  name: catalog
+  version: v1
+parameters:
+  - name: id
+    description: Service template id
+    scope: short
+    type: string
+    short_option: i
+    long_option: id
+    is_optional: false
+results:
+  direction: landscape
+  attributes:
+    - name: id
+      description: Template Id
+      scope: short
+      type: string
+    - name: template-name
+      description: Service template name
+      scope: short
+      type: string
+    - name: vendor
+      description: Template vendor
+      scope: short
+      type: string
+    - name: version
+      description: Template version
+      scope: short
+      type: string
+    - name: csar-id
+      description: Template csarId
+      scope: short
+      type: string
+    - name: type
+      description: Template type
+      scope: short
+      type: string
+    - name: download-uri
+      description: Template downloadUri
+      scope: short
+      type: string
+    - name: input-param
+      description: Template input parameters
+      scope: short
+      type: string
+    - name: output-param
+      description: Template output parameters
+      scope: short
+      type: string
+    - name: operations
+      description: Template operations
+      scope: short
+      type: string
+    - name: substitution
+      description: Template substitution
+      scope: short
+      type: string
+http:
+  request:
+    uri: /servicetemplates/${id}
+    method: GET
+  success_codes:
+    - 201
+    - 200
+  result_map:
+    id: $b{$.serviceTemplateId}
+    template-name: $b{$.templateName}
+    vendor: $b{$.vendor}
+    version: $b{$.version}
+    csarId: $b{$.csarId}
+    type: $b{$.type}
+    download-uri: $b{$.downloadUri}
+    input-param: $b{$.inputs}
+    output-param: $b{$.outputs}
+    operations: $b{$.operations}
+    substitution: $b{$.substitution}
+  sample_response:
+    body:'{"serviceTemplateId":"string","templateName":"string","vendor":"string","version":"string","csarId":"string","type":"string","downloadUri":"string","inputs":"string","outputs":"string","operations":"string","substitution":"string"}'

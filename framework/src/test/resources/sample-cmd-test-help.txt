@@ -40,9 +40,11 @@ where,
                         type STRING.                                          
 -c | --string-param     Open-O string param. It is of type STRING.            
 -y | --yaml-param       Open-O yaml file location param. It is of type        
-                        JSON.                                                 
+                        JSON. It's recommended to input the complete path     
+                        of the file, which is having the value for it.        
 -j | --json-param       Open-O json file location param. It is of type        
-                        JSON.                                                 
+                        JSON. It's recommended to input the complete path     
+                        of the file, which is having the value for it.        
 -l | --long-opt         Open-O long param. It is of type LONG. By default,    
                         it is 10.                                             
 -r | --url              Open-O url param. It is of type URL. By default,      

@@ -1,0 +1,157 @@
+openo_cmd_schema_version: 1.0
+name: resource-datacenter-create
+description: Create the nfvo resource datacenter
+service:
+  name: resmgr
+  version: v1
+parameters:
+  - name: country
+    description: NFVO datacenter country
+    scope: short
+    type: string
+    short_option: n
+    long_option: country
+    is_optional: false
+  - name: location
+    description: NFVO datacenter location
+    scope: short
+    type: string
+    short_option: x
+    long_option: location
+    is_optional: false
+  - name: name
+    description: NFVO datacenter name
+    scope: short
+    type: string
+    short_option: z
+    long_option: name
+    is_optional: false
+  - name: total-memory
+    description: NFVO datacenter total memory
+    scope: short
+    type: string
+    short_option: o
+    long_option: total-memory
+    is_optional: true
+  - name: total-disk
+    description: NFVO datacenter total disk
+    scope: short
+    type: string
+    short_option: k
+    long_option: total-disk
+    is_optional: true
+  - name: total-cpu
+    description: NFVO datacenter total CPU
+    scope: short
+    type: string
+    short_option: c
+    long_option: total-cpu
+    is_optional: false
+  - name: used-memory
+    description: NFVO datacenter used Memory
+    scope: short
+    type: string
+    short_option: e
+    long_option: used-memory
+    is_optional: true
+  - name: used-disk
+    description: NFVO datacenter used Disk
+    scope: short
+    type: string
+    short_option: w
+    long_option: used-disk
+    is_optional: true
+  - name: used-cpu
+    description: NFVO datacenter used CPU
+    scope: short
+    type: string
+    short_option: b
+    long_option: used-cpu
+    is_optional: false
+  - name: vim-name
+    description: NFVO datacenter vim Name
+    scope: short
+    type: string
+    short_option: q
+    long_option: vim-name
+    is_optional: true
+  - name: vim-id
+    description: NFVO datacenter vim id
+    scope: short
+    type: string
+    short_option: y
+    long_option: vim-id
+    is_optional: true
+results:
+  direction: portrait
+  attributes:
+    - name: id
+      description: NFVO datacenter vimId
+      scope: long
+      type: string
+    - name: vim-name
+      description: NFVO datacenter vimName
+      scope: short
+      type: string
+    - name: status
+      description: NFVO datacenter status
+      scope: short
+      type: string
+    - name: name
+      description: NFVO datacenter name
+      scope: short
+      type: string
+    - name: country
+      description: NFVO datacenter country
+      scope: long
+      type: string
+    - name: location
+      description: NFVO datacenter location
+      scope: short
+      type: string
+    - name: total-cpu
+      description: NFVO datacenter total CPU
+      scope: short
+      type: string
+    - name: total-memory
+      description: NFVO datacenter total Memory
+      scope: short
+      type: string
+    - name: total-disk
+      description: NFVO datacenter total Disk
+      scope: short
+      type: string
+    - name: used-cpu
+      description: NFVO datacenter used CPU
+      scope: short
+      type: string
+    - name: used-memory
+      description: NFVO datacenter used Memory
+      scope: short
+      type: string
+    - name: used-disk
+      description: NFVO datacenter used Disk
+      scope: short
+      type: string
+http:
+  request:
+    uri: /datacenters
+    method: POST
+    body: '{"vimId":"${vim-id}","vimName":"${vim-name}", "name":"${name}","country":"${country}","location":"${location}","totalCPU":"${total-cpu}","totalMemory":"${total-memory}","totalDisk":"${total-disk}","usedCPU":"${used-cpu}","usedMemory":"${used-memory}","usedDisk":"${used-disk}"}'
+  success_codes:
+    - 200
+  result_map:
+    id: $b{$.vimId}
+    vim-name: $b{$.vimName}
+    status: $b{$.status}
+    name: $b{$.name}
+    country: $b{$.country}
+    location: $b{$.location}
+    total-cpu: $b{$.totalCPU}
+    total-memory: $b{$.totalMemory}
+    total-disk: $b{$.totalDisk}
+    used-cpu: $b{$.usedCPU}
+    used-memory: $b{$.usedMemory}
+    used-disk: $b{$.usedDisk}
+  sample_response:
+    body:'{"vimId":"string","vimName":"string","status":"string","name":"string","country":"string","location":"string","totalCPU":"string","totalMemory":"string","totalDisk":"string","usedCPU":"string","usedMemory":"string","usedDisk":"string"}'

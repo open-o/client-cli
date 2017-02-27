@@ -1,0 +1,45 @@
+openo_cmd_schema_version: 1.0
+name: resource-site-show
+description: Show sdno resource site
+service:
+  name: sdnobrs
+  version: v1
+parameters:
+  - name: id
+    description: Resource site id
+    type: string
+    short_option: i
+    long_option: id
+    is_optional: false
+results:
+  direction: landscape
+  attributes:
+  - name: id
+    description: Resource site ID
+    scope: short
+    type: string
+  - name: name
+    description: Resource site name
+    scope: short
+    type: string
+  - name: type
+    description: Resource site type
+    scope: short
+    type: string
+  - name: location
+    description: Resource site location
+    scope: short
+    type: string
+http:
+  request:
+    uri: /sites/{id}
+    method: GET
+  success_codes:
+    - 201
+  result_map:
+    id: $b{$.id}
+    name: $b{$.name}
+    type: $b{$.type}
+    location: $b{$.location}
+  sample_response:
+      body:'{"id":"string","name":"string","type":"string","location":"string"}'

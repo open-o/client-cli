@@ -1,0 +1,104 @@
+openo_cmd_schema_version: 1.0
+name: resource-port-create
+description: Create the sdno port
+service:
+  name: sdnobrs
+  version: v1
+parameters:
+  - name: name
+    description: SDNO port name
+    scope: short
+    type: string
+    short_option: n
+    long_option: country
+    is_optional: false
+  - name: me
+    description: SDNO port ME
+    scope: short
+    type: string
+    short_option: x
+    long_option: me
+    is_optional: true
+  - name: type
+    description: SDNO port type
+    scope: short
+    type: string
+    short_option: r
+    long_option: type
+    is_optional: true
+  - name: layer-rate
+    description: SDNO port layer rate
+    scope: short
+    type: string
+    short_option: z
+    long_option: layer-rate
+    is_optional: true
+  - name: edge-point
+    description: SDNO port edge point
+    scope: short
+    type: string
+    short_option: o
+    long_option: edge-point
+    is_optional: true
+  - name: port-index
+    description: SDNO port index
+    scope: short
+    type: string
+    short_option: i
+    long_option: port-index
+    is_optional: true
+  - name: ip-address
+    description: SDNO port IpAddress
+    scope: short
+    type: string
+    short_option: b
+    long_option: ip-address
+    is_optional: true
+results:
+  direction: portrait
+  attributes:
+    - name: name
+      description: SDNO logicalTerminationPoint name
+      scope: short
+      type: string
+    - name: me
+      description: SDNO logicalTerminationPoint me
+      scope: short
+      type: string
+    - name: type
+      description: SDNO logicalTerminationPoint type
+      scope: short
+      type: string
+    - name: layer-rate
+      description: SDNO logicalTerminationPoint layerRate
+      scope: short
+      type: string
+    - name: edge-point
+      description: SDNO logicalTerminationPoint edgePoint
+      scope: short
+      type: string
+    - name: port-index
+      description: SDNO logicalTerminationPoint portIndex
+      scope: short
+      type: string
+    - name: ip-address
+      description: SDNO logicalTerminationPoint ipAddress
+      scope: short
+      type: string
+http:
+  request:
+    uri: /logical-termination-points
+    method: POST
+    body: '{"name":"${name}","me":"${me}","type":"${type}","layer-rate":"${layerRate}","edge-point":"${edgePoint}","port-index":"${portIndex}","ip-address":"${ipAddress}"}'
+  success_codes:
+    - 201
+  result_map:
+    name: $b{$.name}
+    me: $b{$.me}
+    type: $b{$.type}
+    layer-rate: $b{$.layerRate}
+    edge-point: $b{$.edgePoint}
+    port-index: $b{$.portIndex}
+    ip-address: $b{$.ipAddress}
+  sample_response:
+    body:'{"name":"string","me":"string","type":"string","layerRate":"string","edgePoint":"string","portIndex":"string","ipAddress":"string"}'

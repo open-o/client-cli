@@ -1,0 +1,80 @@
+openo_cmd_schema_version: 1.0
+name: resource-ne-create
+description: Create the sdno network elements
+service:
+  name: sdnobrs
+  version: v1
+parameters:
+  - name: name
+    description: SDNO network element name
+    scope: short
+    type: string
+    short_option: n
+    long_option: name
+    is_optional: false
+  - name: ne-version
+    description: SDNO network element ME
+    scope: short
+    type: string
+    short_option: x
+    long_option: ne-version
+    is_optional: false
+  - name: product-name
+    description: SDNO network element productName
+    scope: short
+    type: string
+    short_option: r
+    long_option: product-name
+    is_optional: true
+  - name: controller
+    description: SDNO network element controller
+    scope: short
+    type: string
+    short_option: z
+    long_option: controller
+    is_optional: true
+  - name: ip-address
+    description: SDNO network element IpAddress
+    scope: short
+    type: string
+    short_option: b
+    long_option: ip-address
+    is_optional: true
+results:
+  direction: portrait
+  attributes:
+    - name: name
+      description: SDNO network element name
+      scope: short
+      type: string
+    - name: ne-version
+      description: SDNO network element version
+      scope: short
+      type: string
+    - name: product-name
+      description: SDNO network element productName
+      scope: short
+      type: string
+    - name: controller
+      description: SDNO network element controller
+      scope: short
+      type: string
+    - name: ip-address
+      description: SDNO network element ipAddress
+      scope: short
+      type: string
+http:
+  request:
+    uri: /managed-elements
+    method: POST
+    body: '{"name":"${name}","version":"${ne-version}","productName":"${product-name}","controller":"${controller}","ip-address":"${ipAddress}"}'
+  success_codes:
+    - 201
+  result_map:
+    name: $b{$.name}
+    ne-version: $b{$.version}
+    product-name: $b{$.productName}
+    controller: $b{$.controller}
+    ip-address: $b{$.ipAddress}
+  sample_response:
+    body:'{"name":"string","version":"string","productName":"string","controller":"string","ipAddress":"string"}'

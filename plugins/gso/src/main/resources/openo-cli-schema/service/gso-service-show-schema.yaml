@@ -1,0 +1,76 @@
+openo_cmd_schema_version: 1.0
+name: service-show
+description: Show network service
+service:
+  name: gso
+  version: v1
+parameters:
+  - name: id
+    description: Network service id
+    type: string
+    short_option: x
+    long_option: id
+    is_optional: false
+results:
+  direction: landscape
+  attributes:
+    - name: id
+      description: Network service id
+      scope: short
+      type: string
+    - name: name
+      description: Network service name
+      scope: short
+      type: string
+    - name: description
+      description: Network service description
+      scope: short
+      type: string
+    - name: active-status
+      description: Network service active-status
+      scope: short
+      type: string
+    - name: status
+      description: Network service status
+      scope: short
+      type: string
+    - name: creator
+      description: Network service creator
+      scope: short
+      type: string
+    - name: created-at
+      description: Network service createdAt
+      scope: short
+      type: string
+    - name: service-def-id
+      description: Network service Def Id
+      scope: short
+      type: string
+    - name: template-id
+      description: Network service templateId
+      scope: long
+      type: string
+    - name: parameters
+      description: Network service nsParameters
+      scope: short
+      type: json
+http:
+  request:
+    uri: /services/{id}
+    method: GET
+  success_codes:
+    - 200
+  result_map:
+    id: $b{$.serviceId}
+    name: $b{$.name}
+    description: $b{$.description}
+    active-status: $b{$.activeStatus}
+    status: $b{$.status}
+    creator: $b{$.creator}
+    created-at: $b{$.createAt}
+    service-def-id: $b{$.serviceDefId}
+    template-id: $b{$.templateId}
+    parameters: $b{$.parameters}}
+
+  sample_response:
+    body:'{"serviceId":"string","name":"string","description":"string","activeStatus":"string","status":"string","creator":"string","createAt":"string","serviceDefId":"string","templateId":"string","domainHost":"string","nodeTemplateName":"string","nodeType":"string","segments":"array","nsParameters":"file"}'

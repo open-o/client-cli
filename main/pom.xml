@@ -43,7 +43,27 @@
         </dependency>
         <dependency>
             <groupId>org.openo.client.cli</groupId>
-            <artifactId>client-cli-common-service</artifactId>
+            <artifactId>client-cli-plugin-common-service</artifactId>
+            <version>1.1.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>org.openo.client.cli</groupId>
+            <artifactId>client-cli-plugin-common-tosca</artifactId>
+            <version>1.1.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>org.openo.client.cli</groupId>
+            <artifactId>client-cli-plugin-nfvo</artifactId>
+            <version>1.1.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>org.openo.client.cli</groupId>
+            <artifactId>client-cli-plugin-sdno</artifactId>
+            <version>1.1.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>org.openo.client.cli</groupId>
+            <artifactId>client-cli-plugin-gso</artifactId>
             <version>1.1.0-SNAPSHOT</version>
         </dependency>
     </dependencies>

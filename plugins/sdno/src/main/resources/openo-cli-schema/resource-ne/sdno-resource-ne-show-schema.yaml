@@ -1,0 +1,59 @@
+openo_cmd_schema_version: 1.0
+name: sdno-resource-ne-show
+description: Show network element details
+service:
+  name: sdnobrs
+  version: v1
+parameters:
+  - name: id
+    description: SDNO network element id
+    type: string
+    short_option: x
+    long_option: id
+    is_optional: false
+results:
+  direction: landscape
+  attributes:
+    - name: id
+      description: SDNO network element id
+      scope: short
+      type: string
+    - name: name
+      description: SDNO network element name
+      scope: short
+      type: string
+    - name: version
+      description: SDNO network element version
+      scope: short
+      type: string
+    - name: product-name
+      description: SDNO network element productName
+      scope: short
+      type: string
+    - name: controller
+      description: SDNO network element controller
+      scope: short
+      type: string
+    - name: ip-address
+      description: SDNO network element ipAddress
+      scope: short
+      type: string
+http:
+  request:
+    uri: /managed-elements/{id}
+    method: GET
+  success_codes:
+    - 201
+    - 400
+    - 401
+    - 404
+    - 500
+  result_map:
+    id: $b{$.id}
+    name: $b{$.name}
+    version: $b{$.version}
+    product-name: $b{$.productName}
+    controller: $b{$.controller}
+    ip-address: $b{$.ipAddress}
+  sample_response:
+    body:'{"id":"string","name":"string","version":"string","productName":"string","controller":"string","ipAddress":"string"}'

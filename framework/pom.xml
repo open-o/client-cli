@@ -27,7 +27,7 @@
         <version>1.1.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>client-cli-fw</artifactId>
+    <artifactId>client-cli-framework</artifactId>
     <name>client-cli/framework</name>
     <packaging>jar</packaging>
     <dependencies>

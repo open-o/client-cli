@@ -19,6 +19,27 @@ package org.openo.client.cli.main;
 import org.aspectj.lang.annotation.After;
 import org.junit.Ignore;
 import org.junit.Test;
+import org.openo.client.cli.fw.OpenOCommand;
+import org.openo.client.cli.fw.OpenOCommandRegistrar;
+import org.openo.client.cli.fw.error.OpenOCommandDiscoveryFailed;
+import org.openo.client.cli.fw.error.OpenOCommandInvalidParameterType;
+import org.openo.client.cli.fw.error.OpenOCommandInvalidParameterValue;
+import org.openo.client.cli.fw.error.OpenOCommandInvalidPrintDirection;
+import org.openo.client.cli.fw.error.OpenOCommandInvalidRegistration;
+import org.openo.client.cli.fw.error.OpenOCommandInvalidResultAttributeScope;
+import org.openo.client.cli.fw.error.OpenOCommandInvalidSchema;
+import org.openo.client.cli.fw.error.OpenOCommandNotFound;
+import org.openo.client.cli.fw.error.OpenOCommandRegistrationFailed;
+import org.openo.client.cli.main.error.OpenOCliArgumentValueMissing;
+import org.openo.client.cli.main.error.OpenOCliInvalidArgument;
+import org.openo.client.cli.main.utils.OpenOCliUtils;
+
+import java.io.File;
+import java.net.URL;
+import java.net.URLClassLoader;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class OpenOCliMainTest {
 
@@ -64,6 +85,31 @@ public class OpenOCliMainTest {
     @Test
     public void testHelpSampleCommand() {
         this.handle(new String[] { "sample-test", "--help" });
+    }
+
+    @Test
+    public void testHelpSampleCreateCommand()
+            throws OpenOCommandNotFound, OpenOCommandRegistrationFailed, OpenOCommandInvalidParameterType,
+            OpenOCommandInvalidPrintDirection, OpenOCommandInvalidResultAttributeScope, OpenOCommandInvalidRegistration,
+            OpenOCommandDiscoveryFailed, OpenOCommandInvalidSchema, OpenOCliArgumentValueMissing,
+            OpenOCliInvalidArgument, OpenOCommandInvalidParameterValue {
+        ClassLoader cl = ClassLoader.getSystemClassLoader();
+        URL[] urls = ((URLClassLoader) cl).getURLs();
+        for (URL url : urls) {
+            if (url.getPath().contains("main/target/test-classes")) {
+                File file = new File(url.getPath() + "data");
+                if (!file.exists()) {
+                    file.mkdirs();
+                }
+                break;
+            }
+        }
+        this.handle(new String[] { "sample-create", "--help" });
+        OpenOCommand cmd = OpenOCommandRegistrar.getRegistrar().get("sample-create");
+        List<String> args = new ArrayList<>(Arrays.asList(new String[] { "sample-create", "-u", "admin", "-p",
+                "Changeme_123", "-m", "http://192.168.99.100:80", "--service-name", "test-service", "-i", "ip1", "-i",
+                "ip2", "-o", "port1=value1", "-o", "port2=value2" }));
+        OpenOCliUtils.populateParams(cmd.getParameters(), args);
     }
 
     @Test
@@ -147,8 +193,8 @@ public class OpenOCliMainTest {
 
         this.handle(new String[] { "sdnc-create", "-u", "root1", "-p", "root123", "-m", "http://192.168.4.47:80",
                 "--name", "testcontroller", "--vendor", "testvendor", "--sdnc-version", "v1", "--description",
-                "testingSDNC", "--type", "string", "--url", "openoapi/extsys/v1", "--username",
-                "test", "--password", "test", "--product-name", "testproduct", "--protocol", "http", "-d" });
+                "testingSDNC", "--type", "string", "--url", "openoapi/extsys/v1", "--username", "test", "--password",
+                "test", "--product-name", "testproduct", "--protocol", "http", "-d" });
     }
 
     @Test
