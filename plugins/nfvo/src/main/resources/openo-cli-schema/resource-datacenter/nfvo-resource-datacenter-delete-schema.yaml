@@ -4,16 +4,17 @@ description: Delete the nfvo resource datacenter
 service:
   name: resmgr
   version: v1
+
 parameters:
   - name: id
     description: NFVO datacenter id
     type: string
-    short_option: x
+    short_option: i
     long_option: id
     is_optional: false
 http:
   request:
-    uri: /datacenters/{id}
+    uri: /datacenters/${id}
     method: DELETE
   success_codes:
     - 200

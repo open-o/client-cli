@@ -4,6 +4,7 @@ description: Create the network service
 service:
   name: gso
   version: v1
+
 parameters:
   - name: name
     description: Network service name
@@ -58,8 +59,10 @@ http:
     body: '{"service": {"name":"${name}","description":"${description}","serviceDefId":"${service-def-id}","templateId":"${template-id}","parameters":"${parameters}"}}'
   success_codes:
     - 201
+    - 202
+    - 200
   result_map:
-    id: $b{$.serviceId}
-    operations-id: $b{$.operationsId}
+    id: $b{$.service.serviceId}
+    operations-id: $b{$.service.operationId}
   sample_response:
-    body:'{"serviceId":"string","operationsId":"string"}'
+    body:'{"service":{"operationId":"string","serviceId":"string"}}'

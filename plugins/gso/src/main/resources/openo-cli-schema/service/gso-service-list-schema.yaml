@@ -4,6 +4,7 @@ description: List network services
 service:
   name: gso
   version: v1
+
 results:
   direction: landscape
   attributes:
@@ -49,16 +50,18 @@ http:
     uri: /services
     method: GET
   success_codes:
+    - 201
+    - 202
     - 200
   result_map:
-    id: $b{$.[*].serviceId}
-    name: $b{$.[*].name}
-    description: $b{$.[*].description}
-    active-status: $b{$.[*].activeStatus}
-    status: $b{$.[*].status}
-    creator: $b{$.[*].creator}
-    created-at: $b{$.[*].createAt}
-    service-def-id: $b{$.[*].serviceDefId}
-    template-id: $b{$.[*].templateId}
+    id: $b{services.[*].serviceId}
+    name: $b{services.[*].name}
+    description: $b{services.[*].description}
+    active-status: $b{services.[*].activeStatus}
+    status: $b{services.[*].status}
+    creator: $b{services.[*].creator}
+    created-at: $b{services.[*].createAt}
+    service-def-id: $b{services.[*].serviceDefId}
+    template-id: $b{services.[*].templateId}
   sample_response:
-    body:'[{"serviceId":"string","name":"string","description":"string","activeStatus":"string","status":"string","creator":"string","createAt":"string","serviceDefId":"string","templateId":"string"}]'
+    body:'{"services":[{"serviceId":"string","name":"string","description":"string","activeStatus":"string","status":"string","creator":"string","createAt":"string","serviceDefId":"string","templateId":"string"}]}'

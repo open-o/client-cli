@@ -4,13 +4,14 @@ description: Create the sdno port
 service:
   name: sdnobrs
   version: v1
+
 parameters:
   - name: name
     description: SDNO port name
     scope: short
     type: string
     short_option: n
-    long_option: country
+    long_option: name
     is_optional: false
   - name: me
     description: SDNO port ME
@@ -57,6 +58,10 @@ parameters:
 results:
   direction: portrait
   attributes:
+    - name: id
+      description: SDNO logicalTerminationPoint id
+      scope: short
+      type: string
     - name: name
       description: SDNO logicalTerminationPoint name
       scope: short
@@ -89,16 +94,14 @@ http:
   request:
     uri: /logical-termination-points
     method: POST
-    body: '{"name":"${name}","me":"${me}","type":"${type}","layer-rate":"${layerRate}","edge-point":"${edgePoint}","port-index":"${portIndex}","ip-address":"${ipAddress}"}'
+    body: '{"logicalTerminationPoint":{"name":"${name}","meID":"${me}","logicalType":"${type}","layerRate":"${layer-rate}","isEdgePoint":"${edge-point}","portIndex":"${port-index}",
+    "source":"${source}","ipAddress":"${ip-address}","adminState":"${adminState}","operState":"${operState}","direction":"${direction}",
+     "phyBW":"${phyBW}","ipMask":"${ipMask}","nativeID":"${nativeID}","macAddress":"${macAddress}","tenantID":"${tenantID}","usageState":"${usageState}","containedLayers":"${containedLayers}","description":"${description}"}}'
   success_codes:
     - 201
+    - 200
   result_map:
-    name: $b{$.name}
-    me: $b{$.me}
-    type: $b{$.type}
-    layer-rate: $b{$.layerRate}
-    edge-point: $b{$.edgePoint}
-    port-index: $b{$.portIndex}
-    ip-address: $b{$.ipAddress}
+    id: $b{$.logicalTerminationPoints.id}
+    createTime: $b{$.logicalTerminationPoints.createTime}
   sample_response:
-    body:'{"name":"string","me":"string","type":"string","layerRate":"string","edgePoint":"string","portIndex":"string","ipAddress":"string"}'
+    body:'{"id":"string","createTime":"string"}'

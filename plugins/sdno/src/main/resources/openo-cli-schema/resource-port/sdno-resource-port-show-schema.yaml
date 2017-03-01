@@ -4,6 +4,7 @@ description: Show port details
 service:
   name: sdnobrs
   version: v1
+
 parameters:
   - name: id
     description: SDNO port id
@@ -20,10 +21,6 @@ results:
       type: string
     - name: name
       description: SDNO logicalTerminationPoint name
-      scope: short
-      type: string
-    - name: me
-      description: SDNO logicalTerminationPoint me
       scope: short
       type: string
     - name: type
@@ -48,19 +45,18 @@ results:
       type: string
 http:
   request:
-    uri: /logical-termination-points/{id}
+    uri: /logical-termination-points/${id}
     method: GET
-    body: '{"name":"${name}","me":"${me}","type":"${type}","layer-rate":"${layerRate}","edge-point":"${edgePoint}","port-index":"${portIndex}","ip-address":"${ipAddress}"}'
   success_codes:
     - 201
+    - 200
   result_map:
-    id: $b{$.id}
-    name: $b{$.name}
-    me: $b{$.me}
-    type: $b{$.type}
-    layer-rate: $b{$.layerRate}
-    edge-point: $b{$.edgePoint}
-    port-index: $b{$.portIndex}
-    ip-address: $b{$.ipAddress}
+    id: $b{$.logicalTerminationPoint.id}
+    name: $b{$.logicalTerminationPoint.name}
+    type: $b{$.logicalTerminationPoint.logicalType}
+    layer-rate: $b{$.logicalTerminationPoint.layerRate}
+    edge-point: $b{$.logicalTerminationPoint.isEdgePoint}
+    port-index: $b{$.logicalTerminationPoint.portIndex}
+    ip-address: $b{$.logicalTerminationPoint.ipAddress}
   sample_response:
     body:'{"id":"id","name":"string","me":"string","type":"string","layerRate":"string","edgePoint":"string","portIndex":"string","ipAddress":"string"}'

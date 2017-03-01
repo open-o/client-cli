@@ -4,9 +4,14 @@ description: List nfvo datacenters
 service:
   name: resmgr
   version: v1
+
 results:
   direction: landscape
   attributes:
+    - name: id
+      description: NFVO datacenter Id
+      scope: short
+      type: string
     - name: vim-id
       description: NFVO datacenter vimId
       scope: short

@@ -4,6 +4,7 @@ description: Retrieves the details of template from Open-O
 service:
   name: catalog
   version: v1
+
 parameters:
   - name: id
     description: Service template id
@@ -46,22 +47,10 @@ results:
     - name: input-param
       description: Template input parameters
       scope: short
-      type: string
-    - name: output-param
-      description: Template output parameters
-      scope: short
-      type: string
-    - name: operations
-      description: Template operations
-      scope: short
-      type: string
-    - name: substitution
-      description: Template substitution
-      scope: short
-      type: string
+      type: json
 http:
   request:
-    uri: /servicetemplates/${id}
+    uri: /servicetemplates?serviceTemplateId=${id}
     method: GET
   success_codes:
     - 201
@@ -71,12 +60,9 @@ http:
     template-name: $b{$.templateName}
     vendor: $b{$.vendor}
     version: $b{$.version}
-    csarId: $b{$.csarId}
+    csar-id: $b{$.csarId}
     type: $b{$.type}
     download-uri: $b{$.downloadUri}
     input-param: $b{$.inputs}
-    output-param: $b{$.outputs}
-    operations: $b{$.operations}
-    substitution: $b{$.substitution}
   sample_response:
     body:'{"serviceTemplateId":"string","templateName":"string","vendor":"string","version":"string","csarId":"string","type":"string","downloadUri":"string","inputs":"string","outputs":"string","operations":"string","substitution":"string"}'

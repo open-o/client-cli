@@ -4,11 +4,12 @@ description: Delete the network service
 service:
   name: gso
   version: v1
+
 parameters:
   - name: id
     description: Network service id
     type: string
-    short_option: x
+    short_option: i
     long_option: id
     is_optional: false
 results:
@@ -24,7 +25,9 @@ http:
     method: DELETE
   success_codes:
     - 201
+    - 202
+    - 200
   result_map:
-    operations-id: $b{$.operationsId}
+    operation-id: $b{$.operationId}
   sample_response:
-    body:'{"operationsId":"string"}'
+    body:'{"operationId":"string"}'

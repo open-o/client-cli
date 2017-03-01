@@ -4,6 +4,7 @@ description: Delete the sdno port
 service:
   name: sdnobrs
   version: v1
+
 parameters:
   - name: id
     description: SDNO port id
@@ -13,7 +14,8 @@ parameters:
     is_optional: false
 http:
   request:
-    uri: /logical-termination-points/{id}
+    uri: /logical-termination-points/${id}
     method: DELETE
   success_codes:
     - 201
+    - 200

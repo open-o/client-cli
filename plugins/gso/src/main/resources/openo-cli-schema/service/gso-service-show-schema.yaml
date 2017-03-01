@@ -4,6 +4,7 @@ description: Show network service
 service:
   name: gso
   version: v1
+
 parameters:
   - name: id
     description: Network service id
@@ -56,21 +57,23 @@ results:
       type: json
 http:
   request:
-    uri: /services/{id}
+    uri: /services/${id}
     method: GET
   success_codes:
     - 200
+    - 201
+    - 202
   result_map:
-    id: $b{$.serviceId}
-    name: $b{$.name}
-    description: $b{$.description}
-    active-status: $b{$.activeStatus}
-    status: $b{$.status}
-    creator: $b{$.creator}
-    created-at: $b{$.createAt}
-    service-def-id: $b{$.serviceDefId}
-    template-id: $b{$.templateId}
-    parameters: $b{$.parameters}}
+    id: $b{service.serviceId}
+    name: $b{service.name}
+    description: $b{service.description}
+    active-status: $b{service.activeStatus}
+    status: $b{service.status}
+    creator: $b{service.creator}
+    created-at: $b{service.createAt}
+    service-def-id: $b{service.serviceDefId}
+    template-id: $b{service.templateId}
+    parameters: $b{service.parameters}
 
   sample_response:
-    body:'{"serviceId":"string","name":"string","description":"string","activeStatus":"string","status":"string","creator":"string","createAt":"string","serviceDefId":"string","templateId":"string","domainHost":"string","nodeTemplateName":"string","nodeType":"string","segments":"array","nsParameters":"file"}'
+    body:'{"service":{"serviceId":"string","name":"string","description":"string","activeStatus":"string","status":"string","creator":"string","createAt":"string","serviceDefId":"string","templateId":"string","domainHost":"string","nodeTemplateName":"string","nodeType":"string","segments":"array","parameters":{"key1":"value1","key2":"value2","key3":"value3"}}}'

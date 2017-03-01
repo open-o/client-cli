@@ -4,21 +4,22 @@ description: List service templates by filter conditions from Open-O
 service:
   name: catalog
   version: v1
+
 parameters:
   - name: status
     description: Template status
     scope: short
     type: string
     short_option: n
-    long_option: name
+    long_option: status
     is_optional: false
   - name: deletion-pending
     description: Template delay to delete
     scope: short
-    type: bool
+    type: string
     short_option: o
-    long_option: provider
-    is_optional: true
+    long_option: deletion-pending
+    is_optional: false
 results:
   direction: landscape
   attributes:
@@ -53,24 +54,11 @@ results:
     - name: input-param
       description: Template input parameters
       scope: short
-      type: string
-    - name: output-param
-      description: Template output parameters
-      scope: short
-      type: string
-    - name: operations
-      description: Template operations
-      scope: short
-      type: string
-    - name: substitution
-      description: Template substitution
-      scope: short
-      type: string
+      type: json
 http:
   request:
-    uri: /servicetemplates
+    uri: /servicetemplates?status=${status}&deletionPending=${deletion-pending}
     method: GET
-    body: '{"status":"${status}","deletionPending":"${deletion-pending}"}'
   success_codes:
     - 201
     - 200
@@ -79,12 +67,9 @@ http:
     template-name: $b{$.templateName}
     vendor: $b{$.vendor}
     version: $b{$.version}
-    csarId: $b{$.csarId}
+    csar-id: $b{$.csarId}
     type: $b{$.type}
     download-uri: $b{$.downloadUri}
     input-param: $b{$.inputs}
-    output-param: $b{$.outputs}
-    operations: $b{$.operations}
-    substitution: $b{$.substitution}
   sample_response:
     body:'{"serviceTemplateId":"string","templateName":"string","vendor":"string","version":"string","csarId":"string","type":"string","downloadUri":"string","inputs":"string","outputs":"string","operations":"string","substitution":"string"}'

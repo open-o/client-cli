@@ -4,6 +4,7 @@ description: List csar packages by filter condition from Open-O
 service:
   name: catalog
   version: v1
+
 parameters:
   - name: name
     description: Package name
@@ -18,28 +19,28 @@ parameters:
     type: string
     short_option: o
     long_option: provider
-    is_optional: true
+    is_optional: false
   - name: package-version
     description: Package version
     scope: short
     type: string
     short_option: e
     long_option: package-version
-    is_optional: true
+    is_optional: false
   - name: deletion-pending
     description: Package delay to delete
     scope: short
-    type: bool
+    type: string
     short_option: g
     long_option: deletion-pending
-    is_optional: true
+    is_optional: false
   - name: type
     description: Package type
     scope: short
     type: string
     short_option: y
     long_option: type
-    is_optional: true
+    is_optional: false
 results:
   direction: landscape
   attributes:
@@ -71,31 +72,31 @@ results:
       description: Package format
       scope: short
       type: string
-    - name: deletionPending
+    - name: deletion-pending
       description: Package delay to delete
       scope: short
       type: string
-    - name: createTime
+    - name: create-time
       description: Package create time
       scope: short
       type: string
-    - name: modifyTime
+    - name: modify-time
       description: Package modify time
       scope: short
       type: string
-    - name: operationalState
+    - name: operational-state
       description: Package operational state
       scope: short
       type: string
-    - name: usageState
+    - name: usage-state
       description: Package usage state
       scope: short
       type: string
-    - name: onBoardState
+    - name: onBoard-state
       description: Package onboard state
       scope: short
       type: string
-    - name: processState
+    - name: process-state
       description: Package process state
       scope: short
       type: string
@@ -103,9 +104,9 @@ http:
   request:
     uri: /csars
     method: GET
-    body: '{"name":"${name}","provider":"${provider}","version":"${package-version}","deletionPending":"${deletion-pending}","type":"${type}"}'
   success_codes:
     - 201
+    - 200
   result_map:
     id: $b{$.csarId}
     name: $b{$.name}
@@ -115,12 +116,12 @@ http:
     provider: $b{$.provider}
     type: $b{$.type}
     format: $b{$.format}
-    deletionPending: $b{$.deletionPending}
-    createTime: $b{$.createTime}
-    modifyTime: $b{$.modifyTime}
-    operationalState: $b{$.operationalState}
-    usageState: $b{$.usageState}
-    onBoardState: $b{$.onBoardState}
-    processState: $b{$.processState}
+    deletion-pending: $b{$.deletionPending}
+    create-time: $b{$.createTime}
+    modify-time: $b{$.modifyTime}
+    operational-state: $b{$.operationalState}
+    usage-state: $b{$.usageState}
+    onBoard-state: $b{$.onBoardState}
+    process-state: $b{$.processState}
   sample_response:
     body:'{"csarId":"string","name":"string","downloadUri":"string","size":"string","version":"string","provider":"string","type":"string","format":"string","deletionPending":"string","createTime":"string","modifyTime":"string","operationalState":"string","usageState":"string","onBoardState":"string","processState":"string"}'

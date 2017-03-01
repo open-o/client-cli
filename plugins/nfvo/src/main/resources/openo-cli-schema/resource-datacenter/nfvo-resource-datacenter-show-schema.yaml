@@ -4,16 +4,21 @@ description: Show datacenter details
 service:
   name: resmgr
   version: v1
+
 parameters:
   - name: id
     description: NFVO datacenter id
     type: string
-    short_option: x
+    short_option: i
     long_option: id
     is_optional: false
 results:
   direction: landscape
   attributes:
+    - name: id
+      description: NFVO datacenter Id
+      scope: short
+      type: string
     - name: vim-id
       description: NFVO datacenter vimId
       scope: short
@@ -64,23 +69,23 @@ results:
       type: string
 http:
   request:
-    uri: /datacenters/{id}
+    uri: /datacenters/${id}
     method: GET
   success_codes:
     - 200
   result_map:
-    id: $b{$.id}
-    vim-id: $b{$.vimId}
-    vim-name: $b{$.vimName}
-    status: $b{$.status}
-    name: $b{$.name}
-    country: $b{$.country}
-    location: $b{$.location}
-    total-cpu: $b{$.totalCPU}
-    total-memory: $b{$.totalMemory}
-    total-disk: $b{$.totalDisk}
-    used-cpu: $b{$.usedCPU}
-    used-memory: $b{$.usedMemory}
-    used-disk: $b{$.usedDisk}
+    id: $b{$.datacenters[*].id}
+    vim-id: $b{$.datacenters[*].vimId}
+    vim-name: $b{$.datacenters[*].vimName}
+    status: $b{$.datacenters[*].status}
+    name: $b{$.datacenters[*].name}
+    country: $b{$.datacenters[*].country}
+    location: $b{$.datacenters[*].location}
+    total-cpu: $b{$.datacenters[*].totalCPU}
+    total-memory: $b{$.datacenters[*].totalMemory}
+    total-disk: $b{$.datacenters[*].totalDisk}
+    used-cpu: $b{$.datacenters[*].usedCPU}
+    used-memory: $b{$.datacenters[*].usedMemory}
+    used-disk: $b{$.datacenters[*].usedDisk}
   sample_response:
-    body:'{"id":"string","vimId":"string","vimName":"string","status":"string","name":"string","country":"string","location":"string","totalCPU":"string","totalMemory":"string","totalDisk":"string","usedCPU":"string","usedMemory":"string","usedDisk":"string"}'
+    body:'{"datacenters":[{"id":"string","vimId":"string","vimName":"string","status":"string","name":"string","country":"string","location":"string","totalCPU":"string","totalMemory":"string","totalDisk":"string","usedCPU":"string","usedMemory":"string","usedDisk":"string"}]}'
