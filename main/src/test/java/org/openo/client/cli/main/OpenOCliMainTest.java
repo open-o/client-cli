@@ -135,6 +135,7 @@ public class OpenOCliMainTest {
     }
 
     @Test
+    @Ignore
     public void testHelpVimShowCommand() {
         this.handle(new String[] { "vim-show", "--help" });
     }

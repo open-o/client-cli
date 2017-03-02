@@ -24,6 +24,18 @@ parameters:
     short_option: e
     long_option: description
     is_optional: true
+  - name: role-name
+    type: string
+    description: Open-O user role name
+    short_option: r
+    long_option: role-name
+    is_optional: false
+  - name: role-id
+    type: string
+    description: Open-O user role id
+    short_option: i
+    long_option: role-id
+    is_optional: false
 results:
   direction: portrait
   attributes:
@@ -43,13 +55,13 @@ http:
   request:
     uri: /users
     method: POST
-    body: '{"description":"${description}","userName":"${username}","password":"${password}"}'
+    body: '{"description":"${description}","userName":"${username}","password":"${password}","roles":[{"name":"${role-name}","id":"${role-id}"}]}'
   success_codes:
     - 201
     - 200
   result_map:
-    name: $b{$.userName}
+    name: $b{$.name}
     id: $b{$.id}
     description: $b{$.description}
   sample_response:
-    body: '{"description":"string","userName":"string","id":"string"}'
+    body: '{"description":"string","name":"string","id":"string"}'

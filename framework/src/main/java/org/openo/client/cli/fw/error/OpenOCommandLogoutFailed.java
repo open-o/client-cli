@@ -27,4 +27,8 @@ public class OpenOCommandLogoutFailed extends OpenOCommandException {
     public OpenOCommandLogoutFailed(String error) {
         super("0x0010", "Logout failed, " + error);
     }
+
+    public OpenOCommandLogoutFailed(int statusCode) {
+        super("0x0010", "Logout failed", statusCode);
+    }
 }

@@ -105,6 +105,7 @@ public class OpenOAuthClientTest {
     }
 
     @Test
+    @Ignore
     public void loginFailedTest()
             throws OpenOCommandExecutionFailed, OpenOCommandServiceNotFound, OpenOCommandHttpFailure {
 

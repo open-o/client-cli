@@ -1,0 +1,29 @@
+openo_cmd_schema_version: 1.0
+name: role-list
+description: List Open-O user roles
+service:
+  name: auth
+  version: v1
+results:
+  direction: landscape
+  attributes:
+    - name: name
+      description: Open-O role name
+      scope: short
+      type: string
+    - name: id
+      description: Open-O role id
+      scope: short
+      type: string
+http:
+  request:
+    uri: /roles
+    method: GET
+  success_codes:
+    - 201
+    - 200
+  result_map:
+    name: $b{$.roles[*].name}
+    id: $b{$.roles[*].id}
+  sample_response:
+    body: '{"roles":[{"name":"admin","id":"abc123"},{"name":"operator","id":"def456"}]}'

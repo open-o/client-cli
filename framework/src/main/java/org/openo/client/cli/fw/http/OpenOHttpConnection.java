@@ -47,7 +47,9 @@ import org.apache.http.util.EntityUtils;
 import org.openo.client.cli.fw.error.OpenOCommandHttpFailure;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.URI;
+import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.security.cert.X509Certificate;
 import java.util.HashMap;
@@ -245,10 +247,20 @@ public class OpenOHttpConnection {
         }
     }
 
+    private String getDomain(String url) {
+        try {
+            return new URL(url).getHost();
+        } catch(MalformedURLException e) {
+            // url is always proper !!
+            return url;
+        }
+    }
+
     private void updateInputFromCookies(HttpInput input, CookieStore cookieStore) {
         addCommonCookies(input, cookieStore);
         for (String cookieName : input.getReqCookies().keySet()) {
-            Cookie cookie = new BasicClientCookie(cookieName, input.getReqCookies().get(cookieName));
+            BasicClientCookie cookie = new BasicClientCookie(cookieName, input.getReqCookies().get(cookieName));
+            cookie.setDomain(this.getDomain(input.getUri()));
             cookieStore.addCookie(cookie);
         }
 

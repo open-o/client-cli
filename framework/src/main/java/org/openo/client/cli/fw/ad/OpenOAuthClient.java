@@ -78,18 +78,16 @@ public class OpenOAuthClient {
             return;
         }
 
-        HttpInput input = new HttpInput().setUri(this.getAuthUrl())
-                .setBody(String.format(TOKEN, creds.getUsername(), creds.getPassword()));
-        
-        
-        
+        HttpInput input = new HttpInput().setUri(this.getAuthUrl() + "/tokens")
+                .setBody(String.format(TOKEN, creds.getUsername(), creds.getPassword())).setMethod("post");
+
         HttpResult result;
         try {
-            result = this.http.post(input);
+            result = this.run(input);
         } catch (OpenOCommandHttpFailure e) {
             throw new OpenOCommandLoginFailed(e.getMessage());
         }
-        if (result.getStatus() != HttpStatus.SC_OK && result.getStatus() != HttpStatus.SC_ACCEPTED) {
+        if (result.getStatus() != HttpStatus.SC_OK && result.getStatus() != HttpStatus.SC_CREATED) {
             throw new OpenOCommandLoginFailed(result.getBody(), result.getStatus());
         }
 
@@ -109,11 +107,24 @@ public class OpenOAuthClient {
      *             service not found
      * @throws OpenOCommandLogoutFailed
      *             logout failed
+     * @throws OpenOCommandHttpFailure
      */
-    public void logout() throws OpenOCommandExecutionFailed, OpenOCommandServiceNotFound, OpenOCommandLogoutFailed {
+    public void logout() throws OpenOCommandExecutionFailed, OpenOCommandServiceNotFound, OpenOCommandLogoutFailed, OpenOCommandHttpFailure {
         // For development purpose, its introduced and is not supported for production
         if (OpenOCommandConfg.isAuthIgnored()) {
             return;
+        }
+
+        HttpInput input = new HttpInput().setUri(this.getAuthUrl() + "/tokens").setMethod("delete");;
+
+        HttpResult result;
+        try {
+            result = this.run(input);
+        } catch (OpenOCommandHttpFailure e) {
+            throw new OpenOCommandLogoutFailed(e.getMessage());
+        }
+        if (result.getStatus() != HttpStatus.SC_NO_CONTENT ) {
+            throw new OpenOCommandLogoutFailed(result.getStatus());
         }
 
         this.http.close();
@@ -177,6 +188,9 @@ public class OpenOAuthClient {
     }
 
     public HttpResult run(HttpInput input) throws OpenOCommandHttpFailure {
+        if (OpenOCommandConfg.isCookiesBasedAuth()) {
+            input.getReqCookies().put(OpenOHttpConnection.X_AUTH_TOKEN, http.getAuthToken());
+        }
         return this.http.request(input);
     }
 }
