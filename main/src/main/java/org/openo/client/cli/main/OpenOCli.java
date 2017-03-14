@@ -105,10 +105,16 @@ public class OpenOCli {
      * Handles command.
      */
     public void handleCommand() {
-        OpenOCommand cmd = null;
-        try {
-            if (!args.isEmpty()) {
+        OpenOCommand cmd;
+        if (!args.isEmpty()) {
+            try {
                 cmd = OpenOCommandRegistrar.getRegistrar().get(args.get(0));
+            } catch (Exception e) {
+                this.print(e.getMessage());
+                this.exitFailure();
+                return;
+            }
+            try {
                 // check for help or version
                 if (args.size() == 2) {
                     if (this.getLongOption(OpenOCliConstants.PARAM_HELP_LOGN).equals(args.get(1))
@@ -131,14 +137,11 @@ public class OpenOCli {
                 this.print(result.getDebugInfo());
                 this.print(result.print());
                 this.exitSuccessfully();
-            }
-        } catch (Exception e) {
-            if (cmd != null) {
+            } catch (Exception e) {
                 this.print(cmd.getResult().getDebugInfo());
+                this.print(e.getMessage());
+                this.exitFailure();
             }
-
-            this.print(e.getMessage());
-            this.exitFailure();
         }
     }
 
