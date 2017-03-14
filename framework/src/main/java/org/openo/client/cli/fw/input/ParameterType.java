@@ -47,21 +47,21 @@ public enum ParameterType {
      *             exception
      */
     public static ParameterType get(String name) throws OpenOCommandInvalidParameterType {
-        if (JSON.name().toLowerCase().equals(name)) {
+        if (JSON.name().equalsIgnoreCase(name)) {
             return JSON;
-        } else if (YAML.name().toLowerCase().equals(name)) {
+        } else if (YAML.name().equalsIgnoreCase(name)) {
             return YAML;
-        } else if (STRING.name().toLowerCase().equals(name)) {
+        } else if (STRING.name().equalsIgnoreCase(name)) {
             return STRING;
-        } else if (LONG.name().toLowerCase().equals(name)) {
+        } else if (LONG.name().equalsIgnoreCase(name)) {
             return LONG;
-        } else if (URL.name().toLowerCase().equals(name)) {
+        } else if (URL.name().equalsIgnoreCase(name)) {
             return URL;
-        } else if (BOOL.name().toLowerCase().equals(name)) {
+        } else if (BOOL.name().equalsIgnoreCase(name)) {
             return BOOL;
-        }  else if (ARRAY.name().toLowerCase().equals(name)) {
+        }  else if (ARRAY.name().equalsIgnoreCase(name)) {
             return ARRAY;
-        } else if (MAP.name().toLowerCase().equals(name)) {
+        } else if (MAP.name().equalsIgnoreCase(name)) {
             return MAP;
         } else {
             throw new OpenOCommandInvalidParameterType(name);

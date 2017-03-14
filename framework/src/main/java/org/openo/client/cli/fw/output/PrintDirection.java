@@ -34,9 +34,9 @@ public enum PrintDirection {
      *             exception
      */
     public static PrintDirection get(String name) throws OpenOCommandInvalidPrintDirection {
-        if (LANDSCAPE.name().toLowerCase().equals(name)) {
+        if (LANDSCAPE.name().equalsIgnoreCase(name)) {
             return LANDSCAPE;
-        } else if (PORTRAIT.name().toLowerCase().equals(name)) {
+        } else if (PORTRAIT.name().equalsIgnoreCase(name)) {
             return PORTRAIT;
         } else {
             throw new OpenOCommandInvalidPrintDirection(name);

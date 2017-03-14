@@ -31,7 +31,7 @@ public enum ResultType {
      * @return boolean
      */
     public static boolean isTabularForm(String type) {
-        if (type.equalsIgnoreCase(TABLE.name()) || type.equalsIgnoreCase(TABLE.name())) {
+        if (type.equalsIgnoreCase(TABLE.name())) {
             return true;
         }
 
@@ -46,16 +46,16 @@ public enum ResultType {
      * @return ResultType
      */
     public static ResultType get(String name) {
-        if (name.toUpperCase().equals(TABLE.name())) {
+        if (TABLE.name().equalsIgnoreCase(name)) {
             return TABLE;
         }
-        if (name.toUpperCase().equals(CSV.name())) {
+        if (CSV.name().equalsIgnoreCase(name)) {
             return CSV;
         }
-        if (name.toUpperCase().equals(JSON.name())) {
+        if (JSON.name().equalsIgnoreCase(name)) {
             return JSON;
         }
-        if (name.toUpperCase().equals(YAML.name())) {
+        if (YAML.name().equalsIgnoreCase(name)) {
             return YAML;
         }
         return TEXT;

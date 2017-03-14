@@ -120,7 +120,7 @@ public class OpenOCommandRegistrar {
     public OpenOCommand get(String cmdName)
             throws OpenOCommandNotFound, OpenOCommandRegistrationFailed, OpenOCommandInvalidParameterType,
             OpenOCommandInvalidPrintDirection, OpenOCommandInvalidResultAttributeScope {
-        OpenOCommand cmd = null;
+        OpenOCommand cmd;
         Class<? extends OpenOCommand> cls = registry.get(cmdName);
         if (cls == null) {
             throw new OpenOCommandNotFound(cmdName);
@@ -130,7 +130,7 @@ public class OpenOCommandRegistrar {
             Constructor<?> constr = cls.getConstructor();
             cmd = (OpenOCommand) constr.newInstance();
 
-            String schemaName = null;
+            String schemaName;
             if (cmd.getClass().getName().equals(OpenOHttpCommand.class.getName())) {
                 schemaName = OpenOCommandUtils.loadExternalSchemaFromJson(cmdName).getSchemaName();
             } else {

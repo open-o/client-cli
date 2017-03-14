@@ -95,7 +95,7 @@ public class OpenOCommandPrint {
 
     /**
      * Helps to form the rows from columns.
-     * 
+     *
      * @param isNormalize boolean
      * @return +--------------+-----------+-----------------------------+ |
      *         header1 | header 2 | header 3 |
@@ -110,7 +110,7 @@ public class OpenOCommandPrint {
 
         // add title
         if (this.isPrintTitle()) {
-            List<Object> list = new ArrayList<Object>();
+            List<Object> list = new ArrayList<>();
             for (String key : this.data.keySet()) {
                 if (isNormalize && key != null && key.length() > MAX_COLUMN_LENGTH) {
                     list.add(splitIntoList(key, MAX_COLUMN_LENGTH));
@@ -156,16 +156,18 @@ public class OpenOCommandPrint {
      */
     public List<String> splitIntoList(String input, int maxCharInLine) {
 
-        if (input == null || "".equals(input) || maxCharInLine <= 0) {
+        String inp = input;
+
+        if (inp == null || "".equals(inp) || maxCharInLine <= 0) {
             return Collections.emptyList();
         }
         // new line is converted to space char
-        if (input.contains("\n")) {
-            input = input.replaceAll("\n", "");
+        if (inp.contains("\n")) {
+            inp = inp.replaceAll("\n", "");
         }
 
-        StringTokenizer tok = new StringTokenizer(input, " ");
-        StringBuilder output = new StringBuilder(input.length());
+        StringTokenizer tok = new StringTokenizer(inp, " ");
+        StringBuilder output = new StringBuilder(inp.length());
         int lineLen = 0;
         while (tok.hasMoreTokens()) {
             String word = tok.nextToken();
@@ -189,18 +191,7 @@ public class OpenOCommandPrint {
         return Arrays.asList(strArray);
     }
 
-    private int getMaxLenOfColumn(List<String> vals) {
-        int mxLen = 0;
-        for (String val : vals) {
-            if (val.trim().length() > mxLen) {
-                mxLen = val.trim().length();
-            }
-        }
 
-        return mxLen;
-    }
-
-   
     /**
     * Helps to print table.
     * @param printSeparator Prints with line separator
@@ -216,11 +207,8 @@ public class OpenOCommandPrint {
     */
     public String printTable(boolean printSeparator) {
         List<List<Object>> rows = this.formRows(true);
-
         TableGenerator table = new TableGenerator();
-        String result = table.generateTable(rows, printSeparator);
-
-        return result;
+        return table.generateTable(rows, printSeparator);
     }
 
     /**
@@ -259,12 +247,12 @@ public class OpenOCommandPrint {
     }
 
     public String printJson() {
-        // TODO(mrkanag): print in json
+        // (mrkanag) print in json
         return null;
     }
 
     public String printYaml() {
-        // TODO(mrkanag): print in yaml
+        // (mrkanag) print in yaml
         return null;
     }
 }

@@ -29,11 +29,11 @@ public class HttpInput {
     public static final String HEADERS = "headers";
     public static final String QUERIES = "queries";
     public static final String COOKIES = "cookies";
-    private String uri = "";
+    private String reqUri = "";
 
-    private String body = "";
+    private String reqBody = "";
 
-    private String method = "";
+    private String reqMethod = "";
 
     private Map<String, String> reqHeaders = new HashMap<>();
 
@@ -42,20 +42,20 @@ public class HttpInput {
     private Map<String, String> reqCookies = new HashMap<>();
 
     public String getUri() {
-        return this.uri;
+        return this.reqUri;
     }
 
     public HttpInput setUri(String uri) {
-        this.uri = uri;
+        this.reqUri = uri;
         return this;
     }
 
     public String getBody() {
-        return this.body;
+        return this.reqBody;
     }
 
     public HttpInput setBody(String body) {
-        this.body = body;
+        this.reqBody = body;
         return this;
     }
 
@@ -78,11 +78,11 @@ public class HttpInput {
     }
 
     public String getMethod() {
-        return this.method;
+        return this.reqMethod;
     }
 
     public HttpInput setMethod(String method) {
-        this.method = method;
+        this.reqMethod = method;
         return this;
     }
 

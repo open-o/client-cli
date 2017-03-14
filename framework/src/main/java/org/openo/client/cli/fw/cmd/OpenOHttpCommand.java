@@ -34,6 +34,7 @@ import org.openo.client.cli.fw.utils.OpenOCommandUtils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -51,7 +52,7 @@ public class OpenOHttpCommand extends OpenOCommand {
 
     private HttpInput input = new HttpInput();
 
-    private ArrayList<Integer> successStatusCodes = new ArrayList<>();
+    private List<Integer> successStatusCodes = new ArrayList<>();
 
     private Map<String, String> resultMap = new HashMap<>();
 
@@ -63,7 +64,7 @@ public class OpenOHttpCommand extends OpenOCommand {
         return OPENO_CMD_SCHEMA_VERSION_VALUE;
     }
 
-    public void setSuccessStatusCodes(ArrayList<Integer> successStatusCodes) {
+    public void setSuccessStatusCodes(List<Integer> successStatusCodes) {
         this.successStatusCodes = successStatusCodes;
     }
 
@@ -75,7 +76,7 @@ public class OpenOHttpCommand extends OpenOCommand {
         return input;
     }
 
-    public ArrayList<Integer> getSuccessStatusCodes() {
+    public List<Integer> getSuccessStatusCodes() {
         return successStatusCodes;
     }
 
@@ -93,10 +94,10 @@ public class OpenOHttpCommand extends OpenOCommand {
 
     @Override
     protected void run() throws OpenOCommandException {
-        HttpInput input = OpenOCommandUtils.populateParameters(this.getParametersMap(), this.getInput());
-        input.setUri(this.authClient.getServiceBasePath(this.getService()) + input.getUri());
+        HttpInput httpInput = OpenOCommandUtils.populateParameters(this.getParametersMap(), this.getInput());
+        httpInput.setUri(this.authClient.getServiceBasePath(this.getService()) + httpInput.getUri());
 
-        HttpResult output = this.authClient.run(input);
+        HttpResult output = this.authClient.run(httpInput);
 
         this.getResult().setOutput(output);
         if (!this.getSuccessStatusCodes().contains(output.getStatus())) {

@@ -30,7 +30,7 @@ import org.slf4j.LoggerFactory;
 public class OpenOCommandLogger {
     private static final Logger LOGGER = LoggerFactory.getLogger(OpenOCommandLogger.class);
 
-    //TODO(mrkanag) verify that it logs for all classes in this project.
+    //(mrkanag) verify that it logs for all classes in this project.
     /**
      * Logging intercepter.
      *

@@ -44,9 +44,9 @@ public enum OpenOCommandResultAttributeScope {
      *             exception
      */
     public static OpenOCommandResultAttributeScope get(String name) throws OpenOCommandInvalidResultAttributeScope {
-        if (name.equals(LONG.name().toLowerCase())) {
+        if (LONG.name().equalsIgnoreCase(name)) {
             return LONG;
-        } else if (name.equals(SHORT.name().toLowerCase())) {
+        } else if (SHORT.name().equalsIgnoreCase(name)) {
             return SHORT;
         }
 

@@ -68,6 +68,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.ServiceLoader;
 import java.util.Set;
 
@@ -76,6 +77,14 @@ import java.util.Set;
  *
  */
 public class OpenOCommandUtils {
+
+    /**
+     * Private constructor.
+     */
+    private OpenOCommandUtils() {
+
+    }
+
     /**
      * Validates schema version.
      *
@@ -175,9 +184,11 @@ public class OpenOCommandUtils {
             OpenOCommandInvalidResultAttributeScope, OpenOCommandSchemaNotFound, OpenOCommandInvalidSchema,
             OpenOCommandInvalidSchemaVersion {
         try {
-            Map<String, ?> values = (Map<String, ?>) validateSchemaVersion(schemaName, cmd.getSchemaVersion());
+            Map<String, ?> values = validateSchemaVersion(schemaName, cmd.getSchemaVersion());
 
-            for (String key : values.keySet()) {
+            for (Map.Entry<String, ?> entry : values.entrySet()) {
+                String key = entry.getKey();
+
                 if (OpenOCommand.NAME.equals(key)) {
                     Object val = values.get(key);
                     cmd.setName(val.toString());
@@ -188,7 +199,9 @@ public class OpenOCommandUtils {
                     Map<String, String> map = (Map<String, String>) values.get(key);
                     OpenOService srv = new OpenOService();
 
-                    for (String key1 : map.keySet()) {
+                    for (Map.Entry<String, String> entry1 : map.entrySet()) {
+                        String key1 = entry1.getKey();
+
                         if (OpenOService.NAME.equals(key1)) {
                             srv.setName(map.get(key1));
                         } else if (OpenOService.VERSION.equals(key1)) {
@@ -205,7 +218,10 @@ public class OpenOCommandUtils {
 
                     for (Map<String, String> map : list) {
                         OpenOCommandParameter param = new OpenOCommandParameter();
-                        for (String key2 : map.keySet()) {
+
+                        for (Map.Entry<String, String> entry1 : map.entrySet()) {
+                            String key2 = entry1.getKey();
+
                             if (OpenOCommandParameter.NAME.equals(key2)) {
                                 if (names.contains(map.get(key2))) {
                                     throw new OpenOCommandParameterNameConflict(map.get(key2));
@@ -251,7 +267,9 @@ public class OpenOCommandUtils {
                 } else if (OpenOCommand.RESULTS.equals(key)) {
                     Map<String, ?> valueMap = (Map<String, ?>) values.get(key);
                     OpenOCommandResult result = new OpenOCommandResult();
-                    for (String key3 : valueMap.keySet()) {
+                    for (Map.Entry<String, ?> entry1 : valueMap.entrySet()) {
+                        String key3 = entry1.getKey();
+
                         if (OpenOCommandResult.DIRECTION.equals(key3)) {
                             result.setPrintDirection(PrintDirection.get((String) valueMap.get(key3)));
                         } else if (OpenOCommandResult.ATTRIBUTES.equals(key3)) {
@@ -259,7 +277,9 @@ public class OpenOCommandUtils {
 
                             for (Map<String, String> map : attrs) {
                                 OpenOCommandResultAttribute attr = new OpenOCommandResultAttribute();
-                                for (String key4 : map.keySet()) {
+                                for (Map.Entry<String, String> entry4 : map.entrySet()) {
+                                    String key4 = entry4.getKey();
+
                                     if (OpenOCommandResultAttribute.NAME.equals(key4)) {
                                         attr.setName(map.get(key4));
                                     } else if (OpenOCommandResultAttribute.DESCRIPTION.equals(key4)) {
@@ -325,7 +345,9 @@ public class OpenOCommandUtils {
             Map<String, String> valueMap = (Map<String, String>) values.get(OpenOSwaggerCommand.EXECUTOR);
             OpenOCommandExecutor exec = new OpenOCommandExecutor();
 
-            for (String key1 : valueMap.keySet()) {
+            for (Map.Entry<String, String> entry1 : valueMap.entrySet()) {
+                String key1 = entry1.getKey();
+
                 if (OpenOCommandExecutor.API.equals(key1)) {
                     exec.setApi(valueMap.get(key1));
                 } else if (OpenOCommandExecutor.CLIENT.equals(key1)) {
@@ -379,10 +401,15 @@ public class OpenOCommandUtils {
         try {
             Map<String, ?> values = (Map<String, ?>) validateSchemaVersion(schemaName, cmd.getSchemaVersion());
             Map<String, ?> valMap = (Map<String, ?>) values.get(OpenOHttpCommand.HTTP);
-            for (String key1 : valMap.keySet()) {
+
+            for (Map.Entry<String, ?> entry1 : valMap.entrySet()) {
+                String key1 = entry1.getKey();
                 if (OpenOHttpCommand.REQUEST.equals(key1)) {
                     Map<String, ?> map = (Map<String, ?>) valMap.get(key1);
-                    for (String key2 : map.keySet()) {
+
+                    for (Map.Entry<String, ?> entry2 : map.entrySet()) {
+                        String key2 = entry2.getKey();
+
                         if (HttpInput.URI.equals(key2)) {
                             Object obj = map.get(key2);
                             cmd.getInput().setUri(obj.toString());
@@ -406,7 +433,7 @@ public class OpenOCommandUtils {
                 } else if (OpenOHttpCommand.RESULT_MAP.equals(key1)) {
                     cmd.setResultMap((Map<String, String>) valMap.get(key1));
                 } else if (OpenOHttpCommand.SAMPLE_RESPONSE.equals(key1)) {
-                    // TODO(mrkanag): implement sample response handling
+                    // (mrkanag) implement sample response handling
                 }
             }
 
@@ -461,15 +488,15 @@ public class OpenOCommandUtils {
         int newLineOptions = 0;
         for (OpenOCommandParameter param : cmd.getParameters()) {
             // First column Option or positional args
-            String optFirstCol = "";
+            String optFirstCol;
             if (newLineOptions == 3) {
                 newLineOptions = 0;
                 commandOptions += "\n";
             }
 
             if (param.getShortOption() != null || param.getLongOption() != null) {
-                optFirstCol = param.printShortOption(param.getShortOption()) + " | "
-                        + param.printLongOption(param.getLongOption());
+                optFirstCol = OpenOCommandParameter.printShortOption(param.getShortOption()) + " | "
+                        + OpenOCommandParameter.printLongOption(param.getLongOption());
                 commandOptions += "[" + optFirstCol + "] ";
             } else {
                 optFirstCol = param.getName();
@@ -487,8 +514,8 @@ public class OpenOCommandUtils {
             }
             optSecondCol += " It is of type " + param.getParameterType().name() + ".";
 
-            if (param.getParameterType().equals(ParameterType.JSON) ||
-                    param.getParameterType().equals(ParameterType.YAML)) {
+            if (param.getParameterType().equals(ParameterType.JSON)
+                    || param.getParameterType().equals(ParameterType.YAML)) {
                 optSecondCol += " It's recommended to input the complete path of the file, which is having the value for it.";
             }
             if (param.isOptional()) {
@@ -503,10 +530,10 @@ public class OpenOCommandUtils {
                 optSecondCol += defaultMsg + param.getDefaultValue() + ".";
             }
 
-            if (param.isSecured) {
+            if (param.isSecured()) {
                 optSecondCol += " Secured.";
             }
-            // TODO(mrkanag) Add help msg for reading default value from env
+            // (mrkanag) Add help msg for reading default value from env
             attrDescription.getValues().add(optSecondCol);
         }
 
@@ -554,7 +581,8 @@ public class OpenOCommandUtils {
      * @return OpenOCredentials
      * @throws OpenOCommandInvalidParameterValue
      */
-    public static OpenOCredentials fromParameters(List<OpenOCommandParameter> params) throws OpenOCommandInvalidParameterValue {
+    public static OpenOCredentials fromParameters(List<OpenOCommandParameter> params)
+            throws OpenOCommandInvalidParameterValue {
         Map<String, String> paramMap = new HashMap<>();
 
         for (OpenOCommandParameter param : params) {
@@ -646,7 +674,7 @@ public class OpenOCommandUtils {
 
         String methodName = prefix;
         for (String tk : name.split("-")) {
-            methodName += ("" + tk.charAt(0)).toUpperCase();
+            methodName += Character.toString(tk.charAt(0)).toUpperCase();
             methodName += tk.substring(1);
         }
         return methodName;
@@ -678,10 +706,8 @@ public class OpenOCommandUtils {
 
             OpenOCommandParameter param = params.get(paramName);
             if (ParameterType.ARRAY.equals(param.getParameterType())
-                    || ParameterType.MAP.equals(param.getParameterType())
-                    || ParameterType.JSON.equals(param.getParameterType())
-                    || ParameterType.YAML.equals(param.getParameterType())) {
-                //ignore the front and back double quotes in json body
+                    || ParameterType.MAP.equals(param.getParameterType())) {
+                // ignore the front and back double quotes in json body
                 result += line.substring(currentIdx, idxS - 1) + value;
                 currentIdx = idxE + 2;
             } else {
@@ -698,19 +724,21 @@ public class OpenOCommandUtils {
             OpenOCommandResultMapProcessingFailed {
         String headerProcessedLine = "";
 
-        ArrayList<String> result = new ArrayList<String>();
+        ArrayList<String> result = new ArrayList<>();
         if (!line.contains("$b{") && !line.contains("$h{")) {
             result.add(line);
             return result;
         }
 
-        // in case of empty response body [] or {}
+        // In case of empty response body [] or {}
         if (resultHttp.getBody().length() <= 2) {
             return result;
         }
 
-        // Process headers macros
-        // line: $h{abc}-$b{$.[*].xyz} , After processing line will be [abc's value]-$b{$.[*].xyz}
+        /**
+         * Process headers macros : line: $h{abc}-$b{$.[*].xyz} , After processing line will be [abc's
+         * value]-$b{$.[*].xyz}
+         **/
         int currentIdx = 0;
         while (currentIdx < line.length()) {
             int idxS = line.indexOf("$h{", currentIdx);
@@ -730,7 +758,7 @@ public class OpenOCommandUtils {
             currentIdx = idxE + 1;
         }
 
-        // process body jsonpath macros
+        // Process body jsonpath macros
         List<Object> values = new ArrayList<>();
         String bodyProcessedPattern = "";
         currentIdx = 0;
@@ -809,6 +837,7 @@ public class OpenOCommandUtils {
      * @throws OpenOCommandParameterNotFound
      *             exception
      * @throws OpenOCommandInvalidParameterValue
+     *             exception
      */
     public static HttpInput populateParameters(Map<String, OpenOCommandParameter> params, HttpInput input)
             throws OpenOCommandParameterNotFound, OpenOCommandInvalidParameterValue {
@@ -850,8 +879,9 @@ public class OpenOCommandUtils {
             OpenOCommandResultMapProcessingFailed {
         Map<String, ArrayList<String>> resultsProcessed = new HashMap<>();
 
-        for (String attr : resultMap.keySet()) {
-            resultsProcessed.put(attr, replaceLineFromOutputResults(resultMap.get(attr), resultHttp));
+        for (Entry<String, String> entry : resultMap.entrySet()) {
+            String key = entry.getKey();
+            resultsProcessed.put(key, replaceLineFromOutputResults(resultMap.get(key), resultHttp));
         }
 
         return resultsProcessed;
@@ -872,7 +902,7 @@ public class OpenOCommandUtils {
         try {
             Resource[] res = getExternalResources(OpenOCommandConfg.EXTERNAL_SCHEMA_PATH_PATERN);
             if (res != null && res.length > 0) {
-                Map<String, ?> resourceMap = null;
+                Map<String, ?> resourceMap;
                 for (Resource resource : res) {
                     resourceMap = getExternalSchemaMap(resource);
                     if (resourceMap != null && resourceMap.size() > 0) {
@@ -977,8 +1007,10 @@ public class OpenOCommandUtils {
      * Check if json file discovered or not.
      *
      * @return boolean
+     * @throws OpenOCommandDiscoveryFailed
+     *             exception
      */
-    public static boolean isJsonFileDiscovered() {
+    public static boolean isJsonFileDiscovered() throws OpenOCommandDiscoveryFailed {
         Resource resource = null;
         try {
             resource = getExternalResource(OpenOCommandConfg.EXTERNAL_DISCOVERY_FILE,
@@ -987,7 +1019,7 @@ public class OpenOCommandUtils {
                 return true;
             }
         } catch (IOException e) {
-            new OpenOCommandDiscoveryFailed(OpenOCommandConfg.EXTERNAL_DISCOVERY_DIRECTORY,
+            throw new OpenOCommandDiscoveryFailed(OpenOCommandConfg.EXTERNAL_DISCOVERY_DIRECTORY,
                     OpenOCommandConfg.EXTERNAL_DISCOVERY_FILE);
         }
 
@@ -1022,7 +1054,7 @@ public class OpenOCommandUtils {
                     schemas.addAll(Arrays.asList(list));
                 }
             } catch (IOException e) {
-                new OpenOCommandDiscoveryFailed(OpenOCommandConfg.EXTERNAL_DISCOVERY_DIRECTORY,
+                throw new OpenOCommandDiscoveryFailed(OpenOCommandConfg.EXTERNAL_DISCOVERY_DIRECTORY,
                         OpenOCommandConfg.EXTERNAL_DISCOVERY_FILE);
             }
         }

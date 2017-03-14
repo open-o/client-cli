@@ -35,24 +35,24 @@ public class OpenOCommandResultAttribute {
     /*
      * Output name
      */
-    public String name;
+    private String outName;
 
     /*
      * Output description
      */
-    public String description;
+    private String outDescription;
 
     /*
      * Output values, in case list out, it holds values for all rows for show output, it will have one value
      */
-    public List<String> values = new ArrayList<>();
+    private List<String> values = new ArrayList<>();
 
     /*
      * Output scope
      */
-    public OpenOCommandResultAttributeScope scope = OpenOCommandResultAttributeScope.SHORT;
+    private OpenOCommandResultAttributeScope outScope = OpenOCommandResultAttributeScope.SHORT;
 
-    private ParameterType type = ParameterType.STRING;
+    private ParameterType paramType = ParameterType.STRING;
 
     private boolean isSecured = false;
 
@@ -61,19 +61,19 @@ public class OpenOCommandResultAttribute {
     }
 
     public String getName() {
-        return name;
+        return outName;
     }
 
     public void setName(String name) {
-        this.name = name;
+        this.outName = name;
     }
 
     public String getDescription() {
-        return description;
+        return outDescription;
     }
 
     public void setDescription(String description) {
-        this.description = description;
+        this.outDescription = description;
     }
 
     public List<String> getValues() {
@@ -81,19 +81,19 @@ public class OpenOCommandResultAttribute {
     }
 
     public OpenOCommandResultAttributeScope getScope() {
-        return scope;
+        return outScope;
     }
 
     public void setScope(OpenOCommandResultAttributeScope scope) {
-        this.scope = scope;
+        this.outScope = scope;
     }
 
     public ParameterType getType() {
-        return type;
+        return paramType;
     }
 
     public void setType(ParameterType type) {
-        this.type = type;
+        this.paramType = type;
     }
 
     public boolean isSecured() {

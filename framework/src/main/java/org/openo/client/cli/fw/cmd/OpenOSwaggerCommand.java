@@ -32,19 +32,19 @@ import java.util.List;
 
 public abstract class OpenOSwaggerCommand extends OpenOCommand {
 
-    // TODO(mrkanag): change this different value
+    // (mrkanag) change this different value
     public static final String OPENO_CMD_SCHEMA_VERSION_VALUE = "1.0"; // cli-swagger-
 
     public static final String EXECUTOR = "exec";
 
-    private OpenOCommandExecutor executor;
+    private OpenOCommandExecutor cmdExecutor;
 
     public OpenOCommandExecutor getExecutor() {
-        return executor;
+        return cmdExecutor;
     }
 
     public void setExecutor(OpenOCommandExecutor executor) {
-        this.executor = executor;
+        this.cmdExecutor = executor;
     }
 
     /**
@@ -65,7 +65,7 @@ public abstract class OpenOSwaggerCommand extends OpenOCommand {
                     Method apiKey = client.getClass().getMethod("setApiKey", String.class);
                     apiKey.invoke(client, this.getAuthToken());
                 } catch (InvocationTargetException e) {
-                    // TODO(mrkanag): once X-AUTH-TOKEN is available, raise exception here
+                    // mrkanag: once X-AUTH-TOKEN is available, raise exception here
                 }
             }
             return client;

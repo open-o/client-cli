@@ -22,11 +22,11 @@ package org.openo.client.cli.fw.error;
  */
 public class OpenOCommandParameterMissing extends OpenOCommandException {
 
+    private static final long serialVersionUID = 2821256032317061066L;
+
     public OpenOCommandParameterMissing(String paramName) {
         super("0x0015", "Parameter " + paramName + " is mandatory");
 
     }
-
-    private static final long serialVersionUID = 2821256032317061066L;
 
 }

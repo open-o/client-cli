@@ -71,7 +71,7 @@ public class OpenOCli {
     public void handleHelp() {
         try {
             // By default, it prints help
-            if ((args.size() == 0)
+            if ((args.isEmpty())
                     || ((args.size() == 1) && (this.getLongOption(OpenOCliConstants.PARAM_HELP_LOGN).equals(args.get(0))
                             || this.getShortOption(OpenOCliConstants.PARAM_HELP_SHORT).equals(args.get(0))))) {
                 String help = OpenOCommandRegistrar.getRegistrar().getHelp();
@@ -111,14 +111,14 @@ public class OpenOCli {
                 cmd = OpenOCommandRegistrar.getRegistrar().get(args.get(0));
                 // check for help or version
                 if (args.size() == 2) {
-                    if ((this.getLongOption(OpenOCliConstants.PARAM_HELP_LOGN).equals(args.get(1))
-                            || this.getShortOption(OpenOCliConstants.PARAM_HELP_SHORT).equals(args.get(1)))) {
+                    if (this.getLongOption(OpenOCliConstants.PARAM_HELP_LOGN).equals(args.get(1))
+                            || this.getShortOption(OpenOCliConstants.PARAM_HELP_SHORT).equals(args.get(1))) {
                         String help = cmd.printHelp();
                         this.print(help);
                         this.exitSuccessfully();
                         return;
-                    } else if ((this.getLongOption(OpenOCliConstants.PARAM_VERSION_LONG).equals(args.get(1))
-                            || this.getShortOption(OpenOCliConstants.PARAM_VERSION_SHORT).equals(args.get(1)))) {
+                    } else if (this.getLongOption(OpenOCliConstants.PARAM_VERSION_LONG).equals(args.get(1))
+                            || this.getShortOption(OpenOCliConstants.PARAM_VERSION_SHORT).equals(args.get(1))) {
                         String version = cmd.printVersion();
                         this.print(version);
                         this.exitSuccessfully();

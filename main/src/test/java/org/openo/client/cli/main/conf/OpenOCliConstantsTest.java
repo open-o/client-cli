@@ -16,16 +16,18 @@
 
 package org.openo.client.cli.main.conf;
 
-public final class OpenOCliConstants {
+import static org.junit.Assert.assertTrue;
 
-    public static final String PARAM_HELP_SHORT = "h";
-    public static final String PARAM_HELP_LOGN = "help";
+import org.junit.Test;
 
-    public static final String PARAM_VERSION_SHORT = "v";
-    public static final String PARAM_VERSION_LONG = "version";
+public class OpenOCliConstantsTest {
 
-    public static final int EXIT_SUCCESS = 0;
-    public static final int EXIT_FAILURE = 1;
+    @Test
+    public void test() {
+        assertTrue(1 == OpenOCliConstants.EXIT_FAILURE && 0 == OpenOCliConstants.EXIT_SUCCESS
+                && "help".equals(OpenOCliConstants.PARAM_HELP_LOGN) && "h".equals(OpenOCliConstants.PARAM_HELP_SHORT)
+                && "v".equals(OpenOCliConstants.PARAM_VERSION_SHORT)
+                && "version".equals(OpenOCliConstants.PARAM_VERSION_LONG));
+    }
 
-    private OpenOCliConstants(){}
 }

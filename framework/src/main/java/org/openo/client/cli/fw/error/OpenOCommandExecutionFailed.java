@@ -23,17 +23,17 @@ package org.openo.client.cli.fw.error;
 public class OpenOCommandExecutionFailed extends OpenOCommandException {
     private static final long serialVersionUID = 488775545436993019L;
 
-    private static String errorCode = "0x0001";
+    private static final String ERROR_CODE = "0x0001";
 
     public OpenOCommandExecutionFailed(String cmdName, String  error, long httpStatus) {
-        super(errorCode, "Command " + cmdName + " failed to execute, " + error, httpStatus);
+        super(ERROR_CODE, "Command " + cmdName + " failed to execute, " + error, httpStatus);
     }
 
     public OpenOCommandExecutionFailed(String  error) {
-        super(errorCode, error);
+        super(ERROR_CODE, error);
     }
 
     public OpenOCommandExecutionFailed(String cmdName, String  error) {
-        super(errorCode, "Command " + cmdName + " failed to execute, " + error);
+        super(ERROR_CODE, "Command " + cmdName + " failed to execute, " + error);
     }
 }

@@ -17,7 +17,6 @@
 package org.openo.client.cli.main.utils;
 
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 import org.openo.client.cli.fw.error.OpenOCommandInvalidParameterValue;
 import org.openo.client.cli.fw.input.OpenOCommandParameter;
@@ -25,22 +24,17 @@ import org.openo.client.cli.fw.input.ParameterType;
 import org.openo.client.cli.main.error.OpenOCliArgumentValueMissing;
 import org.openo.client.cli.main.error.OpenOCliInvalidArgument;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-
 public class OpenOCliUtilsTest {
 
-    private OpenOCliUtils openOCliUtils;
-
-    @Before
-    public void setUp() {
-        openOCliUtils = new OpenOCliUtils();
-    }
-
+    @SuppressWarnings("static-access")
     @Test
-    public void testpopulateParamsLong() throws OpenOCliArgumentValueMissing, OpenOCliInvalidArgument, OpenOCommandInvalidParameterValue  {
+    public void testpopulateParamsLong()
+            throws OpenOCliArgumentValueMissing, OpenOCliInvalidArgument, OpenOCommandInvalidParameterValue {
         OpenOCommandParameter param1 = new OpenOCommandParameter();
         param1.setLongOption("openo-username");
         param1.setName("openo-username");
@@ -61,35 +55,113 @@ public class OpenOCliUtilsTest {
         param5.setLongOption("long-opt");
         param5.setName("long-opt");
         param5.setParameterType(ParameterType.STRING);
-        OpenOCommandParameter param6 = new OpenOCommandParameter();
-        param6.setLongOption("yaml-param");
-        param6.setName("yaml-param");
-        param6.setParameterType(ParameterType.STRING);
+
         List<OpenOCommandParameter> paramslist = new ArrayList<>();
         paramslist.add(param1);
         paramslist.add(param2);
         paramslist.add(param3);
         paramslist.add(param4);
         paramslist.add(param5);
-        paramslist.add(param6);
 
-        String[] args = new String[] {"bool", "--openo-username", "admin", "--openo-password", "123", "--msb-url",
-                        "a@b.com", "--string-param", "blah", "--long-opt", "10", "--yaml-param", "yamlFile"};
-        openOCliUtils.populateParams(paramslist, Arrays.asList(args));
-
+        String[] args = new String[] { "sample-create", "--openo-username", "admin", "--openo-password", "123",
+                "--msb-url", "a@b.com", "--string-param", "blah", "--long-opt", "10" };
+        OpenOCliUtils.populateParams(paramslist, Arrays.asList(args));
         List<String> expectedList = Arrays.asList(args);
 
-        Assert.assertEquals("openo-username", expectedList.get(2), paramslist.get(5).getValue());
-        Assert.assertEquals("openo-password", expectedList.get(4), paramslist.get(2).getValue());
-        Assert.assertEquals("msb-url", expectedList.get(6), paramslist.get(1).getValue());
-        Assert.assertEquals("string-param", expectedList.get(8), paramslist.get(3).getValue());
-        Assert.assertEquals("long-opt", expectedList.get(10), paramslist.get(4).getValue());
-        Assert.assertEquals("yaml-param", expectedList.get(12), paramslist.get(0).getValue());
+        Assert.assertEquals("openo-username", expectedList.get(2), paramslist.get(4).getValue());
+        Assert.assertEquals("openo-password", expectedList.get(4), paramslist.get(1).getValue());
+        Assert.assertEquals("msb-url", expectedList.get(6), paramslist.get(0).getValue());
+        Assert.assertEquals("string-param", expectedList.get(8), paramslist.get(2).getValue());
+        Assert.assertEquals("long-opt", expectedList.get(10), paramslist.get(3).getValue());
 
     }
 
+    @SuppressWarnings("static-access")
     @Test
-    public void testpopulateParamsShort() throws OpenOCliArgumentValueMissing, OpenOCliInvalidArgument, OpenOCommandInvalidParameterValue  {
+    public void testpositionalargs()
+            throws OpenOCliArgumentValueMissing, OpenOCliInvalidArgument, OpenOCommandInvalidParameterValue {
+        OpenOCommandParameter paramargs = new OpenOCommandParameter();
+        paramargs.setName("http://localhost:8082/file.txt");
+        List<OpenOCommandParameter> paramslist = new ArrayList<>();
+        paramslist.add(paramargs);
+        String[] args = new String[] { "positional-args", "http://localhost:8082/file.txt" };
+        paramargs.setParameterType(ParameterType.STRING);
+        OpenOCliUtils.populateParams(paramslist, Arrays.asList(args));
+        List<String> expectedList = Arrays.asList(args);
+        Assert.assertEquals("positional-args", expectedList.get(1), paramslist.get(0).getValue());
+    }
+
+    @SuppressWarnings("static-access")
+    @Test
+    public void testboolparamslong()
+            throws OpenOCliArgumentValueMissing, OpenOCliInvalidArgument, OpenOCommandInvalidParameterValue {
+        OpenOCommandParameter boolparam = new OpenOCommandParameter();
+        boolparam.setLongOption("bool");
+        boolparam.setName("bool-param");
+        List<OpenOCommandParameter> paramslist = new ArrayList<>();
+        paramslist.add(boolparam);
+        String[] args = new String[] { "sample-create", "--bool" };
+
+        boolparam.setParameterType(ParameterType.BOOL);
+        OpenOCliUtils.populateParams(paramslist, Arrays.asList(args));
+        List<String> expectedList = Arrays.asList(args);
+        Assert.assertNotNull(expectedList.get(1), paramslist.get(0).getValue());
+
+    }
+
+    @SuppressWarnings("static-access")
+    @Test
+    public void testboolparamsshort()
+            throws OpenOCliArgumentValueMissing, OpenOCliInvalidArgument, OpenOCommandInvalidParameterValue {
+        OpenOCommandParameter boolparam = new OpenOCommandParameter();
+        boolparam.setShortOption("b");
+        boolparam.setName("bool-param");
+        List<OpenOCommandParameter> paramslist = new ArrayList<>();
+        paramslist.add(boolparam);
+        String[] args = new String[] { "sample-create", "-b", };
+
+        boolparam.setParameterType(ParameterType.BOOL);
+        OpenOCliUtils.populateParams(paramslist, Arrays.asList(args));
+        List<String> expectedList = Arrays.asList(args);
+        Assert.assertNotNull(expectedList.get(1), paramslist.get(0).getValue());
+    }
+
+    @Test
+    public void testjsonparamsshort()
+            throws OpenOCliArgumentValueMissing, OpenOCliInvalidArgument, OpenOCommandInvalidParameterValue {
+        OpenOCommandParameter jsonparam = new OpenOCommandParameter();
+        jsonparam.setShortOption("j");
+        jsonparam.setName("json-param");
+        List<OpenOCommandParameter> paramslist = new ArrayList<>();
+        paramslist.add(jsonparam);
+        File resourcesDirectory = new File("src/test/resources/sampletest.json");
+        String[] args = new String[] { "sample-create", "-j", "file:" + resourcesDirectory };
+        jsonparam.setParameterType(ParameterType.JSON);
+        OpenOCliUtils.populateParams(paramslist, Arrays.asList(args));
+        List<String> expectedList = Arrays.asList(args);
+        Assert.assertNotNull(expectedList.get(1), paramslist.get(0).getValue());
+    }
+
+    @Test
+    public void testjsonparamslong()
+            throws OpenOCliArgumentValueMissing, OpenOCliInvalidArgument, OpenOCommandInvalidParameterValue {
+        OpenOCommandParameter jsonparam = new OpenOCommandParameter();
+        jsonparam.setLongOption("json-param");
+        jsonparam.setName("json-param");
+        List<OpenOCommandParameter> paramslist = new ArrayList<>();
+        paramslist.add(jsonparam);
+        File resourcesDirectory = new File("src/test/resources/sampletest.json");
+        String[] args = new String[] { "sample-create", "--json-param", "file:" + resourcesDirectory };
+        jsonparam.setParameterType(ParameterType.JSON);
+        OpenOCliUtils.populateParams(paramslist, Arrays.asList(args));
+        List<String> expectedList = Arrays.asList(args);
+        Assert.assertNotNull(expectedList.get(1), paramslist.get(0).getValue());
+    }
+
+    @SuppressWarnings("static-access")
+    @Test
+    public void testpopulateParamsShort()
+            throws OpenOCliArgumentValueMissing, OpenOCliInvalidArgument, OpenOCommandInvalidParameterValue {
 
         OpenOCommandParameter param1 = new OpenOCommandParameter();
         param1.setShortOption("u");
@@ -111,10 +183,6 @@ public class OpenOCliUtilsTest {
         param5.setShortOption("l");
         param5.setName("long-opt");
         param5.setParameterType(ParameterType.STRING);
-        OpenOCommandParameter param6 = new OpenOCommandParameter();
-        param6.setShortOption("y");
-        param6.setName("yaml-param");
-        param6.setParameterType(ParameterType.STRING);
 
         List<OpenOCommandParameter> paramslist = new ArrayList<>();
         paramslist.add(param1);
@@ -122,20 +190,18 @@ public class OpenOCliUtilsTest {
         paramslist.add(param3);
         paramslist.add(param4);
         paramslist.add(param5);
-        paramslist.add(param6);
 
-        String[] args11 = new String[] {"bool", "-u", "admin", "-p", "123", "-r", "a@b.com", "-c", "blah", "-l", "10",
-                        "-y", "yamlFile"};
-        openOCliUtils.populateParams(paramslist, Arrays.asList(args11));
+        String[] args11 = new String[] { "sample-create", "-u", "admin", "-p", "123", "-r", "a@b.com", "-c", "blah",
+                "-l", "10", };
+        OpenOCliUtils.populateParams(paramslist, Arrays.asList(args11));
 
         List<String> expectedList = Arrays.asList(args11);
 
-        Assert.assertEquals("u", expectedList.get(2), paramslist.get(5).getValue());
-        Assert.assertEquals("-p", expectedList.get(4), paramslist.get(2).getValue());
-        Assert.assertEquals("r", expectedList.get(6), paramslist.get(1).getValue());
-        Assert.assertEquals("c", expectedList.get(8), paramslist.get(3).getValue());
-        Assert.assertEquals("l", expectedList.get(10), paramslist.get(4).getValue());
-        Assert.assertEquals("y", expectedList.get(12), paramslist.get(0).getValue());
+        Assert.assertEquals("u", expectedList.get(2), paramslist.get(4).getValue());
+        Assert.assertEquals("-p", expectedList.get(4), paramslist.get(1).getValue());
+        Assert.assertEquals("r", expectedList.get(6), paramslist.get(0).getValue());
+        Assert.assertEquals("c", expectedList.get(8), paramslist.get(2).getValue());
+        Assert.assertEquals("l", expectedList.get(10), paramslist.get(3).getValue());
 
     }
 }

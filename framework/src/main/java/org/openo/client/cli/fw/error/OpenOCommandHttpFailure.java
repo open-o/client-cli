@@ -23,13 +23,13 @@ package org.openo.client.cli.fw.error;
 public class OpenOCommandHttpFailure extends OpenOCommandException {
     private static final long serialVersionUID = 488775545436993345L;
 
-    private static String errorCode = "0x0025";
+    private static final String ERROR = "0x0025";
 
     public OpenOCommandHttpFailure(String  error, long httpStatus) {
-        super(errorCode, error, httpStatus);
+        super(ERROR, error, httpStatus);
     }
 
     public OpenOCommandHttpFailure(String  error) {
-        super(errorCode, error);
+        super(ERROR, error);
     }
 }

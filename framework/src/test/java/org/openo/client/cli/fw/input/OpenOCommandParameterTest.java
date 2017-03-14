@@ -39,7 +39,7 @@ public class OpenOCommandParameterTest {
 
         assertTrue(param.getDefaultValue().equals("defaultValue") && param.getDescription().equals("description")
                 && param.getLongOption().equals("longOption") && param.getName().equals("name")
-                && param.getShortOption().equals("shortOption") && param.getValue().equals("value") && param.isOptional
+                && param.getShortOption().equals("shortOption") && param.getValue().equals("value") && param.isOptional()
                 && !param.isSecured() && param.getParameterType().equals(ParameterType.JSON));
     }
 

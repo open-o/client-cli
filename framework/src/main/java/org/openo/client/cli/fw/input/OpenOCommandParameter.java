@@ -42,62 +42,62 @@ public class OpenOCommandParameter {
     /*
      * Name, for positional parameters, the place is decided from schema file definition
      */
-    public String name;
+    private String cmdName;
 
     /*
      * Description
      */
-    public String description = "";
+    private String cmdDescription = "";
 
     /*
      * Short Option, like -f, for positional parameters, its not required.
      */
-    public String shortOption = null;
+    private String shortOption = null;
 
     /*
      * Long Option, like --file-path, for positional parameters, its not required.
      */
-    public String longOption = null;
+    private String longOption = null;
 
     /*
      * Parameter type such as int, json, yaml, string, etc
      */
-    public ParameterType parameterType;
+    private ParameterType parameterType;
 
     /*
      * Default value
      */
-    public String defaultValue = "";
+    private String defaultValue = "";
 
     /*
      * Is optional
      */
-    public boolean isOptional = false;
+    private boolean isOptional = false;
 
     /*
      * Is secured
      */
-    public boolean isSecured = false;
+    private boolean isSecured = false;
 
     /*
      * Parameter Value
      */
-    public Object value;
+    private Object value;
 
     public String getName() {
-        return name;
+        return cmdName;
     }
 
     public void setName(String name) {
-        this.name = name;
+        this.cmdName = name;
     }
 
     public String getDescription() {
-        return description;
+        return cmdDescription;
     }
 
     public void setDescription(String description) {
-        this.description = description;
+        this.cmdDescription = description;
     }
 
     public String getShortOption() {
@@ -175,7 +175,7 @@ public class OpenOCommandParameter {
                     && !value.toString().startsWith("/")) {
                 value = "/" + value;
             } else if (ParameterType.ARRAY.equals(parameterType)) {
-                if (value != null && !(value instanceof List)) {
+                if (!(value instanceof List)) {
                     throw new OpenOCommandInvalidParameterValue(this.getName());
                 }
 
@@ -187,7 +187,7 @@ public class OpenOCommandParameter {
                     throw new OpenOCommandInvalidParameterValue(this.getName());
                 }
             } else if (ParameterType.MAP.equals(parameterType)) {
-                if (value != null && !(value instanceof Map)) {
+                if (!(value instanceof Map)) {
                     throw new OpenOCommandInvalidParameterValue(this.getName());
                 }
 
@@ -241,13 +241,13 @@ public class OpenOCommandParameter {
      * @throws OpenOCommandInvalidParameterValue
      */
     public void validate() throws OpenOCommandParameterMissing, OpenOCommandInvalidParameterValue {
-        // TODO(mrkanag): empty check needs to revisit
+        // (mrkanag) empty check needs to revisit
         if (!this.isOptional()) {
             if (this.getValue() == null || this.getValue().toString().isEmpty()) {
                 throw new OpenOCommandParameterMissing(this.getName());
             }
         }
 
-        // TODO(mrkanag): validate for type supported ParameterType using constraints
+        // (mrkanag) validate for type supported ParameterType using constraints
     }
 }

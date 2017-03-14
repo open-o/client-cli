@@ -115,13 +115,13 @@ public class OpenOCommandResult {
      * @return attributes
      */
     public Map<String, OpenOCommandResultAttribute> getRecordsMap() {
-        Map<String, OpenOCommandResultAttribute> records = new HashMap<>();
+        Map<String, OpenOCommandResultAttribute> recordMap = new HashMap<>();
 
         for (OpenOCommandResultAttribute record : this.getRecords()) {
-            records.put(record.getName(), record);
+            recordMap.put(record.getName(), record);
         }
 
-        return records;
+        return recordMap;
     }
 
     public ResultType getType() {
@@ -184,7 +184,7 @@ public class OpenOCommandResult {
     public String print() throws OpenOCommandOutputFormatNotsupported, OpenOCommandOutputPrintingFailed {
         String printOutput = "";
 
-        if(this.getRecords().isEmpty()){
+        if (this.getRecords().isEmpty()) {
             return printOutput;
         }
 
@@ -237,14 +237,14 @@ public class OpenOCommandResult {
     }
 
     private List<OpenOCommandResultAttribute> getScopedRecords() {
-        List<OpenOCommandResultAttribute> records = new ArrayList<>();
+        List<OpenOCommandResultAttribute> recordList = new ArrayList<>();
         for (OpenOCommandResultAttribute record : this.getRecords()) {
             if (record.getScope().ordinal() > this.getScope().ordinal()) {
                 continue;
             }
-            records.add(record);
+            recordList.add(record);
         }
 
-        return records;
+        return recordList;
     }
 }

@@ -29,7 +29,7 @@ public class HttpResult {
     public static final String COOKIES = "cookies";
     private int status;
 
-    private String body;
+    private String resBody;
 
     private Map<String, String> respHeaders = new HashMap<>();
 
@@ -44,11 +44,11 @@ public class HttpResult {
     }
 
     public String getBody() {
-        return this.body;
+        return this.resBody;
     }
 
     public void setBody(String body) {
-        this.body = body;
+        this.resBody = body;
     }
 
     public void setRespHeaders(Map<String, String> respHeaders) {

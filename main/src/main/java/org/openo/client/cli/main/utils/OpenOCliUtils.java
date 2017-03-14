@@ -16,21 +16,20 @@
 
 package org.openo.client.cli.main.utils;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import net.minidev.json.JSONObject;
+
 import org.openo.client.cli.fw.error.OpenOCommandInvalidParameterValue;
 import org.openo.client.cli.fw.input.OpenOCommandParameter;
 import org.openo.client.cli.fw.input.ParameterType;
 import org.openo.client.cli.main.error.OpenOCliArgumentValueMissing;
 import org.openo.client.cli.main.error.OpenOCliInvalidArgument;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
-
-import net.minidev.json.JSONObject;
-
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -40,6 +39,14 @@ import java.util.Map;
  *
  */
 public class OpenOCliUtils {
+
+    /**
+     * private Constructor.
+     */
+    private OpenOCliUtils() {
+
+    }
+
     /**
      * It read thru the args and populate the given params for short optional, long option and postional args the idx of
      * positional args, is calculated based on the position at which it present in the params and args.
@@ -53,6 +60,7 @@ public class OpenOCliUtils {
      * @throws OpenOCliInvalidArgument
      *             Invalid argument exception
      * @throws OpenOCommandInvalidParameterValue
+     *             exception
      */
     public static void populateParams(List<OpenOCommandParameter> params, List<String> args)
             throws OpenOCliArgumentValueMissing, OpenOCliInvalidArgument, OpenOCommandInvalidParameterValue {
@@ -83,8 +91,8 @@ public class OpenOCliUtils {
         // Skip the first args openo cmd name, so start from 1
         for (int i = 1; i < args.size(); i++) {
             // check if short option exist
-            //TODO(mrkanag): Optimize the below code to handle short and long options in one iteration
-            //now its redundant
+            // (mrkanag) Optimize the below code to handle short and long options in one iteration
+            // now its redundant
             if (shortOptionMap.containsKey(args.get(i))) {
                 // end of the list or if its option rather than a value
                 if ((i + 1) == args.size() || args.get(i + 1).startsWith("-")) {
@@ -103,7 +111,7 @@ public class OpenOCliUtils {
                 } else if (paramMap.get(shortOptionMap.get(args.get(i))).getParameterType()
                         .equals(ParameterType.ARRAY)) {
                     Object value = paramMap.get(shortOptionMap.get(args.get(i))).getValue();
-                    List<String> list = null;
+                    List<String> list;
                     if (value == "") {
                         list = new ArrayList<>();
                     } else {
@@ -117,7 +125,7 @@ public class OpenOCliUtils {
                 } else if (paramMap.get(shortOptionMap.get(args.get(i))).getParameterType().equals(ParameterType.MAP)) {
                     Object value = paramMap.get(shortOptionMap.get(args.get(i))).getValue();
 
-                    Map<String, String> map = null;
+                    Map<String, String> map;
 
                     if (value == "") {
                         map = new HashMap<>();
@@ -164,7 +172,7 @@ public class OpenOCliUtils {
                 } else if (paramMap.get(longOptionMap.get(args.get(i))).getParameterType()
                         .equals(ParameterType.ARRAY)) {
                     Object value = paramMap.get(longOptionMap.get(args.get(i))).getValue();
-                    List<String> list = null;
+                    List<String> list;
                     if (value == "") {
                         list = new ArrayList<>();
                     } else {
@@ -179,7 +187,7 @@ public class OpenOCliUtils {
 
                     Object value = paramMap.get(longOptionMap.get(args.get(i))).getValue();
 
-                    Map<String, String> map = null;
+                    Map<String, String> map;
 
                     if (value == "") {
                         map = new HashMap<>();
@@ -218,7 +226,6 @@ public class OpenOCliUtils {
         }
 
         params.clear();
-        Collection<OpenOCommandParameter> param1 = paramMap.values();
         params.addAll(paramMap.values());
     }
 

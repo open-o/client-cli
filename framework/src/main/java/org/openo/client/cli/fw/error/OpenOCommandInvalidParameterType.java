@@ -22,11 +22,11 @@ package org.openo.client.cli.fw.error;
  */
 public class OpenOCommandInvalidParameterType extends OpenOCommandException {
 
+    private static final long serialVersionUID = 2821256032317061066L;
+
     public OpenOCommandInvalidParameterType(String paramName) {
         super("0x0003", "Parameter type " + paramName + " is invalid");
 
     }
-
-    private static final long serialVersionUID = 2821256032317061066L;
 
 }

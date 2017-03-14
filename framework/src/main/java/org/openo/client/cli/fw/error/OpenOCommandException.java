@@ -27,17 +27,17 @@ public class OpenOCommandException extends Exception {
     /*
      * Command Error Code
      */
-    public String errorCode;
+    private final String errorCode;
 
     /*
      * Command error message
      */
-    public String errorMessage;
+    private final String errorMessage;
 
     /*
      * Command HTTP status code
      */
-    public long httpStatusCode;
+    private final long httpStatusCode;
 
     /**
      * OpenOCommandException constructor.

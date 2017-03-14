@@ -27,50 +27,50 @@ public class OpenOCommandExecutor {
     public static final String METHOD = "method";
     public static final String EXCEPTION = "exception";
 
-    private String api;
-    private String client;
-    private String entity;
-    private String method;
-    private String exception;
+    private String apiName;
+    private String clientName;
+    private String entityName;
+    private String methodName;
+    private String exceptionName;
 
     public String getApi() {
-        return api;
+        return this.apiName;
     }
 
     public void setApi(String api) {
-        this.api = api;
+        this.apiName = api;
     }
 
     public String getClient() {
-        return client;
+        return this.clientName;
     }
 
     public void setClient(String client) {
-        this.client = client;
+        this.clientName = client;
     }
 
     public String getEntity() {
-        return entity;
+        return entityName;
     }
 
     public void setEntity(String entity) {
-        this.entity = entity;
+        this.entityName = entity;
     }
 
     public String getMethod() {
-        return method;
+        return methodName;
     }
 
     public void setMethod(String method) {
-        this.method = method;
+        this.methodName = method;
     }
 
     public String getException() {
-        return exception;
+        return exceptionName;
     }
 
     public void setException(String exception) {
-        this.exception = exception;
+        this.exceptionName = exception;
     }
 
 }

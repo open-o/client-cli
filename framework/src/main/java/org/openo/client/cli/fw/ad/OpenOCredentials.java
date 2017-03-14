@@ -24,17 +24,17 @@ public class OpenOCredentials {
     /*
      * OpenO Service username.
      */
-    public String username;
+    private String username;
 
     /*
      * OpenO Service password
      */
-    public String password;
+    private String password;
 
     /*
      * OpenO Service msb-url
      */
-    public String msbUrl;
+    private String msbUrl;
 
     /**
      * Open-O credentials with username and password.

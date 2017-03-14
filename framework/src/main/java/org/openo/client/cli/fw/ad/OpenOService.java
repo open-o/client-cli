@@ -27,12 +27,12 @@ public class OpenOService {
     /*
      * OpenO Service name like gso.
      */
-    private String name;
+    private String serviceName;
 
     /*
      * OpenO Service API version like v1, v2, etc
      */
-    private String version;
+    private String serviceVersion;
 
     private String basePath;
 
@@ -47,19 +47,19 @@ public class OpenOService {
     }
 
     public String getName() {
-        return name;
+        return serviceName;
     }
 
     public void setName(String name) {
-        this.name = name;
+        this.serviceName = name;
     }
 
     public String getVersion() {
-        return version;
+        return serviceVersion;
     }
 
     public void setVersion(String version) {
-        this.version = version;
+        this.serviceVersion = version;
     }
 
     public String getBasePath() {
@@ -70,6 +70,7 @@ public class OpenOService {
         this.basePath = basePath;
     }
 
+    @Override
     public String toString() {
         return this.getName() + " " + this.getVersion();
     }

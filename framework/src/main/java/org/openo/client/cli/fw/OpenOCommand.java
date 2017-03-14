@@ -59,17 +59,17 @@ public abstract class OpenOCommand {
     public static final String OPENO_CMD_SCHEMA_VERSION = "openo_cmd_schema_version";
     private static final String OPENO_CMD_SCHEMA_VERSION_VALUE = "1.0";
 
-    private String description;
+    private String cmdDescription;
 
-    private String name;
+    private String cmdName;
 
-    private String schemaName;
+    private String cmdSchemaName;
 
-    private OpenOService service = new OpenOService();
+    private OpenOService openOservice = new OpenOService();
 
-    private List<OpenOCommandParameter> parameters = new ArrayList<>();
+    private List<OpenOCommandParameter> cmdParameters = new ArrayList<>();
 
-    private OpenOCommandResult result = new OpenOCommandResult();
+    private OpenOCommandResult cmdResult = new OpenOCommandResult();
 
     protected OpenOAuthClient authClient;
 
@@ -83,44 +83,44 @@ public abstract class OpenOCommand {
      * OpenO command description, defined by derived command.
      */
     public String getDescription() {
-        return this.description;
+        return this.cmdDescription;
     }
 
     public void setDescription(String description) {
-        this.description = description;
+        this.cmdDescription = description;
     }
 
     /*
      * OpenO command name like user-create, ns-list, etc , defined by derived command
      */
     public String getName() {
-        return this.name;
+        return this.cmdName;
     }
 
     public void setName(String name) {
-        this.name = name;
+        this.cmdName = name;
     }
 
     /*
      * OpenO service, this command uses to execute it. , defined by derived command
      */
     public OpenOService getService() {
-        return this.service;
+        return this.openOservice;
     }
 
     public void setService(OpenOService service) {
-        this.service = service;
+        this.openOservice = service;
     }
 
     public void setParameters(List<OpenOCommandParameter> parameters) {
-        this.parameters = parameters;
+        this.cmdParameters = parameters;
     }
 
     /*
      * OpenO command input parameters, defined by derived command
      */
     public List<OpenOCommandParameter> getParameters() {
-        return this.parameters;
+        return this.cmdParameters;
     }
 
     /*
@@ -134,19 +134,19 @@ public abstract class OpenOCommand {
      * OpenO command output results, defined by derived command
      */
     public OpenOCommandResult getResult() {
-        return result;
+        return this.cmdResult;
     }
 
     public void setResult(OpenOCommandResult result) {
-        this.result = result;
+        this.cmdResult = result;
     }
 
     public String getSchemaName() {
-        return schemaName;
+        return cmdSchemaName;
     }
 
     private void setSchemaName(String schemaName) {
-        this.schemaName = schemaName;
+        this.cmdSchemaName = schemaName;
     }
 
     /**
@@ -215,7 +215,7 @@ public abstract class OpenOCommand {
         Map<String, OpenOCommandParameter> paramMap = this.getParametersMap();
 
         // -h or --help is always higher precedence !, user can set this value to get help message
-        if (paramMap.get(OpenOCommandConfg.DEFAULT_PARAMETER_HELP).getValue() == "true") {
+        if ("true".equals(paramMap.get(OpenOCommandConfg.DEFAULT_PARAMETER_HELP).getValue())) {
             OpenOCommandResult result = new OpenOCommandResult();
             result.setType(ResultType.TEXT);
             result.setOutput(this.printHelp());
@@ -223,7 +223,7 @@ public abstract class OpenOCommand {
         }
 
         // -v or --version is next higher precedence !, user can set this value to get help message
-        if (paramMap.get(OpenOCommandConfg.DEFAULT_PARAMETER_VERSION).getValue() == "true") {
+        if ("true".equals(paramMap.get(OpenOCommandConfg.DEFAULT_PARAMETER_VERSION).getValue())) {
             OpenOCommandResult result = new OpenOCommandResult();
             result.setType(ResultType.TEXT);
             result.setOutput(this.printVersion());
@@ -234,19 +234,19 @@ public abstract class OpenOCommand {
         this.validate();
 
         // -f or --format
-        this.result.setType(
+        this.cmdResult.setType(
                 ResultType.get(paramMap.get(OpenOCommandConfg.DEFAULT_PARAMETER_OUTPUT_FORMAT).getValue().toString()));
-        if (paramMap.get(OpenOCommandConfg.DEFAULT_PARAMETER_OUTPUT_ATTR_LONG).getValue().equals("true")) {
-            this.result.setScope(OpenOCommandResultAttributeScope.LONG);
+        if ("true".equals(paramMap.get(OpenOCommandConfg.DEFAULT_PARAMETER_OUTPUT_ATTR_LONG).getValue())) {
+            this.cmdResult.setScope(OpenOCommandResultAttributeScope.LONG);
         }
         // --no-title
-        if (paramMap.get(OpenOCommandConfg.DEFAULT_PARAMETER_OUTPUT_NO_TITLE).getValue().equals("true")) {
-            this.result.setIncludeTitle(false);
+        if ("true".equals(paramMap.get(OpenOCommandConfg.DEFAULT_PARAMETER_OUTPUT_NO_TITLE).getValue())) {
+            this.cmdResult.setIncludeTitle(false);
         }
 
         // --debug
-        if (paramMap.get(OpenOCommandConfg.DEFAULT_PARAMETER_DEBUG).getValue().equals("true")) {
-            this.result.setDebug(true);
+        if ("true".equals(paramMap.get(OpenOCommandConfg.DEFAULT_PARAMETER_DEBUG).getValue())) {
+            this.cmdResult.setDebug(true);
         }
 
         try {
@@ -254,7 +254,7 @@ public abstract class OpenOCommand {
             OpenOCredentials creds = OpenOCommandUtils.fromParameters(this.getParameters());
             this.authClient = new OpenOAuthClient(creds, this.getResult().isDebug());
 
-            if (!this.service.isNoAuth()) {
+            if (!this.openOservice.isNoAuth()) {
                 this.authClient.login();
             }
 
@@ -262,22 +262,22 @@ public abstract class OpenOCommand {
             this.run();
 
             // logout
-            if (!this.service.isNoAuth()) {
+            if (!this.openOservice.isNoAuth()) {
                 this.authClient.logout();
             }
 
-            if (this.result.isDebug()) {
-                this.result.setDebugInfo(this.authClient.getDebugInfo());
+            if (this.cmdResult.isDebug()) {
+                this.cmdResult.setDebugInfo(this.authClient.getDebugInfo());
             }
         } catch (OpenOCommandException e) {
-            if (this.result.isDebug()) {
-                this.result.setDebugInfo(this.authClient.getDebugInfo());
+            if (this.cmdResult.isDebug()) {
+                this.cmdResult.setDebugInfo(this.authClient.getDebugInfo());
             }
             throw e;
         }
 
 
-        return this.result;
+        return this.cmdResult;
     }
 
     /*
@@ -317,5 +317,5 @@ public abstract class OpenOCommand {
     public String printHelp() throws OpenOCommandHelpFailed {
         return OpenOCommandUtils.help(this);
     }
-    // TODO(mrkanag): Add toString for all command, parameter, result, etc objects in JSON format
+    // (mrkanag) Add toString for all command, parameter, result, etc objects in JSON format
 }

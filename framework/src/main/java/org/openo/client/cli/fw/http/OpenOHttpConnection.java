@@ -237,7 +237,7 @@ public class OpenOHttpConnection {
     }
 
     private void addCommonCookies(HttpInput input, CookieStore cookieStore) {
-        Cookie cookie = new BasicClientCookie(this.X_AUTH_TOKEN, this.xauthToken);
+        Cookie cookie = new BasicClientCookie(X_AUTH_TOKEN, this.xauthToken);
         cookieStore.addCookie(cookie);
     }
 

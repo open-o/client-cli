@@ -44,7 +44,7 @@ public class TableGenerator {
     public String generateTable(List<List<Object>> rowsList, boolean printSeparator) {
         StringBuilder stringBuilder = new StringBuilder();
 
-        if (rowsList.size() == 0) {
+        if (rowsList.isEmpty()) {
             return stringBuilder.toString();
         }
 
@@ -63,7 +63,7 @@ public class TableGenerator {
             if (splitRowSize > 1) {
                 for (int cellIndex = 0; cellIndex < row.size(); cellIndex++) {
                     Object cell = row.get(cellIndex);
-                    String finalCell = "";
+                    String finalCell;
                     if (cell != null) {
                         if (cell instanceof String) {
                             finalCell = (String) cell;
@@ -80,13 +80,10 @@ public class TableGenerator {
                     for (int cellIndex = 0; cellIndex < row.size(); cellIndex++) {
                         Object cell = row.get(cellIndex);
                         String finalCell = "";
-                        if (cell != null) {
-                            if (cell instanceof List) {
-                                List<String> list = (List<String>) cell;
-                                if (splitCellIndex < list.size()) {
-                                    finalCell = list.get(splitCellIndex);
-                                }
-
+                        if (cell != null && cell instanceof List) {
+                            List<String> list = (List<String>) cell;
+                            if (splitCellIndex < list.size()) {
+                                finalCell = list.get(splitCellIndex);
                             }
                         }
                         fillCell(stringBuilder, finalCell, cellIndex, columnMaxWidthMapping, printSeparator);
@@ -159,8 +156,8 @@ public class TableGenerator {
      */
     private Map<Integer, Integer> getMaximumWidhtofColumns(List<List<Object>> rowsList) {
         Map<Integer, Integer> columnMaxWidthMapping = new HashMap<>();
-        if (rowsList == null || rowsList.size() == 0) {
-            return new HashMap<Integer, Integer>();
+        if (rowsList == null || rowsList.isEmpty()) {
+            return new HashMap<>();
         }
         for (int columnIndex = 0; columnIndex < rowsList.get(0).size(); columnIndex++) {
             columnMaxWidthMapping.put(columnIndex, 0);
@@ -260,15 +257,17 @@ public class TableGenerator {
      */
     private int getOptimumCellPadding(int cellIndex, int datalength, Map<Integer, Integer> columnMaxWidthMapping,
             int cellPaddingSize) {
-        if (datalength % 2 != 0) {
-            datalength++;
+        int datLen = datalength;
+        int paddingSize = cellPaddingSize;
+        if (datLen % 2 != 0) {
+            datLen++;
         }
 
-        if (datalength < columnMaxWidthMapping.get(cellIndex)) {
-            cellPaddingSize = cellPaddingSize + (columnMaxWidthMapping.get(cellIndex) - datalength) / 2;
+        if (datLen < columnMaxWidthMapping.get(cellIndex)) {
+            paddingSize = paddingSize + (columnMaxWidthMapping.get(cellIndex) - datLen) / 2;
         }
 
-        return cellPaddingSize;
+        return paddingSize;
     }
 
     /**
@@ -286,19 +285,19 @@ public class TableGenerator {
     private void fillCell(StringBuilder stringBuilder, String cell, int cellIndex,
             Map<Integer, Integer> columnMaxWidthMapping, boolean printSeparator) {
 
-        if (cell == null) {
-            cell = "";
+        String filledCell = cell;
+
+        if (filledCell == null) {
+            filledCell = "";
         }
-        int cellLength = cell.length();
+        int cellLength = filledCell.length();
         int cellPaddingSize = getOptimumCellPadding(cellIndex, cellLength, columnMaxWidthMapping, PADDING_SIZE);
 
-        if (cellIndex == 0) {
-            if (printSeparator) {
-                stringBuilder.append(TABLE_V_SPLIT_SYMBOL);
-            }
+        if (cellIndex == 0 && printSeparator) {
+            stringBuilder.append(TABLE_V_SPLIT_SYMBOL);
         }
 
-        stringBuilder.append(cell);
+        stringBuilder.append(filledCell);
         fillSpace(stringBuilder, cellPaddingSize);
 
         if (cellLength % 2 != 0) {
