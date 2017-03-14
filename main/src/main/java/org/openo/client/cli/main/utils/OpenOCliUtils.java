@@ -27,6 +27,7 @@ import org.openo.client.cli.fw.input.ParameterType;
 import org.openo.client.cli.main.error.OpenOCliArgumentValueMissing;
 import org.openo.client.cli.main.error.OpenOCliInvalidArgument;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -232,7 +233,10 @@ public class OpenOCliUtils {
     private static String readJsonStringFromUrl(String input, String argName) throws OpenOCliInvalidArgument {
         ObjectMapper mapper = new ObjectMapper();
         try {
-            if (input.startsWith("file:") || input.startsWith("http:") || input.startsWith("ftp:")) {
+            File file = new File(input);
+            if (file.isFile()) {
+                return mapper.readValue(file, JSONObject.class).toJSONString();
+            } else if (input.startsWith("file:") || input.startsWith("http:") || input.startsWith("ftp:")) {
                 URL jsonUrl = new URL(input);
                 return mapper.readValue(jsonUrl, JSONObject.class).toJSONString();
             } else {
