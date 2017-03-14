@@ -678,7 +678,9 @@ public class OpenOCommandUtils {
 
             OpenOCommandParameter param = params.get(paramName);
             if (ParameterType.ARRAY.equals(param.getParameterType())
-                    || ParameterType.MAP.equals(param.getParameterType())) {
+                    || ParameterType.MAP.equals(param.getParameterType())
+                    || ParameterType.JSON.equals(param.getParameterType())
+                    || ParameterType.YAML.equals(param.getParameterType())) {
                 //ignore the front and back double quotes in json body
                 result += line.substring(currentIdx, idxS - 1) + value;
                 currentIdx = idxE + 2;
