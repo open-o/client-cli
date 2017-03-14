@@ -220,4 +220,10 @@ public class OpenOCliMainTest {
         this.handle(new String[] { "microservice-create", "--help" });
     }
 
+    @Test
+    @Ignore
+    public void testgsoServiceCreateCommand() {
+        this.handle(new String[] { "service-create", "-m", "http://192.168.4.47:80", "-u", "root1", "-p", "root123", "-x", "test", "-z", "test", "-n", "test", "-r", "123", "-j", "D:/workspace/open-o/integration/test/csit/plans/gso/sanity-check/jsoninput/lcm_CreateServiceReq.json", "-d"});
+    }
+
 }
