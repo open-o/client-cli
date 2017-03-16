@@ -58,7 +58,7 @@ public class OpenOListSwaggerBasedCommand extends OpenOSwaggerCommand {
 
         } catch (NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException
                 | IllegalArgumentException | InvocationTargetException e) {
-            throw new OpenOCommandExecutionFailed(this.getName(), e.getMessage());
+            throw new OpenOCommandExecutionFailed(this.getName(), e);
         } catch (OpenOCommandException e) {
             throw e;
         } catch (Exception e) {
@@ -66,8 +66,7 @@ public class OpenOListSwaggerBasedCommand extends OpenOSwaggerCommand {
                 Class execCls = Class.forName(this.getExecutor().getException());
                 Method execMethod = execCls.getClass().getMethod("getCode");
                 if (execCls.isInstance(e)) {
-                    throw new OpenOCommandExecutionFailed(this.getName(), e.getMessage(),
-                            (Integer) execMethod.invoke(e));
+                    throw new OpenOCommandExecutionFailed(this.getName(), e, (Integer) execMethod.invoke(e));
                 }
             } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException
                     | ClassNotFoundException | NoSuchMethodException | SecurityException e1) {

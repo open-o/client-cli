@@ -96,13 +96,11 @@ public class OpenOCommandPrint {
     /**
      * Helps to form the rows from columns.
      *
-     * @param isNormalize boolean
-     * @return +--------------+-----------+-----------------------------+ |
-     *         header1 | header 2 | header 3 |
-     *         +--------------+-----------+-----------------------------+ | v1 |
-     *         List[line| v 3 | | | 1, line2]| |
-     *         +--------------+-----------+-----------------------------+ | null
-     *         | yyyyyy 2 | xxxxxx 3 |
+     * @param isNormalize
+     *            boolean
+     * @return +--------------+-----------+-----------------------------+ | header1 | header 2 | header 3 |
+     *         +--------------+-----------+-----------------------------+ | v1 | List[line| v 3 | | | 1, line2]| |
+     *         +--------------+-----------+-----------------------------+ | null | yyyyyy 2 | xxxxxx 3 |
      *         +--------------+-----------+-----------------------------+
      */
     private List<List<Object>> formRows(boolean isNormalize) {
@@ -191,20 +189,16 @@ public class OpenOCommandPrint {
         return Arrays.asList(strArray);
     }
 
-
     /**
-    * Helps to print table.
-    * @param printSeparator Prints with line separator
-    * @return
-    *       +--------------+-----------+-----------------------------+
-    *       |    header1   | header 2  | header 3                    |
-    *       +--------------+-----------+-----------------------------+
-    *       |    v1        |  line 1   | v      3                    |
-    *       |              |  line 2   |                             |
-    *       +--------------+-----------+-----------------------------+
-    *       |              | yyyyyy 2  | xxxxxx 3                    |
-    *       +--------------+-----------+-----------------------------+
-    */
+     * Helps to print table.
+     *
+     * @param printSeparator
+     *            Prints with line separator
+     * @return +--------------+-----------+-----------------------------+ | header1 | header 2 | header 3 |
+     *         +--------------+-----------+-----------------------------+ | v1 | line 1 | v 3 | | | line 2 | |
+     *         +--------------+-----------+-----------------------------+ | | yyyyyy 2 | xxxxxx 3 |
+     *         +--------------+-----------+-----------------------------+
+     */
     public String printTable(boolean printSeparator) {
         List<List<Object>> rows = this.formRows(true);
         TableGenerator table = new TableGenerator();
@@ -233,7 +227,7 @@ public class OpenOCommandPrint {
 
             return writer.toString();
         } catch (IOException e) {
-            throw new OpenOCommandOutputPrintingFailed(e.getMessage());
+            throw new OpenOCommandOutputPrintingFailed(e);
         } finally {
             try {
                 if (printer != null) {
@@ -241,7 +235,7 @@ public class OpenOCommandPrint {
                 }
                 writer.close();
             } catch (IOException e) {
-                throw new OpenOCommandOutputPrintingFailed(e.getMessage());
+                throw new OpenOCommandOutputPrintingFailed(e);
             }
         }
     }

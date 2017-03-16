@@ -27,4 +27,8 @@ public class OpenOCommandSchemaNotFound extends OpenOCommandException {
     public OpenOCommandSchemaNotFound(String cmdName) {
         super("0x0019", "Command schema " + cmdName + " is not found");
     }
+
+    public OpenOCommandSchemaNotFound(String cmdName, Throwable throwable) {
+        super("0x0019", "Command schema " + cmdName + " is not found, " + throwable.getMessage());
+    }
 }

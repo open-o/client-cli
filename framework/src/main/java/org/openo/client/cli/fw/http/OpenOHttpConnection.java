@@ -126,7 +126,7 @@ public class OpenOHttpConnection {
                 this.httpClient = HttpClients.createDefault();
             }
         } catch (Exception e) {
-            throw new OpenOCommandHttpFailure(e.getMessage());
+            throw new OpenOCommandHttpFailure(e);
         }
 
         this.debug = debug;
@@ -164,7 +164,7 @@ public class OpenOHttpConnection {
             EntityUtils.consume(resp.getEntity());
             return body;
         } catch (IOException e) {
-            throw new OpenOCommandHttpFailure(e.getMessage());
+            throw new OpenOCommandHttpFailure(e);
         }
     }
 
@@ -317,7 +317,7 @@ public class OpenOHttpConnection {
             result.setRespHeaders(this.getHttpHeaders(resp));
             this.updateResultFromCookies(result, cookieStore.getCookies());
         } catch (ParseException | IOException e) {
-            throw new OpenOCommandHttpFailure(e.getMessage());
+            throw new OpenOCommandHttpFailure(e);
         } finally {
             if (this.debug) {
                 this.debugDetails = input + "" + result;

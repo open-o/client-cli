@@ -33,7 +33,6 @@ import org.openo.client.cli.fw.error.OpenOCommandParameterNameConflict;
 import org.openo.client.cli.fw.error.OpenOCommandParameterOptionConflict;
 import org.openo.client.cli.fw.error.OpenOCommandRegistrationFailed;
 import org.openo.client.cli.fw.error.OpenOCommandSchemaNotFound;
-import org.openo.client.cli.fw.log.OpenOCommandLogger;
 import org.openo.client.cli.fw.output.OpenOCommandResult;
 import org.openo.client.cli.fw.output.OpenOCommandResultAttribute;
 import org.openo.client.cli.fw.output.OpenOCommandResultAttributeScope;
@@ -54,11 +53,9 @@ import java.util.Map;
  *
  */
 public class OpenOCommandRegistrar {
-    static {
-        //Start the AOP for logging
-        new OpenOCommandLogger();
-    }
-
+    /*
+     * static { //Start the AOP for logging new OpenOCommandLogger(); }
+     */
     private Map<String, Class<? extends OpenOCommand>> registry = new HashMap<>();
 
     private static OpenOCommandRegistrar registrar = null;
@@ -131,7 +128,7 @@ public class OpenOCommandRegistrar {
             cmd = (OpenOCommand) constr.newInstance();
 
             String schemaName;
-            if (cmd.getClass().getName().equals(OpenOHttpCommand.class.getName())) {
+            if (cmd.getClass().equals(OpenOHttpCommand.class)) { //NOSONAR
                 schemaName = OpenOCommandUtils.loadExternalSchemaFromJson(cmdName).getSchemaName();
             } else {
                 schemaName = this.getSchemaFileName(cls);
@@ -141,7 +138,7 @@ public class OpenOCommandRegistrar {
                 | IllegalArgumentException | InvocationTargetException | OpenOCommandSchemaNotFound
                 | OpenOCommandInvalidSchema | OpenOCommandParameterOptionConflict | OpenOCommandParameterNameConflict
                 | OpenOCommandInvalidSchemaVersion | OpenOCommandDiscoveryFailed e) {
-            throw new OpenOCommandRegistrationFailed(cmdName, e.getMessage());
+            throw new OpenOCommandRegistrationFailed(cmdName, e);
         }
 
         return cmd;
@@ -223,7 +220,7 @@ public class OpenOCommandRegistrar {
                 cmd = this.get(cmdName);
             } catch (OpenOCommandNotFound | OpenOCommandRegistrationFailed | OpenOCommandInvalidParameterType
                     | OpenOCommandInvalidPrintDirection | OpenOCommandInvalidResultAttributeScope e) {
-                throw new OpenOCommandHelpFailed(e.getMessage());
+                throw new OpenOCommandHelpFailed(e);
             }
 
             attr.getValues().add(cmd.getName());
@@ -235,7 +232,7 @@ public class OpenOCommandRegistrar {
             return "Provides Command Line Interface (CLI) for Open-O.\n\nFollowing commands are supported:\n"
                     + help.print();
         } catch (OpenOCommandOutputFormatNotsupported | OpenOCommandOutputPrintingFailed e) {
-            throw new OpenOCommandHelpFailed(e.getMessage());
+            throw new OpenOCommandHelpFailed(e);
         }
     }
 }

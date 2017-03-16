@@ -46,7 +46,7 @@ public class OpenOCreateSwaggerBasedCommand extends OpenOSwaggerCommand {
                 set.invoke(obj, this.getParametersMap().get(paramName).getValue());
             } catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException
                     | InvocationTargetException | OpenOCommandInvalidParameterValue e) {
-                throw new OpenOCommandResultInitialzationFailed(this.getName(), e.getMessage());
+                throw new OpenOCommandResultInitialzationFailed(this.getName(), e);
             }
         }
         return obj;
@@ -81,7 +81,7 @@ public class OpenOCreateSwaggerBasedCommand extends OpenOSwaggerCommand {
             this.initializeResult(result);
         } catch (NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException
                 | IllegalArgumentException | InvocationTargetException e) {
-            throw new OpenOCommandExecutionFailed(this.getName(), e.getMessage());
+            throw new OpenOCommandExecutionFailed(this.getName(), e);
         } catch (OpenOCommandException e) {
             throw e;
         } catch (Exception e) {
@@ -89,8 +89,7 @@ public class OpenOCreateSwaggerBasedCommand extends OpenOSwaggerCommand {
                 Class execCls = Class.forName(this.getExecutor().getException());
                 Method execMethod = execCls.getClass().getMethod("getCode");
                 if (execCls.isInstance(e)) {
-                    throw new OpenOCommandExecutionFailed(this.getName(), e.getMessage(),
-                            (Integer) execMethod.invoke(e));
+                    throw new OpenOCommandExecutionFailed(this.getName(), e, (Integer) execMethod.invoke(e));
                 }
             } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException
                     | ClassNotFoundException | NoSuchMethodException | SecurityException e1) {

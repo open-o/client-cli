@@ -28,4 +28,8 @@ public class OpenOCommandInvalidSchema extends OpenOCommandException {
         super("0x0007", "Command schema " + schema + " is invalid, " + error);
     }
 
+    public OpenOCommandInvalidSchema(String schema, Throwable throwable) {
+        super("0x0007", "Command schema " + schema + " is invalid, " + throwable.getMessage());
+    }
+
 }

@@ -60,6 +60,7 @@ public class OpenOHttpCommand extends OpenOCommand {
         this.input = input;
     }
 
+    @Override
     public String getSchemaVersion() {
         return OPENO_CMD_SCHEMA_VERSION_VALUE;
     }

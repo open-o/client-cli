@@ -29,11 +29,24 @@ public class OpenOCommandExecutionFailed extends OpenOCommandException {
         super(ERROR_CODE, "Command " + cmdName + " failed to execute, " + error, httpStatus);
     }
 
+    public OpenOCommandExecutionFailed(String cmdName, Throwable throwable, long httpStatus) {
+        super(ERROR_CODE, "Command " + cmdName + " failed to execute, " + throwable.getMessage(), httpStatus);
+    }
+
     public OpenOCommandExecutionFailed(String  error) {
         super(ERROR_CODE, error);
     }
 
+    public OpenOCommandExecutionFailed(Throwable throwable, String  text) {
+        super(ERROR_CODE, "Failed to retrive service url, " + text + ", " + throwable.getMessage());
+    }
+
+
     public OpenOCommandExecutionFailed(String cmdName, String  error) {
         super(ERROR_CODE, "Command " + cmdName + " failed to execute, " + error);
+    }
+
+    public OpenOCommandExecutionFailed(String cmd, Throwable throwable) {
+        super(ERROR_CODE, "Command " + cmd + " failed to execute, " + throwable.getMessage());
     }
 }

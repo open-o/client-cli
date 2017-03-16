@@ -4,7 +4,6 @@ description: Create the network service
 service:
   name: gso
   version: v1
-
 parameters:
   - name: name
     description: Network service name

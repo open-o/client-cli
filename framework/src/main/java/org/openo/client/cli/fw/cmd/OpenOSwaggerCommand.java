@@ -72,7 +72,7 @@ public abstract class OpenOSwaggerCommand extends OpenOCommand {
         } catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException
                 | InvocationTargetException | OpenOCommandExecutionFailed | OpenOCommandServiceNotFound
                 | OpenOCommandHttpFailure e) {
-            throw new OpenOCommandClientInitialzationFailed(this.getName(), e.getMessage());
+            throw new OpenOCommandClientInitialzationFailed(this.getName(), e);
         }
     }
 
@@ -94,7 +94,7 @@ public abstract class OpenOSwaggerCommand extends OpenOCommand {
                 row.getValues().add(get.invoke(obj).toString());
             } catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException
                     | InvocationTargetException e) {
-                throw new OpenOCommandResultInitialzationFailed(this.getName(), e.getMessage());
+                throw new OpenOCommandResultInitialzationFailed(this.getName(), e);
             }
         }
     }

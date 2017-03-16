@@ -167,7 +167,7 @@ public class OpenOCommandParameter {
      * Returns param value.
      *
      * @return value
-     * @throws OpenOCommandInvalidParameterValue
+     * @throws OpenOCommandInvalidParameterValue exception
      */
     public Object getValue() throws OpenOCommandInvalidParameterValue {
         if (value != null) {
@@ -238,14 +238,12 @@ public class OpenOCommandParameter {
      *
      * @throws OpenOCommandParameterMissing
      *             exception
-     * @throws OpenOCommandInvalidParameterValue
+     * @throws OpenOCommandInvalidParameterValue exception
      */
     public void validate() throws OpenOCommandParameterMissing, OpenOCommandInvalidParameterValue {
         // (mrkanag) empty check needs to revisit
-        if (!this.isOptional()) {
-            if (this.getValue() == null || this.getValue().toString().isEmpty()) {
-                throw new OpenOCommandParameterMissing(this.getName());
-            }
+        if (!this.isOptional() && (this.getValue() == null || this.getValue().toString().isEmpty())) {
+            throw new OpenOCommandParameterMissing(this.getName());
         }
 
         // (mrkanag) validate for type supported ParameterType using constraints

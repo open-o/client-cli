@@ -53,6 +53,10 @@ public class OpenOCli {
         System.out.println(msg);
     }
 
+    private void print(Throwable throwable) {
+        System.out.println(throwable.getMessage());
+    }
+
     private String getShortOption(String opt) {
         return OpenOCommandParameter.printShortOption(opt);
     }
@@ -79,7 +83,7 @@ public class OpenOCli {
                 this.exitSuccessfully();
             }
         } catch (Exception e) {
-            this.print(e.getMessage());
+            this.print(e);
             this.exitFailure();
         }
     }
@@ -96,7 +100,7 @@ public class OpenOCli {
                 this.exitSuccessfully();
             }
         } catch (Exception e) {
-            this.print(e.getMessage());
+            this.print(e);
             this.exitFailure();
         }
     }
@@ -110,7 +114,7 @@ public class OpenOCli {
             try {
                 cmd = OpenOCommandRegistrar.getRegistrar().get(args.get(0));
             } catch (Exception e) {
-                this.print(e.getMessage());
+                this.print(e);
                 this.exitFailure();
                 return;
             }
@@ -139,7 +143,7 @@ public class OpenOCli {
                 this.exitSuccessfully();
             } catch (Exception e) {
                 this.print(cmd.getResult().getDebugInfo());
-                this.print(e.getMessage());
+                this.print(e);
                 this.exitFailure();
             }
         }

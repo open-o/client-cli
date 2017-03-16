@@ -109,7 +109,7 @@ public class OpenOCommandUtils {
                 inputStream = getExternalResource(schemaName, OpenOCommandConfg.EXTERNAL_SCHEMA_PATH_PATERN)
                         .getInputStream();
             } catch (IOException e) {
-                throw new OpenOCommandSchemaNotFound(schemaName);
+                throw new OpenOCommandSchemaNotFound(schemaName, e);
             }
             if (inputStream == null) {
                 throw new OpenOCommandSchemaNotFound(schemaName);
@@ -120,7 +120,7 @@ public class OpenOCommandUtils {
         try {
             values = (Map<String, ?>) new Yaml().load(inputStream);
         } catch (Exception e) {
-            throw new OpenOCommandInvalidSchema(schemaName, e.getMessage());
+            throw new OpenOCommandInvalidSchema(schemaName, e);
         }
         String schemaVersion = "";
         if (values.keySet().contains(OpenOCommand.OPENO_CMD_SCHEMA_VERSION)) {
@@ -304,11 +304,10 @@ public class OpenOCommandUtils {
                     cmd.setResult(result);
                 }
             }
+        } catch (OpenOCommandException e) {
+            throw e;
         } catch (Exception e) {
-            if (e instanceof OpenOCommandException) {
-                throw e;
-            }
-            throw new OpenOCommandInvalidSchema(schemaName, e.getMessage());
+            throw new OpenOCommandInvalidSchema(schemaName, e);
         }
     }
 
@@ -362,11 +361,10 @@ public class OpenOCommandUtils {
             }
 
             cmd.setExecutor(exec);
+        } catch (OpenOCommandException e) {
+            throw e;
         } catch (Exception e) {
-            if (e instanceof OpenOCommandException) {
-                throw e;
-            }
-            throw new OpenOCommandInvalidSchema(schemaName, e.getMessage());
+            throw new OpenOCommandInvalidSchema(schemaName, e);
         }
     }
 
@@ -437,11 +435,10 @@ public class OpenOCommandUtils {
                 }
             }
 
+        } catch (OpenOCommandException e) {
+            throw e;
         } catch (Exception e) {
-            if (e instanceof OpenOCommandException) {
-                throw e;
-            }
-            throw new OpenOCommandInvalidSchema(schemaName, e.getMessage());
+            throw new OpenOCommandInvalidSchema(schemaName, e);
         }
     }
 
@@ -540,7 +537,7 @@ public class OpenOCommandUtils {
         try {
             help += "\n\nOptions:\n" + commandOptions + "\nwhere,\n" + paramTable.print();
         } catch (OpenOCommandOutputFormatNotsupported | OpenOCommandOutputPrintingFailed e) {
-            throw new OpenOCommandHelpFailed(e.getMessage());
+            throw new OpenOCommandHelpFailed(e);
         }
 
         // Add results
@@ -565,7 +562,7 @@ public class OpenOCommandUtils {
         try {
             help += "\n\nResults:\n" + resultTable.print();
         } catch (OpenOCommandOutputFormatNotsupported | OpenOCommandOutputPrintingFailed e) {
-            throw new OpenOCommandHelpFailed(e.getMessage());
+            throw new OpenOCommandHelpFailed(e);
         }
 
         // Error
@@ -580,6 +577,7 @@ public class OpenOCommandUtils {
      *            list of parameters
      * @return OpenOCredentials
      * @throws OpenOCommandInvalidParameterValue
+     *             exception
      */
     public static OpenOCredentials fromParameters(List<OpenOCommandParameter> params)
             throws OpenOCommandInvalidParameterValue {
@@ -732,7 +730,9 @@ public class OpenOCommandUtils {
             return result;
         }
 
-        // In case of empty response body [] or {}
+        /**
+         * In case of empty response body [] or {}
+         **/
         if (resultHttp.getBody().length() <= 2) {
             return result;
         }
@@ -787,7 +787,7 @@ public class OpenOCommandUtils {
                 values.add(value);
                 currentIdx = idxE + 1;
             } catch (Exception e) {
-                throw new OpenOCommandHttpInvalidResponseBody(jsonPath, e.getMessage());
+                throw new OpenOCommandHttpInvalidResponseBody(jsonPath, e);
             }
         }
 
@@ -818,7 +818,7 @@ public class OpenOCommandUtils {
                         currentIdx = idxE;
                         positionalIdx++;
                     } catch (Exception e) {
-                        throw new OpenOCommandResultMapProcessingFailed(line, e.getMessage());
+                        throw new OpenOCommandResultMapProcessingFailed(line, e);
                     }
                 }
                 result.add(bodyProcessedLine);
@@ -918,7 +918,7 @@ public class OpenOCommandUtils {
                 }
             }
         } catch (IOException e) {
-            new OpenOCommandDiscoveryFailed(OpenOCommandConfg.EXTERNAL_SCHEMA_DIRECTORY);
+            new OpenOCommandDiscoveryFailed(OpenOCommandConfg.EXTERNAL_SCHEMA_DIRECTORY, e);
         }
 
         return extSchemas;
@@ -975,7 +975,7 @@ public class OpenOCommandUtils {
         try {
             values = (Map<String, ?>) new Yaml().load(resource.getInputStream());
         } catch (Exception e) {
-            throw new OpenOCommandInvalidSchema(resource.getFilename(), e.getMessage());
+            throw new OpenOCommandInvalidSchema(resource.getFilename(), e);
         }
         return values;
     }
@@ -1000,7 +1000,7 @@ public class OpenOCommandUtils {
                 }
             } catch (IOException e1) {
                 throw new OpenOCommandDiscoveryFailed(OpenOCommandConfg.EXTERNAL_DISCOVERY_DIRECTORY,
-                        OpenOCommandConfg.EXTERNAL_DISCOVERY_FILE);
+                        OpenOCommandConfg.EXTERNAL_DISCOVERY_FILE, e1);
             }
         }
     }
@@ -1022,7 +1022,7 @@ public class OpenOCommandUtils {
             }
         } catch (IOException e) {
             throw new OpenOCommandDiscoveryFailed(OpenOCommandConfg.EXTERNAL_DISCOVERY_DIRECTORY,
-                    OpenOCommandConfg.EXTERNAL_DISCOVERY_FILE);
+                    OpenOCommandConfg.EXTERNAL_DISCOVERY_FILE, e);
         }
 
         return false;
@@ -1057,7 +1057,7 @@ public class OpenOCommandUtils {
                 }
             } catch (IOException e) {
                 throw new OpenOCommandDiscoveryFailed(OpenOCommandConfg.EXTERNAL_DISCOVERY_DIRECTORY,
-                        OpenOCommandConfg.EXTERNAL_DISCOVERY_FILE);
+                        OpenOCommandConfg.EXTERNAL_DISCOVERY_FILE, e);
             }
         }
 

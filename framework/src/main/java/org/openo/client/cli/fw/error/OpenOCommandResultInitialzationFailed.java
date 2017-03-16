@@ -27,4 +27,8 @@ public class OpenOCommandResultInitialzationFailed extends OpenOCommandException
     public OpenOCommandResultInitialzationFailed(String cmd, String error) {
         super("0x0022", "Command " + cmd + " result format is failed, " + error);
     }
+
+    public OpenOCommandResultInitialzationFailed(String cmd, Throwable throwable) {
+        super("0x0022", "Command " + cmd + " result format is failed, " + throwable.getMessage());
+    }
 }

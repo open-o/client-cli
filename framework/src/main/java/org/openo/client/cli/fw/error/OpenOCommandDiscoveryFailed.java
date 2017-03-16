@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-
 package org.openo.client.cli.fw.error;
 
 public class OpenOCommandDiscoveryFailed extends OpenOCommandException {
@@ -28,5 +27,15 @@ public class OpenOCommandDiscoveryFailed extends OpenOCommandException {
     public OpenOCommandDiscoveryFailed(String directory, String fileName) {
         super("0x0010",
                 "Failed auto generate json file '" + fileName + "' under class path directory '" + directory + "'");
+    }
+
+    public OpenOCommandDiscoveryFailed(String name, Throwable throwable) {
+        super("0x0010",
+                "Failed auto discover schema files from " + name + " under class path, " + throwable.getMessage());
+    }
+
+    public OpenOCommandDiscoveryFailed(String directory, String fileName, Throwable throwable) {
+        super("0x0010", "Failed auto generate json file '" + fileName + "' under class path directory '" + directory
+                + "' , " + throwable.getMessage());
     }
 }

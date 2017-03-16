@@ -27,4 +27,8 @@ public class OpenOCommandOutputPrintingFailed extends OpenOCommandException {
     public OpenOCommandOutputPrintingFailed(String error) {
         super("0x0014", "Command is failed to print the result, " + error);
     }
+
+    public OpenOCommandOutputPrintingFailed(Throwable throwable) {
+        super("0x0014", "Command is failed to print the result, " + throwable.getMessage());
+    }
 }

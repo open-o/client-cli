@@ -27,4 +27,8 @@ public class OpenOCommandHttpInvalidResponseBody extends OpenOCommandException {
     public OpenOCommandHttpInvalidResponseBody(String name, String error) {
         super("0x0028", "Http response body does not have json entry " + name + ", " + error);
     }
+
+    public OpenOCommandHttpInvalidResponseBody(String name, Throwable throwable) {
+        super("0x0028", "Http response body does not have json entry " + name + ", " + throwable.getMessage());
+    }
 }

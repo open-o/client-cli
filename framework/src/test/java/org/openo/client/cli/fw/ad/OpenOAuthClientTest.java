@@ -63,7 +63,7 @@ public class OpenOAuthClientTest {
         mockIsAuthIgnored();
         HttpResult result = new HttpResult();
         result.setStatus(404);
-        mockHttpGetPost(result,null);
+        mockHttpGetPost(result, null);
         try {
             client.login();
         } catch (OpenOCommandServiceNotFound e) {
@@ -79,7 +79,7 @@ public class OpenOAuthClientTest {
         mockIsAuthIgnored();
         HttpResult result = new HttpResult();
         result.setStatus(401);
-        mockHttpGetPost(result,null);
+        mockHttpGetPost(result, null);
         try {
             client.login();
         } catch (OpenOCommandExecutionFailed e) {
@@ -95,11 +95,12 @@ public class OpenOAuthClientTest {
         mockIsAuthIgnored();
         HttpResult result = new HttpResult();
         result.setStatus(200);
-        mockHttpGetPost(result,null);
+        mockHttpGetPost(result, null);
         try {
             client.login();
         } catch (OpenOCommandExecutionFailed e) {
-            assertEquals("0x0001::Failed to retrive service urlauth v1", e.getMessage());
+            assertEquals("0x0001::Failed to retrive service url, auth v1, json string can not be null or empty",
+                    e.getMessage());
         }
 
     }
@@ -113,7 +114,7 @@ public class OpenOAuthClientTest {
         HttpResult result = new HttpResult();
         result.setBody("{\"url\":\"http://192.168.4.47\"}");
         result.setStatus(200);
-        mockHttpGetPost(result,null);
+        mockHttpGetPost(result, null);
         mockHttpPostException(new OpenOCommandHttpFailure("Post Request Failed"));
         try {
             client.login();
@@ -123,7 +124,7 @@ public class OpenOAuthClientTest {
 
         HttpResult postResult = new HttpResult();
         postResult.setStatus(401);
-        mockHttpGetPost(result,postResult);
+        mockHttpGetPost(result, postResult);
 
         try {
             client.login();
@@ -153,8 +154,7 @@ public class OpenOAuthClientTest {
         respHeaders.put(OpenOHttpConnection.X_AUTH_TOKEN, "authtoken");
         postResult.setRespCookies(respCookies);
 
-        mockHttpGetPost(result,postResult);
-
+        mockHttpGetPost(result, postResult);
 
         client.login();
     }

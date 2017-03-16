@@ -32,4 +32,8 @@ public class OpenOCommandHelpFailed extends OpenOCommandException {
     public OpenOCommandHelpFailed(String error) {
         super("0x0002", "Command failed to print help message, " + error);
     }
+
+    public OpenOCommandHelpFailed(Throwable throwable) {
+        super("0x0002", "Command failed to print help message, " + throwable.getMessage());
+    }
 }

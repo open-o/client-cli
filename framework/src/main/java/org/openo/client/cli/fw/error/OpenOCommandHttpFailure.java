@@ -25,11 +25,20 @@ public class OpenOCommandHttpFailure extends OpenOCommandException {
 
     private static final String ERROR = "0x0025";
 
-    public OpenOCommandHttpFailure(String  error, long httpStatus) {
+    public OpenOCommandHttpFailure(String error, long httpStatus) {
         super(ERROR, error, httpStatus);
     }
 
-    public OpenOCommandHttpFailure(String  error) {
+    public OpenOCommandHttpFailure(String error) {
         super(ERROR, error);
     }
+
+    public OpenOCommandHttpFailure(Throwable throwable) {
+        super(ERROR, throwable.getMessage());
+    }
+
+    public OpenOCommandHttpFailure(String error, long httpStatus, Throwable throwable) {
+        super(ERROR, throwable.getMessage(), httpStatus);
+    }
+
 }

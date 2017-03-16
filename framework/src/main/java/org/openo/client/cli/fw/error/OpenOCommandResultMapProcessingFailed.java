@@ -28,4 +28,9 @@ public class OpenOCommandResultMapProcessingFailed extends OpenOCommandException
     public OpenOCommandResultMapProcessingFailed(String resultMap, String error) {
         super(errorCode, "Failed to process the result map " + resultMap + " in http section,  " + error);
     }
+
+    public OpenOCommandResultMapProcessingFailed(String resultMap, Throwable throwable) {
+        super(errorCode,
+                "Failed to process the result map " + resultMap + " in http section,  " + throwable.getMessage());
+    }
 }

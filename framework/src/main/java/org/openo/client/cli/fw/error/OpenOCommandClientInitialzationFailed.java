@@ -27,4 +27,8 @@ public class OpenOCommandClientInitialzationFailed extends OpenOCommandException
     public OpenOCommandClientInitialzationFailed(String cmd, String error) {
         super("0x0021", "API client for the command " + cmd + " is failed, " + error);
     }
+
+    public OpenOCommandClientInitialzationFailed(String cmd, Throwable throwable) {
+        super("0x0021", "API client for the command " + cmd + " is failed, " + throwable.getMessage());
+    }
 }

@@ -85,7 +85,7 @@ public class OpenOAuthClient {
         try {
             result = this.run(input);
         } catch (OpenOCommandHttpFailure e) {
-            throw new OpenOCommandLoginFailed(e.getMessage());
+            throw new OpenOCommandLoginFailed(e);
         }
         if (result.getStatus() != HttpStatus.SC_OK && result.getStatus() != HttpStatus.SC_CREATED) {
             throw new OpenOCommandLoginFailed(result.getBody(), result.getStatus());
@@ -108,22 +108,25 @@ public class OpenOAuthClient {
      * @throws OpenOCommandLogoutFailed
      *             logout failed
      * @throws OpenOCommandHttpFailure
+     *             exception
      */
-    public void logout() throws OpenOCommandExecutionFailed, OpenOCommandServiceNotFound, OpenOCommandLogoutFailed, OpenOCommandHttpFailure {
+    public void logout() throws OpenOCommandExecutionFailed, OpenOCommandServiceNotFound, OpenOCommandLogoutFailed,
+            OpenOCommandHttpFailure {
         // For development purpose, its introduced and is not supported for production
         if (OpenOCommandConfg.isAuthIgnored()) {
             return;
         }
 
-        HttpInput input = new HttpInput().setUri(this.getAuthUrl() + "/tokens").setMethod("delete");;
+        HttpInput input = new HttpInput().setUri(this.getAuthUrl() + "/tokens").setMethod("delete");
+        ;
 
         HttpResult result;
         try {
             result = this.run(input);
         } catch (OpenOCommandHttpFailure e) {
-            throw new OpenOCommandLogoutFailed(e.getMessage());
+            throw new OpenOCommandLogoutFailed(e);
         }
-        if (result.getStatus() != HttpStatus.SC_NO_CONTENT ) {
+        if (result.getStatus() != HttpStatus.SC_NO_CONTENT) {
             throw new OpenOCommandLogoutFailed(result.getStatus());
         }
 
@@ -163,7 +166,7 @@ public class OpenOAuthClient {
         try {
             return this.creds.getMsbUrl() + JsonPath.read(result.getBody(), "url");
         } catch (Exception e) {
-            throw new OpenOCommandExecutionFailed("Failed to retrive service url" + srv.toString());
+            throw new OpenOCommandExecutionFailed(e, srv.toString());
         }
     }
 
@@ -187,6 +190,15 @@ public class OpenOAuthClient {
         return this.http.getDebugInfo();
     }
 
+    /**
+     * Http call to auth service.
+     *
+     * @param input
+     *            http input
+     * @return http result
+     * @throws OpenOCommandHttpFailure
+     *             exception
+     */
     public HttpResult run(HttpInput input) throws OpenOCommandHttpFailure {
         if (OpenOCommandConfg.isCookiesBasedAuth()) {
             input.getReqCookies().put(OpenOHttpConnection.X_AUTH_TOKEN, http.getAuthToken());

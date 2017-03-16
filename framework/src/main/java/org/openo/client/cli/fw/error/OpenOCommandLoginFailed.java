@@ -31,4 +31,8 @@ public class OpenOCommandLoginFailed extends OpenOCommandException {
     public OpenOCommandLoginFailed(String error, int httpStatus) {
         super("0x0009", "Login failed, " + error, httpStatus);
     }
+
+    public OpenOCommandLoginFailed(Throwable throwable) {
+        super("0x0009", "Login failed, " + throwable.getMessage());
+    }
 }

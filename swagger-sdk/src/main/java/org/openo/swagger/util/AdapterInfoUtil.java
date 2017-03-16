@@ -148,9 +148,9 @@ public class AdapterInfoUtil {
             LOGGER.info("jsonTxt = " + jsonTxt);
 
         } catch (FileNotFoundException e) {
-            LOGGER.error(e.getMessage());
+            LOGGER.error("File Exception", e);
         } catch (IOException e) {
-            LOGGER.error(e.getMessage());
+            LOGGER.error("File Exception", e);
         }
         if (jsonTxt != null) {
             JSONObject temp = JSONObject.fromObject(jsonTxt);
@@ -182,7 +182,7 @@ public class AdapterInfoUtil {
      * @return String
      */
     public String getAppRoot() {
-        String appRoot = null;
+        String appRoot;
         appRoot = System.getProperty(CATALINA_BASE);
         if (appRoot != null) {
             appRoot = getCanonicalPath(appRoot);
@@ -205,7 +205,7 @@ public class AdapterInfoUtil {
                 path = file.getCanonicalPath();
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            LOGGER.error("IOException", e);
         }
         return path;
     }

@@ -243,7 +243,7 @@ public class OpenOCliUtils {
                 return mapper.readValue(input, JSONObject.class).toJSONString();
             }
         } catch (IOException e) {
-            throw new OpenOCliInvalidArgument(argName, e.getMessage());
+            throw new OpenOCliInvalidArgument(argName, e);
         }
     }
 
@@ -253,7 +253,7 @@ public class OpenOCliUtils {
         try {
             return new ObjectMapper().readValue(json, mapType);
         } catch (IOException e) {
-            throw new OpenOCliInvalidArgument(arg, e.getMessage());
+            throw new OpenOCliInvalidArgument(arg, e);
         }
     }
 
@@ -263,7 +263,7 @@ public class OpenOCliUtils {
         try {
             return new ObjectMapper().readValue(json, mapType);
         } catch (IOException e) {
-            throw new OpenOCliInvalidArgument(arg, e.getMessage());
+            throw new OpenOCliInvalidArgument(arg, e);
         }
     }
 }

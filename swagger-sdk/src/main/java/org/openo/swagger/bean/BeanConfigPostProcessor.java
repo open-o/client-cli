@@ -33,7 +33,7 @@ import org.springframework.beans.factory.config.BeanPostProcessor;
  */
 public class BeanConfigPostProcessor implements BeanPostProcessor {
 
-    private static String SWAGGER_BEAN_ID = "swaggerConfig";
+    private static final String SWAGGER_BEAN_ID = "swaggerConfig";
 
     private static final Logger LOGGER = LoggerFactory.getLogger(BeanConfigPostProcessor.class);
 
@@ -45,12 +45,13 @@ public class BeanConfigPostProcessor implements BeanPostProcessor {
      * @return object
      * @throws BeansException exception
      */
+    @Override
     public Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException {
         if (SWAGGER_BEAN_ID.equals(beanName)) {
             BeanConfig config = (BeanConfig) bean;
             AdapterInfoUtil util = AdapterInfoUtil.getInstance();
-            if (util.getIp() != null && !util.getIp().equals("") && util.getPort() != null
-                    && !util.getPort().equals("")) {
+            if (util.getIp() != null && !"".equals(util.getIp()) && util.getPort() != null
+                    && !"".equals(util.getPort())) {
                 config.setHost(util.getIp() + ":" + util.getPort());
                 LOGGER.info("BeanConfigPostProcessor : Host Details=" + util.getIp() + ":" + util.getPort());
                 return config;
@@ -71,6 +72,7 @@ public class BeanConfigPostProcessor implements BeanPostProcessor {
      * @throws BeansException
      *             exception
      */
+    @Override
     public Object postProcessBeforeInitialization(Object bean, String beanName) throws BeansException {
         return bean;
     }
