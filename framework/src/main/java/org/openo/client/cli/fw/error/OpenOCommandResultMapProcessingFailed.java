@@ -23,14 +23,13 @@ package org.openo.client.cli.fw.error;
 public class OpenOCommandResultMapProcessingFailed extends OpenOCommandException {
     private static final long serialVersionUID = 488775545436113019L;
 
-    private static String errorCode = "0x0028";
+    private static final String errorCode = "0x0028";
 
     public OpenOCommandResultMapProcessingFailed(String resultMap, String error) {
         super(errorCode, "Failed to process the result map " + resultMap + " in http section,  " + error);
     }
 
     public OpenOCommandResultMapProcessingFailed(String resultMap, Throwable throwable) {
-        super(errorCode,
-                "Failed to process the result map " + resultMap + " in http section,  " + throwable.getMessage());
+        this(resultMap, throwable.getMessage());
     }
 }

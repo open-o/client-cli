@@ -24,7 +24,7 @@ public class OpenOCommandErrorTest {
     @Test
     public void openOCommandClientInitialzationFailedTest() {
         OpenOCommandClientInitialzationFailed failed = new OpenOCommandClientInitialzationFailed("Test",
-                "Test Command Failed");
+                new Exception("Test Command Failed"));
 
         assertEquals("0x0021::API client for the command Test is failed, Test Command Failed", failed.getMessage());
     }
@@ -212,7 +212,7 @@ public class OpenOCommandErrorTest {
     public void openOCommandSchemaNotFoundTest() {
         OpenOCommandSchemaNotFound failed = new OpenOCommandSchemaNotFound("Test");
 
-        assertEquals("0x0019::Command schema Test is not found", failed.getMessage());
+        assertEquals("0x0019::Command schema Test is not found, ", failed.getMessage());
     }
 
     @Test

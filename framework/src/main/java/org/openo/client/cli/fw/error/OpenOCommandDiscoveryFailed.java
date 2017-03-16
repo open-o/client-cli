@@ -20,22 +20,25 @@ public class OpenOCommandDiscoveryFailed extends OpenOCommandException {
 
     private static final long serialVersionUID = 424464582747161435L;
 
-    public OpenOCommandDiscoveryFailed(String name) {
-        super("0x0010", "Failed auto discover schema files from " + name + " under class path");
-    }
+    private static final String ERROR_CODE = "0x0010";
+    private static final String ERROR_MESSAGE1 = "Failed auto discover schema files from ";
+    private static final String ERROR_MESSAGE2 = " under class path, ";
+    private static final String ERROR_MESSAGE3 = "' under class path directory '";
+    private static final String ERROR_MESSAGE4 = "Failed auto generate json file '";
 
-    public OpenOCommandDiscoveryFailed(String directory, String fileName) {
-        super("0x0010",
-                "Failed auto generate json file '" + fileName + "' under class path directory '" + directory + "'");
+    public OpenOCommandDiscoveryFailed(String name) {
+        this(name, new Exception(""));
     }
 
     public OpenOCommandDiscoveryFailed(String name, Throwable throwable) {
-        super("0x0010",
-                "Failed auto discover schema files from " + name + " under class path, " + throwable.getMessage());
+        super(ERROR_CODE, ERROR_MESSAGE1 + name + ERROR_MESSAGE2 + throwable.getMessage());
+    }
+
+    public OpenOCommandDiscoveryFailed(String directory, String fileName) {
+        this(directory, fileName, new Exception(""));
     }
 
     public OpenOCommandDiscoveryFailed(String directory, String fileName, Throwable throwable) {
-        super("0x0010", "Failed auto generate json file '" + fileName + "' under class path directory '" + directory
-                + "' , " + throwable.getMessage());
+        super(ERROR_CODE, ERROR_MESSAGE4 + fileName + ERROR_MESSAGE3 + directory + "' , " + throwable.getMessage());
     }
 }

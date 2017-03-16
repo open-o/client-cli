@@ -19,14 +19,6 @@ package org.openo.client.cli.fw.cmd;
 import org.openo.client.cli.fw.OpenOCommand;
 import org.openo.client.cli.fw.error.OpenOCommandException;
 import org.openo.client.cli.fw.error.OpenOCommandExecutionFailed;
-import org.openo.client.cli.fw.error.OpenOCommandInvalidParameterType;
-import org.openo.client.cli.fw.error.OpenOCommandInvalidPrintDirection;
-import org.openo.client.cli.fw.error.OpenOCommandInvalidResultAttributeScope;
-import org.openo.client.cli.fw.error.OpenOCommandInvalidSchema;
-import org.openo.client.cli.fw.error.OpenOCommandInvalidSchemaVersion;
-import org.openo.client.cli.fw.error.OpenOCommandParameterNameConflict;
-import org.openo.client.cli.fw.error.OpenOCommandParameterOptionConflict;
-import org.openo.client.cli.fw.error.OpenOCommandSchemaNotFound;
 import org.openo.client.cli.fw.http.HttpInput;
 import org.openo.client.cli.fw.http.HttpResult;
 import org.openo.client.cli.fw.output.OpenOCommandResultAttribute;
@@ -86,10 +78,7 @@ public class OpenOHttpCommand extends OpenOCommand {
     }
 
     @Override
-    protected void initializeProfileSchema() throws OpenOCommandParameterNameConflict,
-            OpenOCommandParameterOptionConflict, OpenOCommandInvalidParameterType, OpenOCommandInvalidPrintDirection,
-            OpenOCommandInvalidResultAttributeScope, OpenOCommandSchemaNotFound, OpenOCommandInvalidSchema,
-            OpenOCommandInvalidSchemaVersion {
+    protected void initializeProfileSchema() throws OpenOCommandException {
         OpenOCommandUtils.loadSchema(this, this.getSchemaName());
     }
 

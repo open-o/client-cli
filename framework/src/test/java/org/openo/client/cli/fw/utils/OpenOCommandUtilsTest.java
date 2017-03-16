@@ -28,11 +28,8 @@ import org.openo.client.cli.fw.ad.OpenOCredentials;
 import org.openo.client.cli.fw.cmd.OpenOHttpCommand;
 import org.openo.client.cli.fw.cmd.OpenOSwaggerCommand;
 import org.openo.client.cli.fw.error.OpenOCommandException;
-import org.openo.client.cli.fw.error.OpenOCommandHelpFailed;
-import org.openo.client.cli.fw.error.OpenOCommandHttpHeaderNotFound;
 import org.openo.client.cli.fw.error.OpenOCommandHttpInvalidResponseBody;
 import org.openo.client.cli.fw.error.OpenOCommandInvalidParameterType;
-import org.openo.client.cli.fw.error.OpenOCommandInvalidParameterValue;
 import org.openo.client.cli.fw.error.OpenOCommandInvalidPrintDirection;
 import org.openo.client.cli.fw.error.OpenOCommandInvalidResultAttributeScope;
 import org.openo.client.cli.fw.error.OpenOCommandInvalidSchema;
@@ -40,7 +37,6 @@ import org.openo.client.cli.fw.error.OpenOCommandInvalidSchemaVersion;
 import org.openo.client.cli.fw.error.OpenOCommandParameterNameConflict;
 import org.openo.client.cli.fw.error.OpenOCommandParameterNotFound;
 import org.openo.client.cli.fw.error.OpenOCommandParameterOptionConflict;
-import org.openo.client.cli.fw.error.OpenOCommandResultMapProcessingFailed;
 import org.openo.client.cli.fw.error.OpenOCommandSchemaNotFound;
 import org.openo.client.cli.fw.http.HttpInput;
 import org.openo.client.cli.fw.http.HttpResult;
@@ -60,8 +56,7 @@ import java.util.Set;
 public class OpenOCommandUtilsTest {
 
     @Test
-    public void schemaFileNotFoundTest()
-            throws OpenOCommandInvalidSchemaVersion, OpenOCommandInvalidSchema, OpenOCommandSchemaNotFound {
+    public void schemaFileNotFoundTest() throws OpenOCommandException {
 
         Map<String, ?> map = OpenOCommandUtils.validateSchemaVersion("sample-test-schema.yaml", "1.0");
         assertTrue(map.size() > 0);
@@ -69,7 +64,7 @@ public class OpenOCommandUtilsTest {
 
     @Test
     @Ignore
-    public void invalidSchemaFileTest() {
+    public void invalidSchemaFileTest() throws OpenOCommandException {
         Map<String, ?> map = null;
         try {
             map = OpenOCommandUtils.validateSchemaVersion("sample-test-schema1.yaml", "1.0");
@@ -83,7 +78,7 @@ public class OpenOCommandUtilsTest {
     }
 
     @Test
-    public void validateWrongSchemaVersionTest() {
+    public void validateWrongSchemaVersionTest() throws OpenOCommandException {
         Map<String, ?> map = null;
         try {
             map = OpenOCommandUtils.validateSchemaVersion("sample-test-invalid-schema.yaml", "1.0");
@@ -97,7 +92,7 @@ public class OpenOCommandUtilsTest {
     }
 
     @Test
-    public void validateSchemaVersionTest() {
+    public void validateSchemaVersionTest() throws OpenOCommandException {
         Map<String, ?> map = null;
         try {
             map = OpenOCommandUtils.validateSchemaVersion("sample-test-schema.yaml", "1.1");
@@ -111,20 +106,14 @@ public class OpenOCommandUtilsTest {
     }
 
     @Test
-    public void loadOpenoCommandSchemaWithOutDefaultTest() throws OpenOCommandParameterNameConflict,
-            OpenOCommandParameterOptionConflict, OpenOCommandInvalidParameterType, OpenOCommandInvalidPrintDirection,
-            OpenOCommandInvalidResultAttributeScope, OpenOCommandSchemaNotFound, OpenOCommandInvalidSchema,
-            OpenOCommandInvalidSchemaVersion {
+    public void loadOpenoCommandSchemaWithOutDefaultTest() throws OpenOCommandException {
         OpenOCommand cmd = new OpenOCommandSample();
         OpenOCommandUtils.loadSchema(cmd, "sample-test-schema.yaml", false);
         assertTrue("sample-test".equals(cmd.getName()) && cmd.getParameters().size() == 9);
     }
 
     @Test
-    public void loadOpenoCommandSchemaWithDefaultTest() throws OpenOCommandParameterNameConflict,
-            OpenOCommandParameterOptionConflict, OpenOCommandInvalidParameterType, OpenOCommandInvalidPrintDirection,
-            OpenOCommandInvalidResultAttributeScope, OpenOCommandSchemaNotFound, OpenOCommandInvalidSchema,
-            OpenOCommandInvalidSchemaVersion, OpenOCommandInvalidParameterValue {
+    public void loadOpenoCommandSchemaWithDefaultTest() throws OpenOCommandException {
         OpenOCommand cmd = new OpenOCommandSample();
         OpenOCommandUtils.loadSchema(cmd, "sample-test-schema.yaml", true);
         assertTrue("sample-test".equals(cmd.getName()) && cmd.getParameters().size() > 9);
@@ -140,9 +129,7 @@ public class OpenOCommandUtilsTest {
     }
 
     @Test
-    public void loadSwaggerBasedSchemaExceptionTest() throws OpenOCommandParameterNameConflict,
-            OpenOCommandParameterOptionConflict, OpenOCommandInvalidParameterType, OpenOCommandInvalidPrintDirection,
-            OpenOCommandInvalidResultAttributeScope, OpenOCommandSchemaNotFound, OpenOCommandInvalidSchemaVersion {
+    public void loadSwaggerBasedSchemaExceptionTest() throws OpenOCommandException {
         OpenOSwaggerCommand cmd = new OpenOSwaggerBasedCommandSample();
         try {
             OpenOCommandUtils.loadSchema(cmd, "sample-test-schema.yaml");
@@ -152,9 +139,7 @@ public class OpenOCommandUtilsTest {
     }
 
     @Test
-    public void loadSwaggerBasedSchemaTest() throws OpenOCommandParameterNameConflict,
-            OpenOCommandParameterOptionConflict, OpenOCommandInvalidParameterType, OpenOCommandInvalidPrintDirection,
-            OpenOCommandInvalidResultAttributeScope, OpenOCommandSchemaNotFound, OpenOCommandInvalidSchemaVersion {
+    public void loadSwaggerBasedSchemaTest() throws OpenOCommandException {
         OpenOSwaggerCommand cmd = new OpenOSwaggerBasedCommandSample();
         try {
             OpenOCommandUtils.loadSchema(cmd, "sample-test-schema-swagger.yaml");
@@ -166,7 +151,7 @@ public class OpenOCommandUtilsTest {
     }
 
     @Test
-    public void loadHttpBasedSchemaExceptionTest() {
+    public void loadHttpBasedSchemaExceptionTest() throws OpenOCommandException {
         OpenOHttpCommand cmd = new OpenOHttpCommandSample();
         cmd.setName("sample-test-http");
         try {
@@ -180,7 +165,7 @@ public class OpenOCommandUtilsTest {
     }
 
     @Test
-    public void loadHttpBasedSchemaTest() {
+    public void loadHttpBasedSchemaTest() throws OpenOCommandException {
         OpenOHttpCommand cmd = new OpenOHttpCommandSample();
         cmd.setName("sample-test-http");
         try {
@@ -195,10 +180,7 @@ public class OpenOCommandUtilsTest {
     }
 
     @Test
-    public void helpCommandTest() throws OpenOCommandParameterNameConflict, OpenOCommandParameterOptionConflict,
-            OpenOCommandInvalidParameterType, OpenOCommandInvalidPrintDirection,
-            OpenOCommandInvalidResultAttributeScope, OpenOCommandSchemaNotFound, OpenOCommandInvalidSchema,
-            OpenOCommandInvalidSchemaVersion, OpenOCommandHelpFailed, IOException {
+    public void helpCommandTest() throws IOException, OpenOCommandException {
         OpenOCommand cmd = new OpenOCommandSample();
         OpenOCommandUtils.loadSchema(cmd, "sample-test-schema.yaml", true);
 
@@ -257,7 +239,7 @@ public class OpenOCommandUtilsTest {
     }
 
     @Test
-    public void populateParametersTest() throws OpenOCommandParameterNotFound, OpenOCommandInvalidParameterValue {
+    public void populateParametersTest() throws OpenOCommandException {
 
         HttpInput input = new HttpInput();
         input.setBody("body");
@@ -297,8 +279,7 @@ public class OpenOCommandUtilsTest {
     }
 
     @Test
-    public void populateOutputsTest() throws OpenOCommandHttpHeaderNotFound, OpenOCommandResultMapProcessingFailed,
-            OpenOCommandHttpInvalidResponseBody {
+    public void populateOutputsTest() throws OpenOCommandException {
         HttpResult output = new HttpResult();
         output.setBody("{\"serviceName\":\"test\",\"version\":\"v1\",\"url\":\"/api/test/v1\",\"protocol\":\"REST\"}");
         Map<String, String> mapHead = new HashMap<>();

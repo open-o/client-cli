@@ -18,10 +18,8 @@ package org.openo.client.cli.fw.cmd;
 
 import org.openo.client.cli.fw.OpenOCommand;
 import org.openo.client.cli.fw.error.OpenOCommandClientInitialzationFailed;
-import org.openo.client.cli.fw.error.OpenOCommandExecutionFailed;
-import org.openo.client.cli.fw.error.OpenOCommandHttpFailure;
+import org.openo.client.cli.fw.error.OpenOCommandException;
 import org.openo.client.cli.fw.error.OpenOCommandResultInitialzationFailed;
-import org.openo.client.cli.fw.error.OpenOCommandServiceNotFound;
 import org.openo.client.cli.fw.output.OpenOCommandResultAttribute;
 import org.openo.client.cli.fw.run.OpenOCommandExecutor;
 import org.openo.client.cli.fw.utils.OpenOCommandUtils;
@@ -70,8 +68,7 @@ public abstract class OpenOSwaggerCommand extends OpenOCommand {
             }
             return client;
         } catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException
-                | InvocationTargetException | OpenOCommandExecutionFailed | OpenOCommandServiceNotFound
-                | OpenOCommandHttpFailure e) {
+                | InvocationTargetException | OpenOCommandException e) {
             throw new OpenOCommandClientInitialzationFailed(this.getName(), e);
         }
     }

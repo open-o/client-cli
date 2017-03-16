@@ -21,17 +21,7 @@ import org.junit.Ignore;
 import org.junit.Test;
 import org.openo.client.cli.fw.OpenOCommand;
 import org.openo.client.cli.fw.OpenOCommandRegistrar;
-import org.openo.client.cli.fw.error.OpenOCommandDiscoveryFailed;
-import org.openo.client.cli.fw.error.OpenOCommandInvalidParameterType;
-import org.openo.client.cli.fw.error.OpenOCommandInvalidParameterValue;
-import org.openo.client.cli.fw.error.OpenOCommandInvalidPrintDirection;
-import org.openo.client.cli.fw.error.OpenOCommandInvalidRegistration;
-import org.openo.client.cli.fw.error.OpenOCommandInvalidResultAttributeScope;
-import org.openo.client.cli.fw.error.OpenOCommandInvalidSchema;
-import org.openo.client.cli.fw.error.OpenOCommandNotFound;
-import org.openo.client.cli.fw.error.OpenOCommandRegistrationFailed;
-import org.openo.client.cli.main.error.OpenOCliArgumentValueMissing;
-import org.openo.client.cli.main.error.OpenOCliInvalidArgument;
+import org.openo.client.cli.fw.error.OpenOCommandException;
 import org.openo.client.cli.main.utils.OpenOCliUtils;
 
 import java.io.File;
@@ -88,11 +78,7 @@ public class OpenOCliMainTest {
     }
 
     @Test
-    public void testHelpSampleCreateCommand()
-            throws OpenOCommandNotFound, OpenOCommandRegistrationFailed, OpenOCommandInvalidParameterType,
-            OpenOCommandInvalidPrintDirection, OpenOCommandInvalidResultAttributeScope, OpenOCommandInvalidRegistration,
-            OpenOCommandDiscoveryFailed, OpenOCommandInvalidSchema, OpenOCliArgumentValueMissing,
-            OpenOCliInvalidArgument, OpenOCommandInvalidParameterValue {
+    public void testHelpSampleCreateCommand() throws OpenOCommandException {
         ClassLoader cl = ClassLoader.getSystemClassLoader();
         URL[] urls = ((URLClassLoader) cl).getURLs();
         for (URL url : urls) {
@@ -131,7 +117,7 @@ public class OpenOCliMainTest {
     @Ignore
     public void testUserCreateCommand() {
         this.handle(new String[] { "user-create", "-u", "admin", "-p", "Changeme_123", "-m", "http://192.168.99.100:80",
-                "--username", "test", "--password", "sss", "--description", "test user" , "-d"});
+                "--username", "test", "--password", "sss", "--description", "test user", "-d" });
     }
 
     @Test
@@ -223,7 +209,10 @@ public class OpenOCliMainTest {
     @Test
     @Ignore
     public void testgsoServiceCreateCommand() {
-        this.handle(new String[] { "service-create", "-m", "http://192.168.4.47:80", "-u", "root1", "-p", "root123", "-x", "test", "-z", "test", "-n", "test", "-r", "123", "-j", "D:/workspace/open-o/integration/test/csit/plans/gso/sanity-check/jsoninput/lcm_CreateServiceReq.json", "-d"});
+        this.handle(new String[] { "service-create", "-m", "http://192.168.4.47:80", "-u", "root1", "-p", "root123",
+                "-x", "test", "-z", "test", "-n", "test", "-r", "123", "-j",
+                "D:/workspace/open-o/integration/test/csit/plans/gso/sanity-check/jsoninput/lcm_CreateServiceReq.json",
+                "-d" });
     }
 
 }

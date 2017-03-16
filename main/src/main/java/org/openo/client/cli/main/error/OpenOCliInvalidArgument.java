@@ -25,16 +25,18 @@ import org.openo.client.cli.fw.error.OpenOCommandException;
 public class OpenOCliInvalidArgument extends OpenOCommandException {
 
     private static final long serialVersionUID = -1438492553530993246L;
+    private static final String ERROR_CODE = "0x1000";
+    private static final String ERROR_MESSAGE1 = "Invalid argument ";
 
     public OpenOCliInvalidArgument(String arg) {
-        super("0x1000", "Invalid argument " + arg);
+        super(ERROR_CODE, ERROR_MESSAGE1 + arg);
     }
 
     public OpenOCliInvalidArgument(String arg, String errorMessage) {
-        super("0x1000", "Invalid argument " + arg + " , " + errorMessage);
+        super(ERROR_CODE, ERROR_MESSAGE1 + arg + " , " + errorMessage);
     }
 
     public OpenOCliInvalidArgument(String arg, Throwable throwable) {
-        super("0x1000", "Invalid argument " + arg + " , " + throwable.getMessage());
+        this(arg , throwable.getMessage());
     }
 }

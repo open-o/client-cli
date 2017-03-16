@@ -25,6 +25,7 @@ import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.openo.client.cli.fw.conf.OpenOCommandConfg;
+import org.openo.client.cli.fw.error.OpenOCommandException;
 import org.openo.client.cli.fw.error.OpenOCommandExecutionFailed;
 import org.openo.client.cli.fw.error.OpenOCommandHttpFailure;
 import org.openo.client.cli.fw.error.OpenOCommandLoginFailed;
@@ -47,8 +48,7 @@ public class OpenOAuthClientTest {
     }
 
     @Test
-    public void loginFailedAuthIgnoredTest() throws OpenOCommandHttpFailure, OpenOCommandLoginFailed,
-            OpenOCommandExecutionFailed, OpenOCommandServiceNotFound {
+    public void loginFailedAuthIgnoredTest() throws OpenOCommandException {
         OpenOCredentials creds = new OpenOCredentials("test", "test123", "http://192.168.99.10:80");
         OpenOAuthClient client = new OpenOAuthClient(creds, true);
         if (OpenOCommandConfg.isAuthIgnored()) {
@@ -59,7 +59,7 @@ public class OpenOAuthClientTest {
 
     @Test
     public void loginFailedServiceNotFoundTest()
-            throws OpenOCommandHttpFailure, OpenOCommandLoginFailed, OpenOCommandExecutionFailed {
+            throws OpenOCommandException {
         mockIsAuthIgnored();
         HttpResult result = new HttpResult();
         result.setStatus(404);
@@ -74,7 +74,7 @@ public class OpenOAuthClientTest {
 
     @Test
     public void loginFailedCommandExecutionFailedTest()
-            throws OpenOCommandHttpFailure, OpenOCommandLoginFailed, OpenOCommandServiceNotFound {
+            throws OpenOCommandException {
 
         mockIsAuthIgnored();
         HttpResult result = new HttpResult();
@@ -90,7 +90,7 @@ public class OpenOAuthClientTest {
 
     @Test
     public void loginFailedWrongJasonBodyTest()
-            throws OpenOCommandHttpFailure, OpenOCommandLoginFailed, OpenOCommandServiceNotFound {
+            throws OpenOCommandException {
 
         mockIsAuthIgnored();
         HttpResult result = new HttpResult();
@@ -108,7 +108,7 @@ public class OpenOAuthClientTest {
     @Test
     @Ignore
     public void loginFailedTest()
-            throws OpenOCommandExecutionFailed, OpenOCommandServiceNotFound, OpenOCommandHttpFailure {
+            throws OpenOCommandException {
 
         mockIsAuthIgnored();
         HttpResult result = new HttpResult();
@@ -136,8 +136,7 @@ public class OpenOAuthClientTest {
 
     @Test
     @Ignore
-    public void loginSuccessTest() throws OpenOCommandExecutionFailed, OpenOCommandServiceNotFound,
-            OpenOCommandHttpFailure, OpenOCommandLoginFailed {
+    public void loginSuccessTest() throws OpenOCommandException {
         mockIsAuthIgnored();
         HttpResult result = new HttpResult();
         result.setBody("{\"url\":\"http://192.168.4.47\"}");

@@ -24,29 +24,32 @@ public class OpenOCommandExecutionFailed extends OpenOCommandException {
     private static final long serialVersionUID = 488775545436993019L;
 
     private static final String ERROR_CODE = "0x0001";
+    private static final String ERROR_MESSAGE1 = "Command ";
+    private static final String ERROR_MESSAGE2 = " failed to execute, ";
+    private static final String ERROR_MESSAGE3 = "Failed to retrive service url, ";
 
     public OpenOCommandExecutionFailed(String cmdName, String  error, long httpStatus) {
-        super(ERROR_CODE, "Command " + cmdName + " failed to execute, " + error, httpStatus);
+        super(ERROR_CODE, ERROR_MESSAGE1 + cmdName + ERROR_MESSAGE2 + error, httpStatus);
     }
 
     public OpenOCommandExecutionFailed(String cmdName, Throwable throwable, long httpStatus) {
-        super(ERROR_CODE, "Command " + cmdName + " failed to execute, " + throwable.getMessage(), httpStatus);
+        this(cmdName,throwable.getMessage(),httpStatus);
     }
 
     public OpenOCommandExecutionFailed(String  error) {
         super(ERROR_CODE, error);
     }
 
-    public OpenOCommandExecutionFailed(Throwable throwable, String  text) {
-        super(ERROR_CODE, "Failed to retrive service url, " + text + ", " + throwable.getMessage());
+    public OpenOCommandExecutionFailed(Throwable throwable, String  details) {
+        this(ERROR_MESSAGE3 + details + ", " + throwable.getMessage());
     }
 
 
     public OpenOCommandExecutionFailed(String cmdName, String  error) {
-        super(ERROR_CODE, "Command " + cmdName + " failed to execute, " + error);
+        super(ERROR_CODE, ERROR_MESSAGE1 + cmdName + ERROR_MESSAGE2 + error);
     }
 
     public OpenOCommandExecutionFailed(String cmd, Throwable throwable) {
-        super(ERROR_CODE, "Command " + cmd + " failed to execute, " + throwable.getMessage());
+        this(cmd , throwable.getMessage());
     }
 }

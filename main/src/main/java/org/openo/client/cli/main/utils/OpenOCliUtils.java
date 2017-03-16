@@ -21,6 +21,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import net.minidev.json.JSONObject;
 
+import org.openo.client.cli.fw.error.OpenOCommandException;
 import org.openo.client.cli.fw.error.OpenOCommandInvalidParameterValue;
 import org.openo.client.cli.fw.input.OpenOCommandParameter;
 import org.openo.client.cli.fw.input.ParameterType;
@@ -64,7 +65,7 @@ public class OpenOCliUtils {
      *             exception
      */
     public static void populateParams(List<OpenOCommandParameter> params, List<String> args)
-            throws OpenOCliArgumentValueMissing, OpenOCliInvalidArgument, OpenOCommandInvalidParameterValue {
+            throws OpenOCommandException {
         Map<String, String> shortOptionMap = new HashMap<>();
         Map<String, String> longOptionMap = new HashMap<>();
         List<String> positionArgs = new ArrayList<>();

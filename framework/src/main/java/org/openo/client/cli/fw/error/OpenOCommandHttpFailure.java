@@ -34,11 +34,11 @@ public class OpenOCommandHttpFailure extends OpenOCommandException {
     }
 
     public OpenOCommandHttpFailure(Throwable throwable) {
-        super(ERROR, throwable.getMessage());
+        this(throwable.getMessage());
     }
 
-    public OpenOCommandHttpFailure(String error, long httpStatus, Throwable throwable) {
-        super(ERROR, throwable.getMessage(), httpStatus);
+    public OpenOCommandHttpFailure(Throwable throwable, long httpStatus) {
+        this(throwable.getMessage(), httpStatus);
     }
 
 }

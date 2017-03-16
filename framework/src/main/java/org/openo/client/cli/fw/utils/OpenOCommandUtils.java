@@ -37,8 +37,6 @@ import org.openo.client.cli.fw.error.OpenOCommandInvalidPrintDirection;
 import org.openo.client.cli.fw.error.OpenOCommandInvalidResultAttributeScope;
 import org.openo.client.cli.fw.error.OpenOCommandInvalidSchema;
 import org.openo.client.cli.fw.error.OpenOCommandInvalidSchemaVersion;
-import org.openo.client.cli.fw.error.OpenOCommandOutputFormatNotsupported;
-import org.openo.client.cli.fw.error.OpenOCommandOutputPrintingFailed;
 import org.openo.client.cli.fw.error.OpenOCommandParameterNameConflict;
 import org.openo.client.cli.fw.error.OpenOCommandParameterNotFound;
 import org.openo.client.cli.fw.error.OpenOCommandParameterOptionConflict;
@@ -100,8 +98,7 @@ public class OpenOCommandUtils {
      * @throws OpenOCommandSchemaNotFound
      *             schema not found
      */
-    public static Map<String, ?> validateSchemaVersion(String schemaName, String version)
-            throws OpenOCommandInvalidSchemaVersion, OpenOCommandInvalidSchema, OpenOCommandSchemaNotFound {
+    public static Map<String, ?> validateSchemaVersion(String schemaName, String version) throws OpenOCommandException {
         InputStream inputStream = OpenOCommandUtils.class.getClassLoader().getResourceAsStream(schemaName);
 
         if (inputStream == null) {
@@ -162,10 +159,7 @@ public class OpenOCommandUtils {
      *             invalid schema version
      */
     public static void loadSchema(OpenOCommand cmd, String schemaName, boolean includeDefault)
-            throws OpenOCommandParameterNameConflict, OpenOCommandParameterOptionConflict,
-            OpenOCommandInvalidParameterType, OpenOCommandInvalidPrintDirection,
-            OpenOCommandInvalidResultAttributeScope, OpenOCommandSchemaNotFound, OpenOCommandInvalidSchema,
-            OpenOCommandInvalidSchemaVersion {
+            throws OpenOCommandException {
         List<String> shortOptions = new ArrayList<>();
         List<String> longOptions = new ArrayList<>();
         List<String> names = new ArrayList<>();
@@ -179,10 +173,7 @@ public class OpenOCommandUtils {
     }
 
     private static void loadSchema(OpenOCommand cmd, String schemaName, List<String> shortOptions,
-            List<String> longOptions, List<String> names) throws OpenOCommandParameterNameConflict,
-            OpenOCommandParameterOptionConflict, OpenOCommandInvalidParameterType, OpenOCommandInvalidPrintDirection,
-            OpenOCommandInvalidResultAttributeScope, OpenOCommandSchemaNotFound, OpenOCommandInvalidSchema,
-            OpenOCommandInvalidSchemaVersion {
+            List<String> longOptions, List<String> names) throws OpenOCommandException {
         try {
             Map<String, ?> values = validateSchemaVersion(schemaName, cmd.getSchemaVersion());
 
@@ -335,10 +326,7 @@ public class OpenOCommandUtils {
      * @throws OpenOCommandInvalidSchemaVersion
      *             invalid schema version
      */
-    public static void loadSchema(OpenOSwaggerCommand cmd, String schemaName) throws OpenOCommandParameterNameConflict,
-            OpenOCommandParameterOptionConflict, OpenOCommandInvalidParameterType, OpenOCommandInvalidPrintDirection,
-            OpenOCommandInvalidResultAttributeScope, OpenOCommandSchemaNotFound, OpenOCommandInvalidSchema,
-            OpenOCommandInvalidSchemaVersion {
+    public static void loadSchema(OpenOSwaggerCommand cmd, String schemaName) throws OpenOCommandException {
         try {
             Map<String, ?> values = (Map<String, ?>) validateSchemaVersion(schemaName, cmd.getSchemaVersion());
             Map<String, String> valueMap = (Map<String, String>) values.get(OpenOSwaggerCommand.EXECUTOR);
@@ -392,10 +380,7 @@ public class OpenOCommandUtils {
      * @throws OpenOCommandInvalidSchemaVersion
      *             invalid schema version
      */
-    public static void loadSchema(OpenOHttpCommand cmd, String schemaName) throws OpenOCommandParameterNameConflict,
-            OpenOCommandParameterOptionConflict, OpenOCommandInvalidParameterType, OpenOCommandInvalidPrintDirection,
-            OpenOCommandInvalidResultAttributeScope, OpenOCommandSchemaNotFound, OpenOCommandInvalidSchema,
-            OpenOCommandInvalidSchemaVersion {
+    public static void loadSchema(OpenOHttpCommand cmd, String schemaName) throws OpenOCommandException {
         try {
             Map<String, ?> values = (Map<String, ?>) validateSchemaVersion(schemaName, cmd.getSchemaVersion());
             Map<String, ?> valMap = (Map<String, ?>) values.get(OpenOHttpCommand.HTTP);
@@ -536,7 +521,7 @@ public class OpenOCommandUtils {
 
         try {
             help += "\n\nOptions:\n" + commandOptions + "\nwhere,\n" + paramTable.print();
-        } catch (OpenOCommandOutputFormatNotsupported | OpenOCommandOutputPrintingFailed e) {
+        } catch (OpenOCommandException e) {
             throw new OpenOCommandHelpFailed(e);
         }
 
@@ -561,7 +546,7 @@ public class OpenOCommandUtils {
         }
         try {
             help += "\n\nResults:\n" + resultTable.print();
-        } catch (OpenOCommandOutputFormatNotsupported | OpenOCommandOutputPrintingFailed e) {
+        } catch (OpenOCommandException e) {
             throw new OpenOCommandHelpFailed(e);
         }
 
@@ -679,7 +664,7 @@ public class OpenOCommandUtils {
     }
 
     private static String replaceLineFromInputParameters(String line, Map<String, OpenOCommandParameter> params)
-            throws OpenOCommandParameterNotFound, OpenOCommandInvalidParameterValue {
+            throws OpenOCommandException {
         String result = "";
 
         if (!line.contains("${")) {
@@ -842,7 +827,7 @@ public class OpenOCommandUtils {
      *             exception
      */
     public static HttpInput populateParameters(Map<String, OpenOCommandParameter> params, HttpInput input)
-            throws OpenOCommandParameterNotFound, OpenOCommandInvalidParameterValue {
+            throws OpenOCommandException {
         HttpInput inp = new HttpInput();
 
         inp.setBody(replaceLineFromInputParameters(input.getBody(), params));
@@ -877,8 +862,7 @@ public class OpenOCommandUtils {
      *             map processing failed exception
      */
     public static Map<String, ArrayList<String>> populateOutputs(Map<String, String> resultMap, HttpResult resultHttp)
-            throws OpenOCommandHttpHeaderNotFound, OpenOCommandHttpInvalidResponseBody,
-            OpenOCommandResultMapProcessingFailed {
+            throws OpenOCommandException {
         Map<String, ArrayList<String>> resultsProcessed = new HashMap<>();
 
         for (Entry<String, String> entry : resultMap.entrySet()) {
@@ -898,8 +882,7 @@ public class OpenOCommandUtils {
      * @throws OpenOCommandInvalidSchema
      *             exception
      */
-    public static List<ExternalSchema> findAllExternalSchemas()
-            throws OpenOCommandDiscoveryFailed, OpenOCommandInvalidSchema {
+    public static List<ExternalSchema> findAllExternalSchemas() throws OpenOCommandException {
         List<ExternalSchema> extSchemas = new ArrayList<>();
         try {
             Resource[] res = getExternalResources(OpenOCommandConfg.EXTERNAL_SCHEMA_PATH_PATERN);
@@ -1037,8 +1020,7 @@ public class OpenOCommandUtils {
      * @throws OpenOCommandDiscoveryFailed
      *             exception
      */
-    public static List<ExternalSchema> loadExternalSchemasFromJson()
-            throws OpenOCommandDiscoveryFailed, OpenOCommandInvalidSchema {
+    public static List<ExternalSchema> loadExternalSchemasFromJson() throws OpenOCommandException {
         List<ExternalSchema> schemas = new ArrayList<>();
         if (!isJsonFileDiscovered()) {
             schemas = findAllExternalSchemas();
@@ -1075,8 +1057,7 @@ public class OpenOCommandUtils {
      * @throws OpenOCommandDiscoveryFailed
      *             exception
      */
-    public static ExternalSchema loadExternalSchemaFromJson(String cmd)
-            throws OpenOCommandDiscoveryFailed, OpenOCommandInvalidSchema {
+    public static ExternalSchema loadExternalSchemaFromJson(String cmd) throws OpenOCommandException {
         List<ExternalSchema> list = loadExternalSchemasFromJson();
         if (list != null) {
             for (ExternalSchema schema : list) {

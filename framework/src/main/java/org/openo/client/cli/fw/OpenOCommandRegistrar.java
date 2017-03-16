@@ -18,21 +18,11 @@ package org.openo.client.cli.fw;
 
 import org.openo.client.cli.fw.cmd.OpenOHttpCommand;
 import org.openo.client.cli.fw.conf.OpenOCommandConfg;
-import org.openo.client.cli.fw.error.OpenOCommandDiscoveryFailed;
+import org.openo.client.cli.fw.error.OpenOCommandException;
 import org.openo.client.cli.fw.error.OpenOCommandHelpFailed;
-import org.openo.client.cli.fw.error.OpenOCommandInvalidParameterType;
-import org.openo.client.cli.fw.error.OpenOCommandInvalidPrintDirection;
 import org.openo.client.cli.fw.error.OpenOCommandInvalidRegistration;
-import org.openo.client.cli.fw.error.OpenOCommandInvalidResultAttributeScope;
-import org.openo.client.cli.fw.error.OpenOCommandInvalidSchema;
-import org.openo.client.cli.fw.error.OpenOCommandInvalidSchemaVersion;
 import org.openo.client.cli.fw.error.OpenOCommandNotFound;
-import org.openo.client.cli.fw.error.OpenOCommandOutputFormatNotsupported;
-import org.openo.client.cli.fw.error.OpenOCommandOutputPrintingFailed;
-import org.openo.client.cli.fw.error.OpenOCommandParameterNameConflict;
-import org.openo.client.cli.fw.error.OpenOCommandParameterOptionConflict;
 import org.openo.client.cli.fw.error.OpenOCommandRegistrationFailed;
-import org.openo.client.cli.fw.error.OpenOCommandSchemaNotFound;
 import org.openo.client.cli.fw.output.OpenOCommandResult;
 import org.openo.client.cli.fw.output.OpenOCommandResultAttribute;
 import org.openo.client.cli.fw.output.OpenOCommandResultAttributeScope;
@@ -80,14 +70,10 @@ public class OpenOCommandRegistrar {
     /**
      * Get global registrar.
      *
-     * @return OpenOCommandRegistrar
-     * @throws OpenOCommandInvalidRegistration
-     *             Invalid registration exception
-     * @throws OpenOCommandInvalidSchema exception
-     * @throws OpenOCommandDiscoveryFailed exception
+     * @throws OpenOCommandException
+     *             exception
      */
-    public static OpenOCommandRegistrar getRegistrar()
-            throws OpenOCommandInvalidRegistration, OpenOCommandDiscoveryFailed, OpenOCommandInvalidSchema {
+    public static OpenOCommandRegistrar getRegistrar() throws OpenOCommandException {
         if (registrar == null) {
             registrar = new OpenOCommandRegistrar();
             registrar.autoDiscover();
@@ -103,20 +89,10 @@ public class OpenOCommandRegistrar {
      * @param cmdName
      *            Name of command
      * @return OpenOCommand
-     * @throws OpenOCommandNotFound
-     *             Command not found
-     * @throws OpenOCommandRegistrationFailed
-     *             cmd registration failed
-     * @throws OpenOCommandInvalidParameterType
-     *             invalid param
-     * @throws OpenOCommandInvalidPrintDirection
-     *             invalid print direction
-     * @throws OpenOCommandInvalidResultAttributeScope
-     *             Invalid result attribute scope
+     * @throws OpenOCommandException
+     *             Exception
      */
-    public OpenOCommand get(String cmdName)
-            throws OpenOCommandNotFound, OpenOCommandRegistrationFailed, OpenOCommandInvalidParameterType,
-            OpenOCommandInvalidPrintDirection, OpenOCommandInvalidResultAttributeScope {
+    public OpenOCommand get(String cmdName) throws OpenOCommandException {
         OpenOCommand cmd;
         Class<? extends OpenOCommand> cls = registry.get(cmdName);
         if (cls == null) {
@@ -128,16 +104,14 @@ public class OpenOCommandRegistrar {
             cmd = (OpenOCommand) constr.newInstance();
 
             String schemaName;
-            if (cmd.getClass().equals(OpenOHttpCommand.class)) { //NOSONAR
+            if (cmd.getClass().equals(OpenOHttpCommand.class)) { // NOSONAR
                 schemaName = OpenOCommandUtils.loadExternalSchemaFromJson(cmdName).getSchemaName();
             } else {
                 schemaName = this.getSchemaFileName(cls);
             }
             cmd.initializeSchema(schemaName);
-        } catch (NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException
-                | IllegalArgumentException | InvocationTargetException | OpenOCommandSchemaNotFound
-                | OpenOCommandInvalidSchema | OpenOCommandParameterOptionConflict | OpenOCommandParameterNameConflict
-                | OpenOCommandInvalidSchemaVersion | OpenOCommandDiscoveryFailed e) {
+        } catch (OpenOCommandException | NoSuchMethodException | SecurityException | InstantiationException
+                | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
             throw new OpenOCommandRegistrationFailed(cmdName, e);
         }
 
@@ -149,14 +123,13 @@ public class OpenOCommandRegistrar {
 
         for (Class<OpenOCommand> cmd : cmds) {
             if (cmd.isAnnotationPresent(OpenOCommandSchema.class)) {
-                OpenOCommandSchema ano = (OpenOCommandSchema) cmd.getAnnotation(OpenOCommandSchema.class);
+                OpenOCommandSchema ano = cmd.getAnnotation(OpenOCommandSchema.class);
                 this.register(ano.name(), cmd);
             }
         }
     }
 
-    private void autoDiscoverHttpSchemas()
-            throws OpenOCommandInvalidRegistration, OpenOCommandDiscoveryFailed, OpenOCommandInvalidSchema {
+    private void autoDiscoverHttpSchemas() throws OpenOCommandException {
         List<ExternalSchema> schemas = OpenOCommandUtils.loadExternalSchemasFromJson();
         for (ExternalSchema schema : schemas) {
             this.register(schema.getCmdName(), OpenOHttpCommand.class);
@@ -218,8 +191,7 @@ public class OpenOCommandRegistrar {
             OpenOCommand cmd;
             try {
                 cmd = this.get(cmdName);
-            } catch (OpenOCommandNotFound | OpenOCommandRegistrationFailed | OpenOCommandInvalidParameterType
-                    | OpenOCommandInvalidPrintDirection | OpenOCommandInvalidResultAttributeScope e) {
+            } catch (OpenOCommandException e) {
                 throw new OpenOCommandHelpFailed(e);
             }
 
@@ -231,7 +203,7 @@ public class OpenOCommandRegistrar {
         try {
             return "Provides Command Line Interface (CLI) for Open-O.\n\nFollowing commands are supported:\n"
                     + help.print();
-        } catch (OpenOCommandOutputFormatNotsupported | OpenOCommandOutputPrintingFailed e) {
+        } catch (OpenOCommandException e) {
             throw new OpenOCommandHelpFailed(e);
         }
     }

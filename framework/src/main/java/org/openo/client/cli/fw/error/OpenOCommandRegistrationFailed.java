@@ -29,6 +29,6 @@ public class OpenOCommandRegistrationFailed extends OpenOCommandException {
     }
 
     public OpenOCommandRegistrationFailed(String cmdName, Throwable throwable) {
-        super("0x0018", "Command " + cmdName + " is failed to register, " + throwable.getMessage());
+        this(cmdName, throwable.getMessage());
     }
 }

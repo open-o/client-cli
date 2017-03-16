@@ -21,8 +21,7 @@ import static org.junit.Assert.assertTrue;
 
 import org.junit.Ignore;
 import org.junit.Test;
-import org.openo.client.cli.fw.error.OpenOCommandOutputFormatNotsupported;
-import org.openo.client.cli.fw.error.OpenOCommandOutputPrintingFailed;
+import org.openo.client.cli.fw.error.OpenOCommandException;
 import org.openo.client.cli.fw.input.ParameterType;
 
 import java.util.ArrayList;
@@ -51,8 +50,7 @@ public class OpenOCommandResultTest {
     }
 
     @Test
-    public void commandResultPrintLandscapeTableTest()
-            throws OpenOCommandOutputFormatNotsupported, OpenOCommandOutputPrintingFailed {
+    public void commandResultPrintLandscapeTableTest() throws OpenOCommandException {
         OpenOCommandResult res = new OpenOCommandResult();
         res.setDebugInfo("debugInfo");
         res.setIncludeSeparator(true);
@@ -78,8 +76,7 @@ public class OpenOCommandResultTest {
     }
 
     @Test
-    public void commandResultPrintLandscapeJsonTest()
-            throws OpenOCommandOutputFormatNotsupported, OpenOCommandOutputPrintingFailed {
+    public void commandResultPrintLandscapeJsonTest() throws OpenOCommandException {
         OpenOCommandResult res = new OpenOCommandResult();
         res.setDebugInfo("debugInfo");
         res.setIncludeSeparator(true);
@@ -109,8 +106,7 @@ public class OpenOCommandResultTest {
 
     @Test
     @Ignore
-    public void commandResultPrintLandscapeCsvTest()
-            throws OpenOCommandOutputFormatNotsupported, OpenOCommandOutputPrintingFailed {
+    public void commandResultPrintLandscapeCsvTest() throws OpenOCommandException {
         OpenOCommandResult res = new OpenOCommandResult();
         res.setDebugInfo("debugInfo");
         res.setIncludeSeparator(true);
@@ -144,8 +140,7 @@ public class OpenOCommandResultTest {
 
     @Test
     @Ignore
-    public void commandResultPrintPortraitCsvTest()
-            throws OpenOCommandOutputFormatNotsupported, OpenOCommandOutputPrintingFailed {
+    public void commandResultPrintPortraitCsvTest() throws OpenOCommandException {
         OpenOCommandResult res = new OpenOCommandResult();
         res.setDebugInfo("debugInfo");
         res.setIncludeSeparator(true);
@@ -176,8 +171,7 @@ public class OpenOCommandResultTest {
     }
 
     @Test
-    public void commandResultPrintPortraitTableTest()
-            throws OpenOCommandOutputFormatNotsupported, OpenOCommandOutputPrintingFailed {
+    public void commandResultPrintPortraitTableTest() throws OpenOCommandException {
         OpenOCommandResult res = new OpenOCommandResult();
         res.setDebugInfo("debugInfo");
         res.setIncludeSeparator(true);

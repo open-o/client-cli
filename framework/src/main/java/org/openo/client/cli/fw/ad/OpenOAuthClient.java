@@ -19,6 +19,7 @@ package org.openo.client.cli.fw.ad;
 import com.jayway.jsonpath.JsonPath;
 import org.apache.http.HttpStatus;
 import org.openo.client.cli.fw.conf.OpenOCommandConfg;
+import org.openo.client.cli.fw.error.OpenOCommandException;
 import org.openo.client.cli.fw.error.OpenOCommandExecutionFailed;
 import org.openo.client.cli.fw.error.OpenOCommandHttpFailure;
 import org.openo.client.cli.fw.error.OpenOCommandLoginFailed;
@@ -70,8 +71,7 @@ public class OpenOAuthClient {
      * @throws OpenOCommandServiceNotFound
      *             service not found
      */
-    public void login() throws OpenOCommandLoginFailed, OpenOCommandHttpFailure, OpenOCommandExecutionFailed,
-            OpenOCommandServiceNotFound {
+    public void login() throws OpenOCommandException {
 
         // For development purpose, its introduced and is not supported for production
         if (OpenOCommandConfg.isAuthIgnored()) {
@@ -110,15 +110,13 @@ public class OpenOAuthClient {
      * @throws OpenOCommandHttpFailure
      *             exception
      */
-    public void logout() throws OpenOCommandExecutionFailed, OpenOCommandServiceNotFound, OpenOCommandLogoutFailed,
-            OpenOCommandHttpFailure {
+    public void logout() throws OpenOCommandException {
         // For development purpose, its introduced and is not supported for production
         if (OpenOCommandConfg.isAuthIgnored()) {
             return;
         }
 
         HttpInput input = new HttpInput().setUri(this.getAuthUrl() + "/tokens").setMethod("delete");
-        ;
 
         HttpResult result;
         try {
@@ -146,8 +144,7 @@ public class OpenOAuthClient {
      * @throws OpenOCommandHttpFailure
      *             http request failed
      */
-    public String getServiceBasePath(OpenOService srv)
-            throws OpenOCommandExecutionFailed, OpenOCommandServiceNotFound, OpenOCommandHttpFailure {
+    public String getServiceBasePath(OpenOService srv) throws OpenOCommandException {
         if (srv.getName().equals(MSB)) {
             return this.getMsbUrl();
         }
@@ -170,8 +167,7 @@ public class OpenOAuthClient {
         }
     }
 
-    private String getAuthUrl()
-            throws OpenOCommandExecutionFailed, OpenOCommandServiceNotFound, OpenOCommandHttpFailure {
+    private String getAuthUrl() throws OpenOCommandException {
         OpenOService srv = new OpenOService();
         srv.setName(AUTH_SERVICE);
         srv.setVersion(AUTH_SERVICE_VERSION);

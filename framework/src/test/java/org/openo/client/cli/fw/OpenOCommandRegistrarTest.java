@@ -24,14 +24,8 @@ import static org.junit.Assert.fail;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
-import org.openo.client.cli.fw.error.OpenOCommandDiscoveryFailed;
 import org.openo.client.cli.fw.error.OpenOCommandException;
 import org.openo.client.cli.fw.error.OpenOCommandHelpFailed;
-import org.openo.client.cli.fw.error.OpenOCommandInvalidParameterType;
-import org.openo.client.cli.fw.error.OpenOCommandInvalidPrintDirection;
-import org.openo.client.cli.fw.error.OpenOCommandInvalidRegistration;
-import org.openo.client.cli.fw.error.OpenOCommandInvalidResultAttributeScope;
-import org.openo.client.cli.fw.error.OpenOCommandInvalidSchema;
 import org.openo.client.cli.fw.error.OpenOCommandNotFound;
 import org.openo.client.cli.fw.error.OpenOCommandRegistrationFailed;
 
@@ -40,14 +34,12 @@ public class OpenOCommandRegistrarTest {
     OpenOCommandRegistrar registerar;
 
     @Before
-    public void setup() throws OpenOCommandInvalidRegistration, OpenOCommandDiscoveryFailed, OpenOCommandInvalidSchema {
+    public void setup() throws OpenOCommandException {
         registerar = OpenOCommandRegistrar.getRegistrar();
     }
 
     @Test
-    public void registerTest() throws OpenOCommandInvalidRegistration, OpenOCommandNotFound,
-            OpenOCommandRegistrationFailed, OpenOCommandInvalidParameterType, OpenOCommandInvalidPrintDirection,
-            OpenOCommandInvalidResultAttributeScope {
+    public void registerTest() throws OpenOCommandException {
 
         OpenOCommand test = new OpenOCommandTest();
         Class<OpenOCommand> cmd = (Class<OpenOCommand>) test.getClass();
@@ -58,9 +50,7 @@ public class OpenOCommandRegistrarTest {
     }
 
     @Test
-    public void openOCommandNotFoundTest() throws OpenOCommandRegistrationFailed, OpenOCommandInvalidParameterType,
-            OpenOCommandInvalidPrintDirection, OpenOCommandInvalidResultAttributeScope, OpenOCommandInvalidRegistration,
-            OpenOCommandDiscoveryFailed, OpenOCommandInvalidSchema {
+    public void openOCommandNotFoundTest() throws OpenOCommandException {
         try {
             registerar = OpenOCommandRegistrar.getRegistrar();
             registerar.get("Test1");
@@ -71,9 +61,7 @@ public class OpenOCommandRegistrarTest {
     }
 
     @Test
-    public void openOCommandRegistrationFailedTest()
-            throws OpenOCommandNotFound, OpenOCommandInvalidParameterType, OpenOCommandInvalidPrintDirection,
-            OpenOCommandInvalidResultAttributeScope, OpenOCommandInvalidRegistration {
+    public void openOCommandRegistrationFailedTest() throws OpenOCommandException {
 
         OpenOCommand com = new OpenOCommand() {
 

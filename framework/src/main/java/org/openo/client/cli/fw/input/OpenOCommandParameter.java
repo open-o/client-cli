@@ -16,14 +16,15 @@
 
 package org.openo.client.cli.fw.input;
 
-import java.util.List;
-import java.util.Map;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
+import org.openo.client.cli.fw.error.OpenOCommandException;
 import org.openo.client.cli.fw.error.OpenOCommandInvalidParameterValue;
 import org.openo.client.cli.fw.error.OpenOCommandParameterMissing;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Open-O Command's input parameter.
@@ -167,7 +168,8 @@ public class OpenOCommandParameter {
      * Returns param value.
      *
      * @return value
-     * @throws OpenOCommandInvalidParameterValue exception
+     * @throws OpenOCommandInvalidParameterValue
+     *             exception
      */
     public Object getValue() throws OpenOCommandInvalidParameterValue {
         if (value != null) {
@@ -184,7 +186,7 @@ public class OpenOCommandParameter {
                 try {
                     return mapper.writeValueAsString(list);
                 } catch (JsonProcessingException e) {
-                    throw new OpenOCommandInvalidParameterValue(this.getName());
+                    throw new OpenOCommandInvalidParameterValue(this.getName(), e);
                 }
             } else if (ParameterType.MAP.equals(parameterType)) {
                 if (!(value instanceof Map)) {
@@ -196,7 +198,7 @@ public class OpenOCommandParameter {
                 try {
                     return mapper.writeValueAsString(map);
                 } catch (JsonProcessingException e) {
-                    throw new OpenOCommandInvalidParameterValue(this.getName());
+                    throw new OpenOCommandInvalidParameterValue(this.getName(), e);
                 }
             }
 
@@ -238,9 +240,10 @@ public class OpenOCommandParameter {
      *
      * @throws OpenOCommandParameterMissing
      *             exception
-     * @throws OpenOCommandInvalidParameterValue exception
+     * @throws OpenOCommandInvalidParameterValue
+     *             exception
      */
-    public void validate() throws OpenOCommandParameterMissing, OpenOCommandInvalidParameterValue {
+    public void validate() throws OpenOCommandException {
         // (mrkanag) empty check needs to revisit
         if (!this.isOptional() && (this.getValue() == null || this.getValue().toString().isEmpty())) {
             throw new OpenOCommandParameterMissing(this.getName());

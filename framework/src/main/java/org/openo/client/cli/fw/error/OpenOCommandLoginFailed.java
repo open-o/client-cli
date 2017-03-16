@@ -24,15 +24,18 @@ public class OpenOCommandLoginFailed extends OpenOCommandException {
 
     private static final long serialVersionUID = 5518154493762956959L;
 
+    private static final String ERROR_CODE = "0x0009";
+    private static final String ERROR_MESSAGE1 = "Login failed, ";
+
     public OpenOCommandLoginFailed(String error) {
-        super("0x0009", "Login failed, " + error);
+        super(ERROR_CODE, ERROR_MESSAGE1 + error);
     }
 
     public OpenOCommandLoginFailed(String error, int httpStatus) {
-        super("0x0009", "Login failed, " + error, httpStatus);
+        super(ERROR_CODE, ERROR_MESSAGE1 + error, httpStatus);
     }
 
     public OpenOCommandLoginFailed(Throwable throwable) {
-        super("0x0009", "Login failed, " + throwable.getMessage());
+        this(throwable.getMessage());
     }
 }

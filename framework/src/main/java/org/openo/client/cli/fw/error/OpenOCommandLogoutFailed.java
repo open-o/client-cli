@@ -23,16 +23,18 @@ package org.openo.client.cli.fw.error;
 public class OpenOCommandLogoutFailed extends OpenOCommandException {
 
     private static final long serialVersionUID = 1150649507734289032L;
+    private static final String ERROR_CODE = "0x0010";
+    private static final String ERROR_MESSAGE1 = "Logout failed, ";
 
     public OpenOCommandLogoutFailed(String error) {
-        super("0x0010", "Logout failed, " + error);
+        super(ERROR_CODE, ERROR_MESSAGE1 + error);
     }
 
     public OpenOCommandLogoutFailed(Throwable throwable) {
-        super("0x0010", "Logout failed, " + throwable.getMessage());
+        this(throwable.getMessage());
     }
 
     public OpenOCommandLogoutFailed(int statusCode) {
-        super("0x0010", "Logout failed", statusCode);
+        super(ERROR_CODE, ERROR_MESSAGE1, statusCode);
     }
 }

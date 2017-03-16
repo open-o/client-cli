@@ -25,7 +25,7 @@ public class OpenOCommandSchemaNotFound extends OpenOCommandException {
     private static final long serialVersionUID = -3919580583845280200L;
 
     public OpenOCommandSchemaNotFound(String cmdName) {
-        super("0x0019", "Command schema " + cmdName + " is not found");
+        this(cmdName, new Exception(""));
     }
 
     public OpenOCommandSchemaNotFound(String cmdName, Throwable throwable) {

@@ -25,7 +25,11 @@ public class OpenOCommandInvalidParameterValue extends OpenOCommandException {
     private static final long serialVersionUID = 2821256032317061437L;
 
     public OpenOCommandInvalidParameterValue(String paramName) {
-        super("0x0028", "Parameter " + paramName + " value is invalid");
+        this(paramName,new Exception(""));
+    }
+
+    public OpenOCommandInvalidParameterValue(String paramName, Throwable throwable) {
+        super("0x0028", "Parameter " + paramName + " value is invalid, " + throwable.getMessage());
     }
 
 }

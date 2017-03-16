@@ -21,9 +21,7 @@ import org.openo.client.cli.fw.ad.OpenOCredentials;
 import org.openo.client.cli.fw.ad.OpenOService;
 import org.openo.client.cli.fw.conf.OpenOCommandConfg;
 import org.openo.client.cli.fw.error.OpenOCommandException;
-import org.openo.client.cli.fw.error.OpenOCommandExecutionFailed;
 import org.openo.client.cli.fw.error.OpenOCommandHelpFailed;
-import org.openo.client.cli.fw.error.OpenOCommandHttpFailure;
 import org.openo.client.cli.fw.error.OpenOCommandInvalidParameterType;
 import org.openo.client.cli.fw.error.OpenOCommandInvalidPrintDirection;
 import org.openo.client.cli.fw.error.OpenOCommandInvalidResultAttributeScope;
@@ -34,7 +32,6 @@ import org.openo.client.cli.fw.error.OpenOCommandParameterNameConflict;
 import org.openo.client.cli.fw.error.OpenOCommandParameterOptionConflict;
 import org.openo.client.cli.fw.error.OpenOCommandRegistrationFailed;
 import org.openo.client.cli.fw.error.OpenOCommandSchemaNotFound;
-import org.openo.client.cli.fw.error.OpenOCommandServiceNotFound;
 import org.openo.client.cli.fw.input.OpenOCommandParameter;
 import org.openo.client.cli.fw.output.OpenOCommandResult;
 import org.openo.client.cli.fw.output.OpenOCommandResultAttributeScope;
@@ -171,10 +168,7 @@ public abstract class OpenOCommand {
      * @throws OpenOCommandInvalidSchemaVersion
      *             InvalidSchemaVersion Exception
      */
-    public void initializeSchema(String schema) throws OpenOCommandParameterNameConflict,
-            OpenOCommandParameterOptionConflict, OpenOCommandInvalidParameterType, OpenOCommandInvalidPrintDirection,
-            OpenOCommandInvalidResultAttributeScope, OpenOCommandSchemaNotFound, OpenOCommandInvalidSchema,
-            OpenOCommandInvalidSchemaVersion {
+    public void initializeSchema(String schema) throws OpenOCommandException {
         this.setSchemaName(schema);
         OpenOCommandUtils.loadSchema(this, schema, true);
         this.initializeProfileSchema();
@@ -184,10 +178,7 @@ public abstract class OpenOCommand {
     /**
      * Any additional profile based such as http/swagger schema could be initialized.
      */
-    protected void initializeProfileSchema() throws OpenOCommandParameterNameConflict,
-            OpenOCommandParameterOptionConflict, OpenOCommandInvalidParameterType, OpenOCommandInvalidPrintDirection,
-            OpenOCommandInvalidResultAttributeScope, OpenOCommandSchemaNotFound, OpenOCommandInvalidSchema,
-            OpenOCommandInvalidSchemaVersion {
+    protected void initializeProfileSchema() throws OpenOCommandException {
 
     }
 
@@ -290,7 +281,7 @@ public abstract class OpenOCommand {
      * Get my service base path (endpoint).
      */
     protected String getBasePath()
-            throws OpenOCommandExecutionFailed, OpenOCommandServiceNotFound, OpenOCommandHttpFailure {
+            throws OpenOCommandException {
         return this.authClient.getServiceBasePath(this.getService());
     }
 

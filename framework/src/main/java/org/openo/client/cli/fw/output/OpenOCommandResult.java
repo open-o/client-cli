@@ -17,6 +17,7 @@
 package org.openo.client.cli.fw.output;
 
 import org.openo.client.cli.fw.conf.OpenOCommandConfg;
+import org.openo.client.cli.fw.error.OpenOCommandException;
 import org.openo.client.cli.fw.error.OpenOCommandOutputFormatNotsupported;
 import org.openo.client.cli.fw.error.OpenOCommandOutputPrintingFailed;
 import org.openo.client.cli.fw.input.ParameterType;
@@ -181,7 +182,7 @@ public class OpenOCommandResult {
      * @throws OpenOCommandOutputPrintingFailed
      *             exception
      */
-    public String print() throws OpenOCommandOutputFormatNotsupported, OpenOCommandOutputPrintingFailed {
+    public String print() throws OpenOCommandException {
         String printOutput = "";
 
         if (this.getRecords().isEmpty()) {
