@@ -70,7 +70,7 @@ public final class OpenOCommandConfg {
         try {
             prps.load(OpenOCommandConfg.class.getClassLoader().getResourceAsStream(CONF));
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException(e); //NOSONAR
         }
     }
 
