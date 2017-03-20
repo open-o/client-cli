@@ -21,8 +21,12 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.net.URL;
+
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.openo.client.cli.fw.error.OpenOCommandException;
 import org.openo.client.cli.fw.error.OpenOCommandHelpFailed;
@@ -36,11 +40,26 @@ public class OpenOCommandRegistrarTest {
     @Before
     public void setup() throws OpenOCommandException {
         registerar = OpenOCommandRegistrar.getRegistrar();
+        createDir();
+    }
+
+    private void createDir() {
+        URL url = OpenOCommandRegistrarTest.class.getClassLoader().getResource("openo-cli-schema");
+        if (url != null) {
+            String path = url.getPath();
+            path = path.replaceFirst("openo-cli-schema", "data");
+            File file = new File(path);
+            if (!file.exists()) {
+                file.mkdir();
+            } else {
+                File f1 = new File(path + "/external-schema.json");
+                f1.delete();
+            }
+        }
     }
 
     @Test
     public void registerTest() throws OpenOCommandException {
-
         OpenOCommand test = new OpenOCommandTest();
         Class<OpenOCommand> cmd = (Class<OpenOCommand>) test.getClass();
         registerar.register("Test", cmd);

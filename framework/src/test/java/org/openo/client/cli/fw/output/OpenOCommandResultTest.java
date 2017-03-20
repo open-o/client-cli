@@ -19,19 +19,19 @@ package org.openo.client.cli.fw.output;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 import org.junit.Ignore;
 import org.junit.Test;
 import org.openo.client.cli.fw.error.OpenOCommandException;
 import org.openo.client.cli.fw.input.ParameterType;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
 public class OpenOCommandResultTest {
 
     @Test
-    public void commandResultObjTest() {
+    public void commandResultObjTest() throws OpenOCommandException {
         OpenOCommandResult res = new OpenOCommandResult();
         res.setDebugInfo("debugInfo");
         res.setIncludeSeparator(true);
@@ -41,11 +41,17 @@ public class OpenOCommandResultTest {
         res.setRecords(new ArrayList<OpenOCommandResultAttribute>());
         res.setScope(OpenOCommandResultAttributeScope.LONG);
         res.setType(ResultType.TABLE);
+        res.setDebug(true);
 
         assertTrue("debugInfo".equals(res.getDebugInfo()) && res.isIncludeSeparator()
                 && "Output".equals(res.getOutput()) && PrintDirection.LANDSCAPE.equals(res.getPrintDirection())
                 && res.getRecords().isEmpty() && OpenOCommandResultAttributeScope.LONG.equals(res.getScope())
                 && ResultType.TABLE.equals(res.getType()));
+
+
+        String help = res.print();
+
+        assertTrue("".equals(help));
 
     }
 
@@ -68,6 +74,7 @@ public class OpenOCommandResultTest {
         res.setRecords(list);
         res.setScope(OpenOCommandResultAttributeScope.LONG);
         res.setType(ResultType.TABLE);
+        res.getRecordsMap();
         String expRes = "+--------+\n|param   |\n+--------+\n|value   |\n+--------+\n";
         String result = res.print();
 
