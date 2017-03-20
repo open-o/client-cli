@@ -32,6 +32,8 @@ public class OpenOCliArgumentTest {
     public void openOCliInvalidArgumentTest() {
         OpenOCliInvalidArgument failed = new OpenOCliInvalidArgument("Invalid Argument");
         assertEquals("0x1000::Invalid argument Invalid Argument", failed.getMessage());
+        failed = new OpenOCliInvalidArgument("Invalid Argument", new Exception(""));
+        assertEquals("0x1000::Invalid argument Invalid Argument , ", failed.getMessage());
     }
 
 }

@@ -27,7 +27,10 @@ public class OpenOServiceTest {
         OpenOService ser = new OpenOService();
         ser.setName("name");
         ser.setVersion("1.0");
-        assertTrue(ser.getName().equals("name") && ser.getVersion().equals("1.0"));
+        ser.setBasePath("basePath");
+        ser.setNoAuth(true);
+        assertTrue(ser.getName().equals("name") && ser.getVersion().equals("1.0")
+                && ser.getBasePath().equals("basePath") && ser.isNoAuth());
 
     }
 

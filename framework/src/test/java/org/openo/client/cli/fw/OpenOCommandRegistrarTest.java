@@ -82,7 +82,6 @@ public class OpenOCommandRegistrarTest {
     }
 
     @Test
-    @Ignore
     public void helpTest() throws OpenOCommandHelpFailed {
         String help = registerar.getHelp();
         assertNotNull(help);

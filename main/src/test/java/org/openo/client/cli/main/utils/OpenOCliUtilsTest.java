@@ -25,7 +25,9 @@ import org.openo.client.cli.fw.input.ParameterType;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class OpenOCliUtilsTest {
 
@@ -211,6 +213,22 @@ public class OpenOCliUtilsTest {
 
         List<String> expectedList = Arrays.asList(args);
         Assert.assertNotNull(expectedList.get(1), paramslist.get(0).getValue());
+    }
+
+    @Test
+    public void testMapparamsShort() throws OpenOCommandException {
+        OpenOCommandParameter param1 = new OpenOCommandParameter();
+        param1.setLongOption("map");
+        param1.setName("MAP");
+        param1.setParameterType(ParameterType.MAP);
+        List<OpenOCommandParameter> paramslist = new ArrayList<>();
+        paramslist.add(param1);
+
+        param1.setParameterType(ParameterType.MAP);
+        OpenOCliUtils.populateParams(paramslist,
+                Arrays.asList("show", "--map", "param1=value1", "--map", "param2=value2"));
+
+        Assert.assertEquals("{\"param1\":\"value1\",\"param2\":\"value2\"}", paramslist.get(0).getValue().toString());
     }
 
 }

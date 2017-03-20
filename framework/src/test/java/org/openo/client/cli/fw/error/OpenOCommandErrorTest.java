@@ -21,11 +21,39 @@ import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 
 public class OpenOCommandErrorTest {
+
+    @Test
+    public void openOCommandDiscoveryFailedTest() {
+        OpenOCommandDiscoveryFailed failed = new OpenOCommandDiscoveryFailed("name");
+        assertEquals("0x0010::Failed auto discover schema files from name under class path, ", failed.getMessage());
+        failed = new OpenOCommandDiscoveryFailed("directory", "name");
+        assertEquals("0x0010::Failed auto generate json file 'name' under class path directory 'directory' , ",
+                failed.getMessage());
+    }
+
+    @Test
+    public void openOCommandInvalidParameterValueTest() {
+        OpenOCommandInvalidParameterValue failed = new OpenOCommandInvalidParameterValue("name");
+        assertEquals("0x0028::Parameter name value is invalid, ", failed.getMessage());
+    }
+
+    @Test
+    public void openOCommandResultMapProcessingFailedTest() {
+        OpenOCommandResultMapProcessingFailed failed = new OpenOCommandResultMapProcessingFailed("name",
+                new Exception(""));
+        assertEquals("0x0028::Failed to process the result map name in http section,  ", failed.getMessage());
+    }
+
+    @Test
+    public void openOCommandHttpHeaderNotFoundTest() {
+        OpenOCommandHttpHeaderNotFound failed = new OpenOCommandHttpHeaderNotFound("name");
+        assertEquals("0x0027::Http header name is not returned from the service", failed.getMessage());
+    }
+
     @Test
     public void openOCommandClientInitialzationFailedTest() {
         OpenOCommandClientInitialzationFailed failed = new OpenOCommandClientInitialzationFailed("Test",
                 new Exception("Test Command Failed"));
-
         assertEquals("0x0021::API client for the command Test is failed, Test Command Failed", failed.getMessage());
     }
 
@@ -45,6 +73,8 @@ public class OpenOCommandErrorTest {
     public void openOCommandExecutionFailedTest1() {
         OpenOCommandExecutionFailed failed = new OpenOCommandExecutionFailed("Test", "Test Command Failed", 201);
         assertEquals("201::0x0001::Command Test failed to execute, Test Command Failed", failed.getMessage());
+        failed = new OpenOCommandExecutionFailed("Test", new Exception("Test Command Failed"), 201);
+        assertEquals("201::0x0001::Command Test failed to execute, Test Command Failed", failed.getMessage());
     }
 
     @Test
@@ -57,6 +87,9 @@ public class OpenOCommandErrorTest {
     public void openOCommandExecutionFailedTest3() {
         OpenOCommandExecutionFailed failed = new OpenOCommandExecutionFailed("Test", "Test Command Failed");
         assertEquals("0x0001::Command Test failed to execute, Test Command Failed", failed.getMessage());
+
+        failed = new OpenOCommandExecutionFailed("Test", new Exception("Test Command Failed"));
+        assertEquals("0x0001::Command Test failed to execute, Test Command Failed", failed.getMessage());
     }
 
     @Test
@@ -68,7 +101,7 @@ public class OpenOCommandErrorTest {
 
     @Test
     public void openOCommandHelpFailedTest() {
-        OpenOCommandHelpFailed failed = new OpenOCommandHelpFailed("Failed");
+        OpenOCommandHelpFailed failed = new OpenOCommandHelpFailed(new Exception("Failed"));
 
         assertEquals("0x0002::Command failed to print help message, Failed", failed.getMessage());
     }
@@ -76,8 +109,10 @@ public class OpenOCommandErrorTest {
     @Test
     public void openOCommandHttpFailureTest1() {
         OpenOCommandHttpFailure failed = new OpenOCommandHttpFailure("Failed");
-
         assertEquals("0x0025::Failed", failed.getMessage());
+
+        failed = new OpenOCommandHttpFailure(new Exception("failed"), 201);
+        assertEquals("201::0x0025::failed", failed.getMessage());
     }
 
     @Test
@@ -132,7 +167,7 @@ public class OpenOCommandErrorTest {
 
     @Test
     public void openOCommandLoginFailedTest1() {
-        OpenOCommandLoginFailed failed = new OpenOCommandLoginFailed("Failed");
+        OpenOCommandLoginFailed failed = new OpenOCommandLoginFailed(new Exception("Failed"));
 
         assertEquals("0x0009::Login failed, Failed", failed.getMessage());
     }
@@ -146,9 +181,11 @@ public class OpenOCommandErrorTest {
 
     @Test
     public void openOCommandLogoutFailedTest() {
-        OpenOCommandLogoutFailed failed = new OpenOCommandLogoutFailed("Failed");
-
+        OpenOCommandLogoutFailed failed = new OpenOCommandLogoutFailed(new Exception("Failed"));
         assertEquals("0x0010::Logout failed, Failed", failed.getMessage());
+
+        failed = new OpenOCommandLogoutFailed(200);
+        assertEquals("200::0x0010::Logout failed, ", failed.getMessage());
     }
 
     @Test
@@ -167,7 +204,7 @@ public class OpenOCommandErrorTest {
 
     @Test
     public void openOCommandOutputPrintingFailedTest() {
-        OpenOCommandOutputPrintingFailed failed = new OpenOCommandOutputPrintingFailed("error");
+        OpenOCommandOutputPrintingFailed failed = new OpenOCommandOutputPrintingFailed(new Exception("error"));
 
         assertEquals("0x0014::Command is failed to print the result, error", failed.getMessage());
     }
@@ -203,7 +240,8 @@ public class OpenOCommandErrorTest {
 
     @Test
     public void openOCommandResultInitialzationFailedTest() {
-        OpenOCommandResultInitialzationFailed failed = new OpenOCommandResultInitialzationFailed("Test", "error");
+        OpenOCommandResultInitialzationFailed failed = new OpenOCommandResultInitialzationFailed("Test",
+                new Exception("error"));
 
         assertEquals("0x0022::Command Test result format is failed, error", failed.getMessage());
     }

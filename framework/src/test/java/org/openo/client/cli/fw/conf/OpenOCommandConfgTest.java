@@ -36,6 +36,9 @@ public class OpenOCommandConfgTest {
         prps.load(OpenOCommandConfg.class.getClassLoader().getResourceAsStream("openo.properties"));
         boolean auth = OpenOCommandConfg.isAuthIgnored();
         Assert.assertTrue(auth == Boolean.valueOf(prps.getProperty("cli.ignore_auth")));
+        Assert.assertTrue(OpenOCommandConfg.isCookiesBasedAuth() == Boolean
+                .valueOf(prps.getProperty("http.api_key_use_cookies")));
+        Assert.assertTrue("X-Auth-Token".equals(OpenOCommandConfg.getXAuthTokenName()));
     }
 
 }

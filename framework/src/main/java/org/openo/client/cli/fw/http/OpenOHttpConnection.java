@@ -236,7 +236,7 @@ public class OpenOHttpConnection {
         }
     }
 
-    private void addCommonCookies(HttpInput input, CookieStore cookieStore) {
+    private void addCommonCookies(CookieStore cookieStore) {
         Cookie cookie = new BasicClientCookie(X_AUTH_TOKEN, this.xauthToken);
         cookieStore.addCookie(cookie);
     }
@@ -250,14 +250,14 @@ public class OpenOHttpConnection {
     private String getDomain(String url) {
         try {
             return new URL(url).getHost();
-        } catch(MalformedURLException e) {
+        } catch (MalformedURLException e) {
             // url is always proper !!
             return url;
         }
     }
 
     private void updateInputFromCookies(HttpInput input, CookieStore cookieStore) {
-        addCommonCookies(input, cookieStore);
+        addCommonCookies(cookieStore);
         for (String cookieName : input.getReqCookies().keySet()) {
             BasicClientCookie cookie = new BasicClientCookie(cookieName, input.getReqCookies().get(cookieName));
             cookie.setDomain(this.getDomain(input.getUri()));

@@ -22,6 +22,10 @@ import org.junit.Test;
 import org.openo.client.cli.fw.error.OpenOCommandException;
 import org.openo.client.cli.fw.error.OpenOCommandInvalidParameterValue;
 
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
+
 public class OpenOCommandParameterTest {
 
     @Test
@@ -39,8 +43,25 @@ public class OpenOCommandParameterTest {
 
         assertTrue(param.getDefaultValue().equals("defaultValue") && param.getDescription().equals("description")
                 && param.getLongOption().equals("longOption") && param.getName().equals("name")
-                && param.getShortOption().equals("shortOption") && param.getValue().equals("value") && param.isOptional()
-                && !param.isSecured() && param.getParameterType().equals(ParameterType.JSON));
+                && param.getShortOption().equals("shortOption") && param.getValue().equals("value")
+                && param.isOptional() && !param.isSecured() && param.getParameterType().equals(ParameterType.JSON));
+
+        assertTrue("value".equals(param.getValue()));
+
+        param.setParameterType(ParameterType.ARRAY);
+        param.setValue(Arrays.asList("1", "2", "3"));
+        assertTrue("[\"1\",\"2\",\"3\"]".equals(param.getValue()));
+
+        param.setParameterType(ParameterType.MAP);
+        Map<String, String> map = new HashMap<>();
+        map.put("One", "1");
+        map.put("Two", "2");
+        map.put("Three", "3");
+        param.setValue(map);
+        assertTrue("{\"One\":\"1\",\"Two\":\"2\",\"Three\":\"3\"}".equals(param.getValue()));
+
+        param.setDefaultValue("${defaultValue}");
+        assertTrue(null == param.getDefaultValue());
     }
 
     @Test

@@ -235,7 +235,7 @@ public class OpenOCommandPrint {
                 }
                 writer.close();
             } catch (IOException e) {
-                throw new OpenOCommandOutputPrintingFailed(e);
+                throw new OpenOCommandOutputPrintingFailed(e);  // NOSONAR
             }
         }
     }

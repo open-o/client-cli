@@ -30,8 +30,9 @@ public class OpenOCommandExecutorTest {
         exec.setException("exception");
         exec.setMethod("method");
 
-        Assert.assertTrue(exec.getApi().equals("api") && exec.getClient().equals("client")
-                && exec.getEntity().equals("entity") && exec.getMethod().equals("method"));
+        Assert.assertTrue(
+                exec.getApi().equals("api") && exec.getClient().equals("client") && exec.getEntity().equals("entity")
+                        && exec.getMethod().equals("method") && exec.getException().equals("exception"));
     }
 
 }

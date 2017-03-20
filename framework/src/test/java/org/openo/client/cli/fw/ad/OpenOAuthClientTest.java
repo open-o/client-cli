@@ -29,6 +29,7 @@ import org.openo.client.cli.fw.error.OpenOCommandException;
 import org.openo.client.cli.fw.error.OpenOCommandExecutionFailed;
 import org.openo.client.cli.fw.error.OpenOCommandHttpFailure;
 import org.openo.client.cli.fw.error.OpenOCommandLoginFailed;
+import org.openo.client.cli.fw.error.OpenOCommandLogoutFailed;
 import org.openo.client.cli.fw.error.OpenOCommandServiceNotFound;
 import org.openo.client.cli.fw.http.HttpInput;
 import org.openo.client.cli.fw.http.HttpResult;
@@ -58,8 +59,7 @@ public class OpenOAuthClientTest {
     }
 
     @Test
-    public void loginFailedServiceNotFoundTest()
-            throws OpenOCommandException {
+    public void loginFailedServiceNotFoundTest() throws OpenOCommandException {
         mockIsAuthIgnored();
         HttpResult result = new HttpResult();
         result.setStatus(404);
@@ -73,8 +73,7 @@ public class OpenOAuthClientTest {
     }
 
     @Test
-    public void loginFailedCommandExecutionFailedTest()
-            throws OpenOCommandException {
+    public void loginFailedCommandExecutionFailedTest() throws OpenOCommandException {
 
         mockIsAuthIgnored();
         HttpResult result = new HttpResult();
@@ -89,8 +88,7 @@ public class OpenOAuthClientTest {
     }
 
     @Test
-    public void loginFailedWrongJasonBodyTest()
-            throws OpenOCommandException {
+    public void loginFailedWrongJasonBodyTest() throws OpenOCommandException {
 
         mockIsAuthIgnored();
         HttpResult result = new HttpResult();
@@ -106,30 +104,33 @@ public class OpenOAuthClientTest {
     }
 
     @Test
-    @Ignore
-    public void loginFailedTest()
-            throws OpenOCommandException {
+    public void loginFailedTest() throws OpenOCommandException {
 
         mockIsAuthIgnored();
         HttpResult result = new HttpResult();
         result.setBody("{\"url\":\"http://192.168.4.47\"}");
         result.setStatus(200);
-        mockHttpGetPost(result, null);
-        mockHttpPostException(new OpenOCommandHttpFailure("Post Request Failed"));
+        mockOpenOAuthClient();
         try {
             client.login();
         } catch (OpenOCommandLoginFailed e) {
-            assertEquals("0x0009::Login failed, 0x0025::Post Request Failed", e.getMessage());
+            assertEquals("0x0009::Login failed, 0x0025::null", e.getMessage());
         }
 
-        HttpResult postResult = new HttpResult();
-        postResult.setStatus(401);
-        mockHttpGetPost(result, postResult);
+    }
 
+    @Test
+    public void logoutFailedTest() throws OpenOCommandException {
+
+        mockIsAuthIgnored();
+        HttpResult result = new HttpResult();
+        result.setBody("{\"url\":\"http://192.168.4.47\"}");
+        result.setStatus(200);
+        mockOpenOAuthClient();
         try {
-            client.login();
-        } catch (OpenOCommandLoginFailed e) {
-            assertEquals("401::0x0009::Login failed, null", e.getMessage());
+            client.logout();
+        } catch (OpenOCommandLogoutFailed e) {
+            assertEquals("0x0010::Logout failed, 0x0025::null", e.getMessage());
         }
 
     }
@@ -165,7 +166,6 @@ public class OpenOAuthClientTest {
 
             @Mock
             public boolean isAuthIgnored(Invocation inv) {
-                System.out.println("isAuthIgnored : " + isMock);
                 if (isMock) {
                     isMock = false;
                     return false;
@@ -182,7 +182,6 @@ public class OpenOAuthClientTest {
 
             @Mock
             public HttpResult get(Invocation inv, final HttpInput input) throws OpenOCommandHttpFailure {
-                System.out.println("mockHttpGet : " + isMock);
                 if (isMock) {
                     isMock = false;
                     return resultGet;
@@ -193,7 +192,6 @@ public class OpenOAuthClientTest {
 
             @Mock
             public HttpResult post(Invocation inv, final HttpInput input) throws OpenOCommandHttpFailure {
-                System.out.println("mockHttpPost : " + isMock);
                 if (isMock) {
                     isMock = false;
                     return resultPost;
@@ -204,18 +202,27 @@ public class OpenOAuthClientTest {
         };
     }
 
-    private void mockHttpPostException(Exception exp) {
-        new MockUp<OpenOHttpConnection>() {
+    private void mockOpenOAuthClient() {
+        new MockUp<OpenOAuthClient>() {
             boolean isMock = true;
 
             @Mock
-            public HttpResult post(Invocation inv, final HttpInput input) throws Exception {
-                System.out.println("mockHttpPostException : " + isMock);
+            public HttpResult run(Invocation inv, HttpInput input) throws OpenOCommandHttpFailure {
                 if (isMock) {
                     isMock = false;
-                    throw exp;
+                    return new HttpResult();
                 } else {
                     return inv.proceed(input);
+                }
+            }
+
+            @Mock
+            private String getAuthUrl(Invocation inv) throws OpenOCommandException {
+                if (isMock) {
+                    isMock = false;
+                    return "uri";
+                } else {
+                    return inv.proceed();
                 }
             }
         };

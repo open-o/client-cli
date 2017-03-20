@@ -41,7 +41,7 @@ public class OpenOCommandLogger {
      *             exception
      */
     @Around("execution(* org.openo.client.cli.fw*(..))")
-    public Object log(ProceedingJoinPoint joinPoint) throws Throwable {
+    public Object log(ProceedingJoinPoint joinPoint) throws Throwable { // NOSONAR
         LOGGER.info(joinPoint.getThis().toString() + "->" + joinPoint.getSignature().getName() + "("
                 + joinPoint.getArgs() + ")");
 

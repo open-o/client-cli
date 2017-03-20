@@ -56,6 +56,17 @@ import java.util.Set;
 public class OpenOCommandUtilsTest {
 
     @Test
+    public void externalSchemaTest() {
+        ExternalSchema schema = new ExternalSchema();
+        schema.setCmdName("cmdName");
+        schema.setSchemaName("schemaName");
+        schema.setVersion("version");
+
+        assertTrue("cmdName".equals(schema.getCmdName()) && "schemaName".equals(schema.getSchemaName())
+                && "version".equals(schema.getVersion()));
+    }
+
+    @Test
     public void schemaFileNotFoundTest() throws OpenOCommandException {
 
         Map<String, ?> map = OpenOCommandUtils.validateSchemaVersion("sample-test-schema.yaml", "1.0");

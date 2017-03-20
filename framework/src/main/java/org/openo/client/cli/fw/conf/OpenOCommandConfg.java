@@ -29,7 +29,7 @@ public final class OpenOCommandConfg {
 
     // Common parameters used across all commands.
     public static final String DEAFULT_PARAMETER_USERNAME = "openo-username";
-    public static final String DEAFULT_PARAMETER_PASSWORD = "openo-password";
+    public static final String DEAFULT_PARAMETER_PASS_WORD = "openo-password";
     public static final String DEAFULT_PARAMETER_MSB_URL = "msb-url";
     public static final String DEFAULT_PARAMETER_HELP = "help";
     public static final String DEFAULT_PARAMETER_VERSION = "version";
@@ -70,7 +70,7 @@ public final class OpenOCommandConfg {
         try {
             prps.load(OpenOCommandConfg.class.getClassLoader().getResourceAsStream(CONF));
         } catch (IOException e) {
-            // This exception will never occur
+            throw new RuntimeException(e);
         }
     }
 

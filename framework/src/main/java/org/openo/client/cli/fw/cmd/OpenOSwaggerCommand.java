@@ -59,12 +59,8 @@ public abstract class OpenOSwaggerCommand extends OpenOCommand {
             basePath.invoke(client, this.getBasePath());
 
             if (this.getAuthToken() != null) {
-                try {
-                    Method apiKey = client.getClass().getMethod("setApiKey", String.class);
-                    apiKey.invoke(client, this.getAuthToken());
-                } catch (InvocationTargetException e) {
-                    // mrkanag: once X-AUTH-TOKEN is available, raise exception here
-                }
+                Method apiKey = client.getClass().getMethod("setApiKey", String.class);
+                apiKey.invoke(client, this.getAuthToken());
             }
             return client;
         } catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException

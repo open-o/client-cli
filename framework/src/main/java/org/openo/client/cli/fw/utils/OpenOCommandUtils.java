@@ -573,7 +573,7 @@ public class OpenOCommandUtils {
         }
 
         return new OpenOCredentials(paramMap.get(OpenOCommandConfg.DEAFULT_PARAMETER_USERNAME),
-                paramMap.get(OpenOCommandConfg.DEAFULT_PARAMETER_PASSWORD),
+                paramMap.get(OpenOCommandConfg.DEAFULT_PARAMETER_PASS_WORD),
                 paramMap.get(OpenOCommandConfg.DEAFULT_PARAMETER_MSB_URL));
     }
 
@@ -633,7 +633,7 @@ public class OpenOCommandUtils {
         for (String json : jsons) {
             try {
                 results.add(JsonPath.parse(json).jsonString());
-            } catch (Exception e) {
+            } catch (Exception e) { // NOSONAR
                 results.add(json);
             }
         }
@@ -901,7 +901,7 @@ public class OpenOCommandUtils {
                 }
             }
         } catch (IOException e) {
-            new OpenOCommandDiscoveryFailed(OpenOCommandConfg.EXTERNAL_SCHEMA_DIRECTORY, e);
+            throw new OpenOCommandDiscoveryFailed(OpenOCommandConfg.EXTERNAL_SCHEMA_DIRECTORY, e);
         }
 
         return extSchemas;
