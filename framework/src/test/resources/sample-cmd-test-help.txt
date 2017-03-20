@@ -35,9 +35,10 @@ where,
 -t | --no-title         whether to print title or not. It is of type BOOL.    
                         By default, it is false.                              
 -b | --bool             Open-O boolean param, by default its always false.    
-                        It is of type BOOL. By default, it is false.          
+                        It is of type BOOL. It is optional. By default, it    
+                        is false.                                             
 -x | --secure           Open-O secure param such as password. It is of        
-                        type STRING.                                          
+                        type STRING. Secured.                                 
 -c | --string-param     Open-O string param. It is of type STRING.            
 -y | --yaml-param       Open-O yaml file location param. It is of type        
                         JSON. It's recommended to input the complete path     
@@ -59,7 +60,7 @@ positional-args         Open-O positional args, if no short option and no
 
 Results:
 output-1  Open-O output attribute marked in short and is of   
-          type STRING.                                        
+          type STRING. It is secured.                         
 output-2  Open-O output attribute marked in long and is of    
           type STRING.                                        
 

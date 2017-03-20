@@ -103,8 +103,12 @@ public class OpenOCommandUtils {
 
         if (inputStream == null) {
             try {
-                inputStream = getExternalResource(schemaName, OpenOCommandConfg.EXTERNAL_SCHEMA_PATH_PATERN)
-                        .getInputStream();
+                Resource resource = getExternalResource(schemaName, OpenOCommandConfg.EXTERNAL_SCHEMA_PATH_PATERN);
+
+                if (resource != null) {
+                    inputStream = resource.getInputStream();
+                }
+
             } catch (IOException e) {
                 throw new OpenOCommandSchemaNotFound(schemaName, e);
             }

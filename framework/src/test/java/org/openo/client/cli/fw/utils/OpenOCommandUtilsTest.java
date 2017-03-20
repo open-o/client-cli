@@ -55,6 +55,17 @@ import java.util.Set;
 
 public class OpenOCommandUtilsTest {
 
+    @Test(expected = OpenOCommandSchemaNotFound.class)
+    public void openOCommandUtilsInputStreamNullTest() throws OpenOCommandException {
+        OpenOCommandUtils.validateSchemaVersion("sample-test1-schema-http1.yaml", "1.0");
+    }
+
+    @Test
+    public void openOCommandUtilsInputStreamNotNullTest() throws OpenOCommandException {
+        Map<String, ?> map = OpenOCommandUtils.validateSchemaVersion("sample-test1-schema-http.yaml", "1.0");
+        assertTrue(map != null);
+    }
+
     @Test
     public void externalSchemaTest() {
         ExternalSchema schema = new ExternalSchema();
@@ -121,6 +132,24 @@ public class OpenOCommandUtilsTest {
         OpenOCommand cmd = new OpenOCommandSample();
         OpenOCommandUtils.loadSchema(cmd, "sample-test-schema.yaml", false);
         assertTrue("sample-test".equals(cmd.getName()) && cmd.getParameters().size() == 9);
+    }
+
+    @Test(expected = OpenOCommandParameterNameConflict.class)
+    public void loadOpenoCommandSchemaWithDuplicateNameTest() throws OpenOCommandException {
+        OpenOCommand cmd = new OpenOCommandSample();
+        OpenOCommandUtils.loadSchema(cmd, "sample-test-invalid-schema-duplicate-name.yaml", false);
+    }
+
+    @Test(expected = OpenOCommandParameterOptionConflict.class)
+    public void loadOpenoCommandSchemaWithDuplicateShortOptionTest() throws OpenOCommandException {
+        OpenOCommand cmd = new OpenOCommandSample();
+        OpenOCommandUtils.loadSchema(cmd, "sample-test-invalid-schema-duplicate-shortoption.yaml", false);
+    }
+
+    @Test(expected = OpenOCommandParameterOptionConflict.class)
+    public void loadOpenoCommandSchemaWithDuplicateLongOptionTest() throws OpenOCommandException {
+        OpenOCommand cmd = new OpenOCommandSample();
+        OpenOCommandUtils.loadSchema(cmd, "sample-test-invalid-schema-duplicate-longoption.yaml", false);
     }
 
     @Test

@@ -4,27 +4,26 @@ description: Open-O sample command to test the command features
 service:
   name: sample
   version: v1
-  no-auth: true
 parameters:
   - name: bool-param
     type: bool
     description: Open-O boolean param, by default its always false.
     short_option: b
     long_option: bool
-    is_optional: "true"
+    is_optional: true
     default_value: false
   - name: secure-param
     type: string
     description: Open-O secure param such as password
     short_option: x
     long_option: secure
-    is_secured: "true"
+    is_secured: true
     is_optional: false
     default_Value: pass123#
   - name: string-param
     type: string
     description: Open-O string param
-    long_option: string-param
+    long_option: secure
     short_option: c
     is_optional: false
     default_Value: test
@@ -73,9 +72,7 @@ results:
       description: Open-O output attribute marked in short
       scope: short
       type: string
-      is_secured: "true"
     - name: output-2
       description: Open-O output attribute marked in long
       scope: short
-      is_secured: false
       type: string
