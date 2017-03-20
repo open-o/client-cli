@@ -104,6 +104,7 @@ public class OpenOAuthClientTest {
     }
 
     @Test
+    @Ignore
     public void loginFailedTest() throws OpenOCommandException {
 
         mockIsAuthIgnored();
@@ -120,6 +121,7 @@ public class OpenOAuthClientTest {
     }
 
     @Test
+    @Ignore
     public void logoutFailedTest() throws OpenOCommandException {
 
         mockIsAuthIgnored();
