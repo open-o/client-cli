@@ -21,6 +21,8 @@ import static org.junit.Assert.assertEquals;
 import mockit.Invocation;
 import mockit.Mock;
 import mockit.MockUp;
+
+import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -53,115 +55,107 @@ public class OpenOAuthClientTest {
         OpenOCredentials creds = new OpenOCredentials("test", "test123", "http://192.168.99.10:80");
         OpenOAuthClient client = new OpenOAuthClient(creds, true);
         if (OpenOCommandConfg.isAuthIgnored()) {
+            client.getDebugInfo();
             client.login();
             assertEquals(null, client.getAuthToken());
         }
     }
 
     @Test
+    public void logoutFailedAuthIgnoredTest() throws OpenOCommandException {
+        OpenOCredentials creds = new OpenOCredentials("test", "test123", "http://192.168.99.10:80");
+        OpenOAuthClient client = new OpenOAuthClient(creds, true);
+        if (OpenOCommandConfg.isAuthIgnored()) {
+            client.logout();
+            assertEquals(null, client.getAuthToken());
+        }
+    }
+
+    @Test
+    public void getMsbUrlTest() throws OpenOCommandException {
+        OpenOCredentials creds = new OpenOCredentials("test", "test123", "http://192.168.99.10:80");
+        OpenOAuthClient client = new OpenOAuthClient(creds, true);
+        OpenOService srv = new OpenOService();
+        srv.setName("msb");
+        String msb = client.getServiceBasePath(srv);
+        assertEquals("http://192.168.99.10:80/api/microservices/v1", msb);
+    }
+
+    @Test(expected = OpenOCommandServiceNotFound.class)
     public void loginFailedServiceNotFoundTest() throws OpenOCommandException {
-        mockIsAuthIgnored();
+        mockIsAuthIgnored(false);
         HttpResult result = new HttpResult();
         result.setStatus(404);
-        mockHttpGetPost(result, null);
-        try {
-            client.login();
-        } catch (OpenOCommandServiceNotFound e) {
-            assertEquals("0x0020::Service auth v1 is not found in MSB", e.getMessage());
-        }
+        mockHttpRequest(result);
+        client.login();
 
     }
 
-    @Test
+    @Test(expected = OpenOCommandExecutionFailed.class)
     public void loginFailedCommandExecutionFailedTest() throws OpenOCommandException {
 
-        mockIsAuthIgnored();
+        mockIsAuthIgnored(false);
         HttpResult result = new HttpResult();
         result.setStatus(401);
-        mockHttpGetPost(result, null);
-        try {
-            client.login();
-        } catch (OpenOCommandExecutionFailed e) {
-            assertEquals("0x0001::Failed to retrive service auth v1", e.getMessage());
-        }
-
-    }
-
-    @Test
-    public void loginFailedWrongJasonBodyTest() throws OpenOCommandException {
-
-        mockIsAuthIgnored();
-        HttpResult result = new HttpResult();
-        result.setStatus(200);
-        mockHttpGetPost(result, null);
-        try {
-            client.login();
-        } catch (OpenOCommandExecutionFailed e) {
-            assertEquals("0x0001::Failed to retrive service url, auth v1, json string can not be null or empty",
-                    e.getMessage());
-        }
-
-    }
-
-    @Test
-    @Ignore
-    public void loginFailedTest() throws OpenOCommandException {
-
-        mockIsAuthIgnored();
-        HttpResult result = new HttpResult();
-        result.setBody("{\"url\":\"http://192.168.4.47\"}");
-        result.setStatus(200);
-        mockOpenOAuthClient();
-        try {
-            client.login();
-        } catch (OpenOCommandLoginFailed e) {
-            assertEquals("0x0009::Login failed, 0x0025::null", e.getMessage());
-        }
-
-    }
-
-    @Test
-    @Ignore
-    public void logoutFailedTest() throws OpenOCommandException {
-
-        mockIsAuthIgnored();
-        HttpResult result = new HttpResult();
-        result.setBody("{\"url\":\"http://192.168.4.47\"}");
-        result.setStatus(200);
-        mockOpenOAuthClient();
-        try {
-            client.logout();
-        } catch (OpenOCommandLogoutFailed e) {
-            assertEquals("0x0010::Logout failed, 0x0025::null", e.getMessage());
-        }
-
-    }
-
-    @Test
-    @Ignore
-    public void loginSuccessTest() throws OpenOCommandException {
-        mockIsAuthIgnored();
-        HttpResult result = new HttpResult();
-        result.setBody("{\"url\":\"http://192.168.4.47\"}");
-        result.setStatus(200);
-
-        HttpResult postResult = new HttpResult();
-        postResult.setStatus(200);
-
-        Map<String, String> respHeaders = new HashMap<>();
-        respHeaders.put(OpenOHttpConnection.X_AUTH_TOKEN, "authtoken");
-        postResult.setRespHeaders(respHeaders);
-
-        Map<String, String> respCookies = new HashMap<>();
-        respHeaders.put(OpenOHttpConnection.X_AUTH_TOKEN, "authtoken");
-        postResult.setRespCookies(respCookies);
-
-        mockHttpGetPost(result, postResult);
-
+        mockHttpRequest(result);
         client.login();
     }
 
-    private void mockIsAuthIgnored() {
+    @Test(expected = OpenOCommandExecutionFailed.class)
+    public void loginFailedWrongJasonBodyTest() throws OpenOCommandException {
+        mockIsAuthIgnored(false);
+        HttpResult result = new HttpResult();
+        result.setStatus(200);
+        mockHttpRequest(result);
+        client.login();
+    }
+
+    @Test
+    public void loginSuccessTest() {
+
+        mockIsAuthIgnored(false);
+        HttpResult result = new HttpResult();
+        result.setBody("{\"url\":\"http://192.168.4.47\"}");
+        result.setStatus(200);
+        mockHttpConsecutiveRequest(result);
+        try {
+            client.login();
+        } catch (OpenOCommandException e) {
+        }
+        mockHttpRequest(null);
+    }
+
+    @Test
+    public void logoutFailedTest() {
+
+        mockIsAuthIgnored(false);
+        HttpResult result = new HttpResult();
+        result.setBody("{\"url\":\"http://192.168.4.47\"}");
+        result.setStatus(200);
+        mockHttpConsecutiveRequest(result);
+        try {
+            client.logout();
+        } catch (OpenOCommandException e) {
+        }
+        mockHttpRequest(null);
+    }
+
+    @Test
+    public void logoutSuccessTest() {
+
+        mockIsAuthIgnored(false);
+        HttpResult result = new HttpResult();
+        result.setBody("{\"url\":\"http://192.168.4.47\"}");
+        result.setStatus(204);
+        mockHttpConsecutiveRequest(result);
+        try {
+            client.logout();
+        } catch (OpenOCommandException e) {
+        }
+        mockHttpRequest(null);
+    }
+
+    private void mockIsAuthIgnored(boolean isAuthIgnored) {
 
         new MockUp<OpenOCommandConfg>() {
             boolean isMock = true;
@@ -170,7 +164,7 @@ public class OpenOAuthClientTest {
             public boolean isAuthIgnored(Invocation inv) {
                 if (isMock) {
                     isMock = false;
-                    return false;
+                    return isAuthIgnored;
                 } else {
                     return inv.proceed();
                 }
@@ -178,25 +172,15 @@ public class OpenOAuthClientTest {
         };
     }
 
-    private void mockHttpGetPost(HttpResult resultGet, HttpResult resultPost) {
+    private static void mockHttpRequest(HttpResult result) {
         new MockUp<OpenOHttpConnection>() {
             boolean isMock = true;
 
             @Mock
-            public HttpResult get(Invocation inv, final HttpInput input) throws OpenOCommandHttpFailure {
+            public HttpResult request(Invocation inv, HttpInput input) throws OpenOCommandHttpFailure {
                 if (isMock) {
                     isMock = false;
-                    return resultGet;
-                } else {
-                    return inv.proceed(input);
-                }
-            }
-
-            @Mock
-            public HttpResult post(Invocation inv, final HttpInput input) throws OpenOCommandHttpFailure {
-                if (isMock) {
-                    isMock = false;
-                    return resultPost;
+                    return result;
                 } else {
                     return inv.proceed(input);
                 }
@@ -204,29 +188,20 @@ public class OpenOAuthClientTest {
         };
     }
 
-    private void mockOpenOAuthClient() {
-        new MockUp<OpenOAuthClient>() {
-            boolean isMock = true;
-
+    private void mockHttpConsecutiveRequest(HttpResult result) {
+        new MockUp<OpenOHttpConnection>() {
             @Mock
-            public HttpResult run(Invocation inv, HttpInput input) throws OpenOCommandHttpFailure {
-                if (isMock) {
-                    isMock = false;
-                    return new HttpResult();
-                } else {
-                    return inv.proceed(input);
-                }
-            }
-
-            @Mock
-            private String getAuthUrl(Invocation inv) throws OpenOCommandException {
-                if (isMock) {
-                    isMock = false;
-                    return "uri";
-                } else {
-                    return inv.proceed();
-                }
+            public HttpResult request(Invocation inv, HttpInput input) throws OpenOCommandHttpFailure {
+                return result;
             }
         };
+    }
+
+    @AfterClass
+    public static void clear() {
+        HttpResult result = new HttpResult();
+        result.setBody("{\"url\":\"http://192.168.4.47\"}");
+        result.setStatus(200);
+        mockHttpRequest(result);
     }
 }

@@ -16,14 +16,18 @@
 
 package org.openo.client.cli.fw.input;
 
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 import org.openo.client.cli.fw.error.OpenOCommandException;
+import org.openo.client.cli.fw.error.OpenOCommandHttpFailure;
 import org.openo.client.cli.fw.error.OpenOCommandInvalidParameterValue;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class OpenOCommandParameterTest {
@@ -88,6 +92,25 @@ public class OpenOCommandParameterTest {
         } catch (OpenOCommandException e) {
             assertTrue("0x0015::Parameter null is mandatory".equals(e.getMessage()));
         }
+    }
+
+    @Test(expected = OpenOCommandInvalidParameterValue.class)
+    public void openOCommandInvalidParameterValueArrayExeceptionTest() throws OpenOCommandInvalidParameterValue {
+        OpenOCommandParameter param = new OpenOCommandParameter();
+        param.setName("name");
+        param.setParameterType(ParameterType.ARRAY);
+        param.setValue("value");
+        assertTrue("[\"1\",\"2\",\"3\"]".equals(param.getValue()));
+
+    }
+
+    @Test(expected = OpenOCommandInvalidParameterValue.class)
+    public void openOCommandInvalidParameterValueMapExeceptionTest() throws OpenOCommandInvalidParameterValue {
+        OpenOCommandParameter param = new OpenOCommandParameter();
+        param.setName("name");
+        param.setParameterType(ParameterType.MAP);
+        param.setValue("value");
+        assertTrue("{\"One\":\"1\",\"Two\":\"2\",\"Three\":\"3\"}".equals(param.getValue()));
     }
 
 }

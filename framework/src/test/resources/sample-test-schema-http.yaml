@@ -1,75 +1,90 @@
 openo_cmd_schema_version: 1.0
-name: sample-test-http
-description: Open-O sample command to test the command features
+name: sample-create-http
+description: Register microservice into Open-O
 service:
-  name: sample
+  name: msb
   version: v1
 parameters:
-  - name: bool-param
-    type: bool
-    description: Open-O boolean param, by default its always false.
-    short_option: b
-    long_option: bool
-    is_optional: true
-    default_value: false
-  - name: secure-param
+  - name: service-name
+    description: Open-O service name
     type: string
-    description: Open-O secure param such as password
     short_option: x
-    long_option: secure
-    is_secured: true
+    long_option: service-name
     is_optional: false
-    default_Value: pass123#
-  - name: string-param
+  - name: service-version
+    description: Open-O service version
     type: string
-    description: Open-O string param
-    long_option: string-param
-    short_option: c
-    is_optional: false
-    default_Value: test
-  - name: yaml-param
-    type: json
-    description: Open-O yaml file location param
-    long_option: yaml-param
     short_option: y
+    long_option: service-version
     is_optional: false
-  - name: json-param
-    type: json
-    description: Open-O json file location param
-    long_option: json-param
-    short_option: j
-    is_optional: false
-  - name: long-param
-    type: long
-    description: Open-O long param
-    short_option: l
-    long_option: long-opt
-    is_optional: false
-    default_value: 10
-  - name: url-param
+  - name: service-url
+    description: Open-O service base url
     type: url
-    description: Open-O url param
     short_option: r
-    long_option: url
+    long_option: service-url
     is_optional: false
-    default_value: http://localhost:8082/file.txt
-  - name: env-param
-    type: string
-    description: Open-O env param.
+  - name: status
+    description: Open-O service status
+    type: long
     short_option: z
-    long_option: env
-    is_optional: false
-    default_value: ${ENV_VAR}
-  - name: positional-args
+    long_option: service-status
+    is_optional: true
+    default_value: 1
+  - name: node-ip
+    description: Open-O service running node IP
     type: string
-    description: Open-O positional args, if no short option and no long option given for it
-    is_optional: false
-    default_value: http://localhost:8082/file.txt
+  - name: node-port
+    description: Open-O service running node port
+    type: string
+  - name: create-or-update
+    description: Open-O service create or update
+    type: bool
+    default_value: true
+results:
+  direction: portrait
+  attributes:
+    - name: name
+      description: Open-O service name
+      scope: short
+      type: string
+    - name: version
+      description: Open-O service version
+      scope: short
+      type: string
+    - name: url
+      description: Open-O service base url
+      scope: short
+      type: url
+    - name: status
+      description: Open-O service status
+      scope: short
+      type: long
+    - name: nodes
+      description: Open-O service running nodes
+      scope: long
+      type: string
+    - name: location
+      description: Open-O service location
+      scope: long
+      type: url
 http:
   request:
-    uri: /services/${service-name}/version/${service-version}
-    method: DELETE
+    uri: /services
+    method: POST
+    body: '{"serviceName":"${service-name}","version":"${service-version}","url":"${service-url}","protocol":"REST","visualRange":"1","lb_policy":"hash","nodes":[{"ip":"${node-ip}","port":"${node-port}","ttl":0}]}'
+    headers:
+    queries:
+      createOrUpdate: ${create-or-update}
   success_codes:
     - 201
     - 200
-    - 204
+  result_map:
+    name: $b{$.serviceName}
+    version: $b{$.version}
+    url: $b{$.url}
+    status: $b{$.status}
+    nodes: $b{$.nodes[*].ip}:$b{$.nodes[*].port}
+    location: $h{Location}
+
+  sample_response:
+    body: {"serviceName":"test","version":"v1","url":"/api/test/v1","protocol":"REST","visualRange":"1","lb_policy":"hash","nodes":[{"ip":"127.0.0.1","port":"8012","ttl":0,"nodeId":"test_127.0.0.1_8012","expiration":"2017-02-10T05:33:25Z","created_at":"2017-02-10T05:33:25Z","updated_at":"2017-02-10T05:33:25Z"}],"status":"1"}

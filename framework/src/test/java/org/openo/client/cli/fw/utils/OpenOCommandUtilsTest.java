@@ -20,14 +20,22 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
+import org.junit.FixMethodOrder;
 import org.junit.Ignore;
 import org.junit.Test;
+import org.junit.runners.MethodSorters;
 import org.openo.client.cli.fw.OpenOCommand;
+import org.openo.client.cli.fw.OpenOCommandRegistrarTest;
 import org.openo.client.cli.fw.OpenOCommandSchema;
+import org.openo.client.cli.fw.ad.OpenOAuthClient;
 import org.openo.client.cli.fw.ad.OpenOCredentials;
 import org.openo.client.cli.fw.cmd.OpenOHttpCommand;
 import org.openo.client.cli.fw.cmd.OpenOSwaggerCommand;
+import org.openo.client.cli.fw.error.OpenOCommandDiscoveryFailed;
 import org.openo.client.cli.fw.error.OpenOCommandException;
+import org.openo.client.cli.fw.error.OpenOCommandHelpFailed;
+import org.openo.client.cli.fw.error.OpenOCommandHttpFailure;
+import org.openo.client.cli.fw.error.OpenOCommandHttpHeaderNotFound;
 import org.openo.client.cli.fw.error.OpenOCommandHttpInvalidResponseBody;
 import org.openo.client.cli.fw.error.OpenOCommandInvalidParameterType;
 import org.openo.client.cli.fw.error.OpenOCommandInvalidPrintDirection;
@@ -42,9 +50,17 @@ import org.openo.client.cli.fw.http.HttpInput;
 import org.openo.client.cli.fw.http.HttpResult;
 import org.openo.client.cli.fw.input.OpenOCommandParameter;
 import org.openo.client.cli.fw.input.ParameterType;
+import org.openo.client.cli.fw.output.OpenOCommandResult;
 import org.openo.client.cli.fw.run.OpenOCommandExecutor;
+import org.springframework.core.io.Resource;
 
+import mockit.Invocation;
+import mockit.Mock;
+import mockit.MockUp;
+
+import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -53,6 +69,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class OpenOCommandUtilsTest {
 
     @Test(expected = OpenOCommandSchemaNotFound.class)
@@ -207,10 +224,10 @@ public class OpenOCommandUtilsTest {
     @Test
     public void loadHttpBasedSchemaTest() throws OpenOCommandException {
         OpenOHttpCommand cmd = new OpenOHttpCommandSample();
-        cmd.setName("sample-test-http");
+        cmd.setName("sample-create-http");
         try {
             OpenOCommandUtils.loadSchema(cmd, "sample-test-schema-http.yaml");
-            assertTrue(cmd.getSuccessStatusCodes().size() == 3);
+            assertTrue(cmd.getSuccessStatusCodes().size() == 2);
         } catch (OpenOCommandParameterNameConflict | OpenOCommandParameterOptionConflict
                 | OpenOCommandInvalidParameterType | OpenOCommandInvalidPrintDirection
                 | OpenOCommandInvalidResultAttributeScope | OpenOCommandSchemaNotFound | OpenOCommandInvalidSchema
@@ -260,6 +277,15 @@ public class OpenOCommandUtilsTest {
     }
 
     @Test
+    public void jsonFlattenExceptionTest() {
+        List<String> list = Arrays.asList(new String[] { "{\"menu1\"::{\"id\":\"file1\",\"value\":\"File1\"}}" });
+        List<String> list1 = OpenOCommandUtils.jsonFlatten(list);
+        String expected = "[{\"menu1\"::{\"id\":\"file1\",\"value\":\"File1\"}}]";
+        assertEquals(expected, list1.toString());
+
+    }
+
+    @Test
     public void formMethodNameFromAttributeTest() {
 
         String str = "";
@@ -288,7 +314,7 @@ public class OpenOCommandUtilsTest {
         mapHead.put("key2", "${value2}");
         input.setReqHeaders(mapHead);
         Map<String, String> query = new HashMap<>();
-        query.put("key3", "${value3}");
+        query.put("key3", "{${value3}}");
         input.setReqQueries(query);
         input.setUri("uri");
 
@@ -298,12 +324,12 @@ public class OpenOCommandUtilsTest {
         param.setParameterType(ParameterType.STRING);
         params.put("value2", param);
         OpenOCommandParameter param1 = new OpenOCommandParameter();
-        param1.setDefaultValue("defaultValue3");
-        param1.setParameterType(ParameterType.STRING);
+        param1.setDefaultValue("{\"defaultValue3\"}");
+        param1.setParameterType(ParameterType.JSON);
         params.put("value3", param1);
 
         HttpInput input1 = OpenOCommandUtils.populateParameters(params, input);
-        String expected = "\nURL: uri\nMethod: method\nRequest Queries: {key3=defaultValue3}\n"
+        String expected = "\nURL: uri\nMethod: method\nRequest Queries: {key3={\"defaultValue3\"}}\n"
                 + "Request Body: body\nRequest Headers: {key2=defaultValue2}\nRequest Cookies: {}";
         assertEquals(expected, input1.toString());
 
@@ -318,10 +344,11 @@ public class OpenOCommandUtilsTest {
 
     }
 
-    @Test
+    @Test(expected = OpenOCommandHttpHeaderNotFound.class)
     public void populateOutputsTest() throws OpenOCommandException {
         HttpResult output = new HttpResult();
-        output.setBody("{\"serviceName\":\"test\",\"version\":\"v1\",\"url\":\"/api/test/v1\",\"protocol\":\"REST\"}");
+        output.setBody(
+                "{\"serviceName\":\"test\",\"version\":\"v1\",\"url\":\"/api/test/v1\",\"protocol\":\"REST\",\"visualRange\":\"1\",\"lb_policy\":\"hash\",\"nodes\":[{\"ip\":\"127.0.0.1\",\"port\":\"8012\",\"ttl\":0,\"nodeId\":\"test_127.0.0.1_8012\",\"expiration\":\"2017-02-10T05:33:25Z\",\"created_at\":\"2017-02-10T05:33:25Z\",\"updated_at\":\"2017-02-10T05:33:25Z\"}],\"status\":\"1\"}");
         Map<String, String> mapHead = new HashMap<>();
         mapHead.put("head1", "value1");
         output.setRespHeaders(mapHead);
@@ -330,9 +357,10 @@ public class OpenOCommandUtilsTest {
         Map<String, String> params = new HashMap<>();
         params.put("head", "$h{head1}");
         params.put("body", "$b{$.serviceName}");
+        params.put("key", "value");
 
         Map<String, ArrayList<String>> input1 = OpenOCommandUtils.populateOutputs(params, output);
-        assertEquals("{head=[value1], body=[test]}", input1.toString());
+        assertEquals("{head=[value1], body=[test], key=[value]}", input1.toString());
 
         params.put("body", "$b{{$.serviceName}");
         try {
@@ -342,6 +370,63 @@ public class OpenOCommandUtilsTest {
                     "0x0028::Http response body does not have json entry {$.serviceName, Missing property in path $['{$']",
                     e.getMessage());
         }
+        output.setBody("{}");
+        input1 = OpenOCommandUtils.populateOutputs(params, output);
+        params.put("head", "$h{head2}");
+        output.setBody("{\"test\"}");
+        input1 = OpenOCommandUtils.populateOutputs(params, output);
+    }
+
+    @Test(expected = OpenOCommandException.class)
+    public void zendExceptionTest1() throws OpenOCommandException {
+
+        mockExternalResources();
+        OpenOCommandUtils.loadSchema(new OpenOSwaggerBasedCommandSample(), "schemaName");
+    }
+
+    @Test(expected = OpenOCommandException.class)
+    public void zendExceptionTest2() throws OpenOCommandException {
+
+        mockExternalResources();
+        OpenOCommandUtils.loadSchema(new OpenOHttpCommandSample(), "schemaName", false);
+    }
+
+    @Test(expected = OpenOCommandException.class)
+    public void zendExceptionTest3() throws OpenOCommandException {
+
+        mockExternalResources();
+        OpenOCommandUtils.validateSchemaVersion("schemaName", "version");
+    }
+
+    @Test(expected = OpenOCommandException.class)
+    public void zendExceptionTest4() throws OpenOCommandException {
+
+        mockExternalResources();
+        OpenOCommandUtils.loadExternalSchemasFromJson();
+    }
+
+    @Test(expected = OpenOCommandException.class)
+    public void zendExceptionTest5() throws OpenOCommandException {
+
+        mockExternalResources();
+        OpenOCommandUtils.findAllExternalSchemas();
+    }
+
+    @Test(expected = OpenOCommandException.class)
+    public void zendExceptionTest6() throws OpenOCommandException {
+
+        mockExternalResources();
+        OpenOCommandUtils.persist(new ArrayList<ExternalSchema>());
+    }
+
+    @Test(expected = OpenOCommandHelpFailed.class)
+    public void zendExceptionHelpTest1() throws OpenOCommandException {
+
+        mockPrintMethodException();
+        OpenOCommand cmd = new OpenOCommandSample();
+        OpenOCommandUtils.loadSchema(cmd, "sample-test-schema.yaml", true);
+
+        OpenOCommandUtils.help(cmd);
 
     }
 
@@ -366,5 +451,37 @@ public class OpenOCommandUtilsTest {
         @Override
         protected void run() throws OpenOCommandException {
         }
+    }
+
+    private void mockExternalResources() {
+        new MockUp<OpenOCommandUtils>() {
+            boolean isMock = true;
+
+            @Mock
+            public Resource[] getExternalResources(Invocation inv, String pattern) throws IOException {
+                if (isMock) {
+                    isMock = false;
+                    throw new IOException();
+                } else {
+                    return inv.proceed(pattern);
+                }
+            }
+        };
+    }
+
+    private void mockPrintMethodException() {
+        new MockUp<OpenOCommandResult>() {
+            boolean isMock = true;
+
+            @Mock
+            public String print(Invocation inv) throws OpenOCommandException {
+                if (isMock) {
+                    isMock = false;
+                    throw new OpenOCommandException("", "");
+                } else {
+                    return inv.proceed();
+                }
+            }
+        };
     }
 }

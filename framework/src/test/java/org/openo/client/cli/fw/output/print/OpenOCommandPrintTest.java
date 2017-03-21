@@ -25,6 +25,7 @@ import org.openo.client.cli.fw.output.PrintDirection;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 public class OpenOCommandPrintTest {
 
@@ -43,11 +44,39 @@ public class OpenOCommandPrintTest {
     @Test
     public void printTableTest() throws OpenOCommandOutputPrintingFailed {
         OpenOCommandPrint pr = new OpenOCommandPrint();
+        List<String> getColumnsData = new ArrayList<String>();
         pr.setDirection(PrintDirection.LANDSCAPE);
         pr.setPrintTitle(true);
         pr.addColumn("name2", new ArrayList<String>(Arrays.asList(new String[] { "value2" })));
         String exp = "+--------+\n|name2   |\n+--------+\n|value2  |\n+--------+\n";
         String result = pr.printTable(true);
+        getColumnsData = pr.getColumn("name2");
+        assertEquals(exp, result);
+    }
+
+    @Test
+    public void printTableNullColumnHeaderTest() throws OpenOCommandOutputPrintingFailed {
+        OpenOCommandPrint pr = new OpenOCommandPrint();
+        List<String> getColumnsData = new ArrayList<String>();
+        pr.setDirection(PrintDirection.LANDSCAPE);
+        pr.setPrintTitle(true);
+        pr.addColumn("name2", new ArrayList<String>(Arrays.asList(new String[] { "value2" })));
+        String exp = "+--------+\n|name2   |\n+--------+\n|value2  |\n+--------+\n";
+        String result = pr.printTable(true);
+        getColumnsData = pr.getColumn(null);
+        assertEquals(exp, result);
+    }
+
+    @Test
+    public void printTableEmptyColumnValuesTest() throws OpenOCommandOutputPrintingFailed {
+        OpenOCommandPrint pr = new OpenOCommandPrint();
+        List<String> getColumnsData = new ArrayList<String>();
+        pr.setDirection(PrintDirection.LANDSCAPE);
+        pr.setPrintTitle(true);
+        pr.addColumn("name2", new ArrayList<String>(Arrays.asList(new String[] { "" })));
+        String exp = "+--------+\n|name2   |\n+--------+\n|        |\n+--------+\n";
+        String result = pr.printTable(true);
+        getColumnsData = pr.getColumn("name2");
         assertEquals(exp, result);
     }
 }

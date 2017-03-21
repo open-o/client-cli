@@ -61,9 +61,6 @@ public class OpenOCommandRegistrar {
      *             Invalid registration exception
      */
     public void register(String name, Class<? extends OpenOCommand> cmd) throws OpenOCommandInvalidRegistration {
-        if (!OpenOCommand.class.isAssignableFrom(cmd)) {
-            throw new OpenOCommandInvalidRegistration(cmd);
-        }
         this.registry.put(name, cmd);
     }
 

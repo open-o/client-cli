@@ -21,17 +21,17 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.InputStream;
-import java.net.URL;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.openo.client.cli.fw.error.OpenOCommandException;
 import org.openo.client.cli.fw.error.OpenOCommandHelpFailed;
+import org.openo.client.cli.fw.error.OpenOCommandInvalidRegistration;
 import org.openo.client.cli.fw.error.OpenOCommandNotFound;
+import org.openo.client.cli.fw.error.OpenOCommandOutputPrintingFailed;
 import org.openo.client.cli.fw.error.OpenOCommandRegistrationFailed;
+
+import java.io.File;
+import java.net.URL;
 
 public class OpenOCommandRegistrarTest {
 
@@ -69,6 +69,15 @@ public class OpenOCommandRegistrarTest {
     }
 
     @Test
+    // For Coverage
+    public void cmdTestSchema() throws OpenOCommandException {
+        OpenOCommand test = new OpenOCommandTest();
+        Class<OpenOCommand> cmd = (Class<OpenOCommand>) test.getClass();
+        registerar.register("Test", cmd);
+        OpenOCommand cc = registerar.get("Test");
+    }
+
+    @Test
     public void openOCommandNotFoundTest() throws OpenOCommandException {
         try {
             registerar = OpenOCommandRegistrar.getRegistrar();
@@ -100,8 +109,20 @@ public class OpenOCommandRegistrarTest {
         }
     }
 
+    @Test(expected = OpenOCommandHelpFailed.class)
+    // For coverage
+    public void helpTestException()
+            throws OpenOCommandException {
+        OpenOCommand test = new OpenOCommandTest1();
+        Class<OpenOCommand> cmd = (Class<OpenOCommand>) test.getClass();
+        registerar = new OpenOCommandRegistrar();
+        registerar.register("test1", cmd);
+        String help = registerar.getHelp();
+        assertNotNull(help);
+    }
+
     @Test
-    public void helpTest() throws OpenOCommandHelpFailed {
+    public void helpTest() throws OpenOCommandException {
         String help = registerar.getHelp();
         assertNotNull(help);
     }
@@ -121,6 +142,21 @@ class OpenOCommandTest extends OpenOCommand {
     }
 
     public static final String CMD_NAME = "test";
+
+    protected void run() throws OpenOCommandException {
+
+    }
+
+}
+
+@OpenOCommandSchema(name = OpenOCommandTest1.CMD_NAME, schema = "test-schema.yaml")
+class OpenOCommandTest1 extends OpenOCommand {
+
+    public OpenOCommandTest1() {
+
+    }
+
+    public static final String CMD_NAME = "test1";
 
     protected void run() throws OpenOCommandException {
 

@@ -16,6 +16,7 @@
 
 package org.openo.client.cli.fw.output;
 
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
@@ -27,5 +28,15 @@ public class ResultTypeTest {
                 && ResultType.JSON.equals(ResultType.get("json")) && ResultType.YAML.equals(ResultType.get("yaml"))
                 && ResultType.TEXT.equals(ResultType.get("text")));
 
+    }
+
+    @Test
+    public void isTabularFormTest() {
+        assertTrue(ResultType.isTabularForm("table"));
+    }
+
+    @Test
+    public void isTabularFormNotTest() {
+        assertFalse(ResultType.isTabularForm("text"));
     }
 }

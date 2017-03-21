@@ -1063,13 +1063,15 @@ public class OpenOCommandUtils {
      */
     public static ExternalSchema loadExternalSchemaFromJson(String cmd) throws OpenOCommandException {
         List<ExternalSchema> list = loadExternalSchemasFromJson();
+        ExternalSchema schemaStr = null;
         if (list != null) {
             for (ExternalSchema schema : list) {
                 if (cmd.equals(schema.getCmdName())) {
-                    return schema;
+                    schemaStr = schema;
+                    break;
                 }
             }
         }
-        return null;
+        return schemaStr;
     }
 }

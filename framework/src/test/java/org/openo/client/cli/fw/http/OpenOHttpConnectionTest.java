@@ -19,6 +19,7 @@ package org.openo.client.cli.fw.http;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
+import mockit.Invocation;
 import mockit.Mock;
 import mockit.MockUp;
 import org.apache.http.client.ClientProtocolException;
@@ -37,18 +38,20 @@ import java.util.Map;
 public class OpenOHttpConnectionTest {
     HttpInput inp = null;
     OpenOHttpConnection con = null;
+
     @Before
-    public void setup(){
+    public void setup() {
+        mockHttpRequest(null);
         inp = new HttpInput();
         inp.setMethod("get");
         inp.setBody("body");
-        Map<String,String> map1 = new HashMap<>();
+        Map<String, String> map1 = new HashMap<>();
         map1.put("header1", "value1");
         inp.setReqHeaders(map1);
-        Map<String,String> map2 = new HashMap<>();
+        Map<String, String> map2 = new HashMap<>();
         map2.put("query1", "value1");
         inp.setReqQueries(map2);
-        Map<String,String> map = new HashMap<>();
+        Map<String, String> map = new HashMap<>();
         map.put("cookie1", "value1");
         inp.setReqCookies(map);
         inp.setUri("http://192.168.99.10:80");
@@ -167,5 +170,20 @@ public class OpenOHttpConnectionTest {
         } catch (OpenOCommandHttpFailure e) {
             assertEquals("0x0025::IO Exception", e.getMessage());
         }
+    }
+
+    private static void mockHttpRequest(HttpResult result) {
+        new MockUp<OpenOHttpConnection>() {
+            boolean isMock = false;
+
+            @Mock
+            public HttpResult request(Invocation inv, HttpInput input) throws OpenOCommandHttpFailure {
+                if (isMock) {
+                    return result;
+                } else {
+                    return inv.proceed(input);
+                }
+            }
+        };
     }
 }
