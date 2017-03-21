@@ -243,13 +243,13 @@ public class OpenOCommandUtils {
                             } else if (OpenOCommandParameter.TYPE.equals(key2)) {
                                 param.setParameterType(ParameterType.get(map.get(key2)));
                             } else if (OpenOCommandParameter.IS_OPTIONAL.equals(key2)) {
-                                if ("true".equals(map.get(key2))) {
+                                if ("true".equalsIgnoreCase(String.valueOf(map.get(key2)))) {
                                     param.setOptional(true);
                                 } else {
                                     param.setOptional(false);
                                 }
                             } else if (OpenOCommandParameter.IS_SECURED.equals(key2)) {
-                                if ("true".equals(map.get(key2))) {
+                                if ("true".equalsIgnoreCase(String.valueOf(map.get(key2)))) {
                                     param.setSecured(true);
                                 } else {
                                     param.setSecured(false);
@@ -284,7 +284,7 @@ public class OpenOCommandUtils {
                                     } else if (OpenOCommandResultAttribute.TYPE.equals(key4)) {
                                         attr.setType(ParameterType.get(map.get(key4)));
                                     } else if (OpenOCommandResultAttribute.IS_SECURED.equals(key4)) {
-                                        if ("true".equals(map.get(key4))) {
+                                        if ("true".equals(String.valueOf(map.get(key4)))) {
                                             attr.setSecured(true);
                                         } else {
                                             attr.setSecured(false);

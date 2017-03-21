@@ -144,7 +144,7 @@ public class OpenOCliMainTest {
     }
 
     @Test
-   // @Ignore
+    @Ignore
     public void testServiceListCommand() {
         this.handle(new String[] { "microservice-list", "-u", "root1", "-p", "root123", "-m",
                 "http://192.168.4.47:80", "--long", "--no-title", "true", "-d" });

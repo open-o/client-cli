@@ -17,7 +17,7 @@ where,
                         OPENO_USERNAME.                                       
 -p | --openo-password   Open-O user password. It is of type STRING. By        
                         default, it is read from environment variable         
-                        OPENO_PASSWORD.                                       
+                        OPENO_PASSWORD. Secured.                              
 -m | --msb-url          Open-O MSB url. It is of type URL. By default, it     
                         is read from environment variable OPENO_MSB_URL.      
 -h | --help             Open-O command help message. It is of type STRING.    
