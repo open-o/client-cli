@@ -70,7 +70,7 @@ public abstract class OpenOCommand {
 
     protected OpenOAuthClient authClient;
 
-    private boolean isInitialzied = false;
+    protected boolean isInitialzied = false;
 
     public String getSchemaVersion() {
         return OPENO_CMD_SCHEMA_VERSION_VALUE;

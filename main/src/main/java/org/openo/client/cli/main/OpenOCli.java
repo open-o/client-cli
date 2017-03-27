@@ -18,6 +18,7 @@ package org.openo.client.cli.main;
 
 import org.openo.client.cli.fw.OpenOCommand;
 import org.openo.client.cli.fw.OpenOCommandRegistrar;
+import org.openo.client.cli.fw.error.OpenOCommandWarning;
 import org.openo.client.cli.fw.input.OpenOCommandParameter;
 import org.openo.client.cli.fw.output.OpenOCommandResult;
 import org.openo.client.cli.main.conf.OpenOCliConstants;
@@ -143,8 +144,12 @@ public class OpenOCli {
                 this.exitSuccessfully();
             } catch (Exception e) {
                 this.print(cmd.getResult().getDebugInfo());
-                this.print(e);
-                this.exitFailure();
+                if (e instanceof OpenOCommandWarning) {
+                    this.exitSuccessfully();
+                } else {
+                    this.print(e);
+                    this.exitFailure();
+                }
             }
         }
     }

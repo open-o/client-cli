@@ -13,7 +13,7 @@ parameters:
     long_option: id
     is_optional: false
 results:
-  direction: landscape
+  direction: portrait
   attributes:
     - name: id
       description: NFVO datacenter Id

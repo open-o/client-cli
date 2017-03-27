@@ -189,7 +189,22 @@ public class OpenOCliMainTest {
     public void testSdnclist() {
 
         this.handle(
-                new String[] { "sdnc-list", "-p", "root123", "--msb-url", "http://192.168.4.47", "-u", "root1", "-d" });
+                new String[] { "sdnc-list", "-p", "root123", "--msb-url", "http://192.168.99.100", "-u", "root1", "-d" });
+    }
+
+    @Test
+    @Ignore
+    public void testNFVResourcelist() {
+        this.handle(
+                new String[] { "resource-datacenter-show", "--id", "test", "-u", "root", "-p", "root123",  "--msb-url", "http://192.168.99.100", "-a", "-d"});
+    }
+
+    @Test
+    @Ignore
+    public void testNFVResourceShow() {
+
+        this.handle(
+                new String[] { "resource-datacenter-show", "--id", "test", "-u", "root", "-p", "root123",  "--msb-url", "http://192.168.99.100", "-a", "-d"});
     }
 
     @Test

@@ -40,6 +40,7 @@ import org.openo.client.cli.fw.error.OpenOCommandInvalidSchemaVersion;
 import org.openo.client.cli.fw.error.OpenOCommandParameterNameConflict;
 import org.openo.client.cli.fw.error.OpenOCommandParameterNotFound;
 import org.openo.client.cli.fw.error.OpenOCommandParameterOptionConflict;
+import org.openo.client.cli.fw.error.OpenOCommandResultEmpty;
 import org.openo.client.cli.fw.error.OpenOCommandResultMapProcessingFailed;
 import org.openo.client.cli.fw.error.OpenOCommandSchemaNotFound;
 import org.openo.client.cli.fw.http.HttpInput;
@@ -710,7 +711,7 @@ public class OpenOCommandUtils {
 
     private static ArrayList<String> replaceLineFromOutputResults(String line, HttpResult resultHttp)
             throws OpenOCommandHttpHeaderNotFound, OpenOCommandHttpInvalidResponseBody,
-            OpenOCommandResultMapProcessingFailed {
+            OpenOCommandResultMapProcessingFailed, OpenOCommandResultEmpty {
         String headerProcessedLine = "";
 
         ArrayList<String> result = new ArrayList<>();
@@ -800,12 +801,18 @@ public class OpenOCommandUtils {
                         String valueS = value.toString();
                         if (value instanceof JSONArray) {
                             JSONArray arr = (JSONArray) value;
-                            valueS = arr.get(i).toString();
+                            if (!arr.isEmpty()) {
+                                valueS = arr.get(i).toString();
+                            } else {
+                                throw new OpenOCommandResultEmpty();
+                            }
                         }
 
                         bodyProcessedLine += bodyProcessedPattern.substring(currentIdx, idxS) + valueS;
                         currentIdx = idxE;
                         positionalIdx++;
+                    } catch (OpenOCommandResultEmpty e) {
+                        throw e;
                     } catch (Exception e) {
                         throw new OpenOCommandResultMapProcessingFailed(line, e);
                     }
