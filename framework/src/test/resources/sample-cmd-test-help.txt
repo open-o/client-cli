@@ -8,9 +8,10 @@ Options:
 [-u | --openo-username] [-p | --openo-password] [-m | --msb-url] 
 [-h | --help] [-v | --version] [-d | --debug] 
 [-f | --format] [-s | --long] [-t | --no-title] 
-[-b | --bool] [-x | --secure] [-c | --string-param] 
-[-y | --yaml-param] [-j | --json-param] [-l | --long-opt] 
-[-r | --url] [-z | --env] <positional-args> 
+[-a | --no-auth] [-b | --bool] [-x | --secure] 
+[-c | --string-param] [-y | --yaml-param] [-j | --json-param] 
+[-l | --long-opt] [-r | --url] [-z | --env] 
+<positional-args> 
 where,
 -u | --openo-username   Open-O user name. It is of type STRING. By            
                         default, it is read from environment variable         
@@ -26,7 +27,7 @@ where,
                         STRING. By default, it is false.                      
 -d | --debug            Enable debug output. It is of type BOOL. By           
                         default, it is false.                                 
--f | --format           Output formats, supported formatas such as table,     
+-f | --format           Output formats, supported formats such as table,      
                         csv, json, yaml. It is of type STRING. By default,    
                         it is table.                                          
 -s | --long             whether to print all attributes or only short         
@@ -34,6 +35,8 @@ where,
                         false.                                                
 -t | --no-title         whether to print title or not. It is of type BOOL.    
                         By default, it is false.                              
+-a | --no-auth          whether to authenticate user or not. It is of type    
+                        BOOL. By default, it is false.                        
 -b | --bool             Open-O boolean param, by default its always false.    
                         It is of type BOOL. It is optional. By default, it    
                         is false.                                             

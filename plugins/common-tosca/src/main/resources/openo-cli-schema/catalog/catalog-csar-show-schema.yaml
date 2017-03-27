@@ -4,7 +4,6 @@ description: Retrieves CSAR package from Open-O
 service:
   name: catalog
   version: v1
-
 parameters:
   - name: id
     description: Package id
@@ -14,7 +13,7 @@ parameters:
     long_option: id
     is_optional: false
 results:
-  direction: landscape
+  direction: portrait
   attributes:
     - name: id
       description: Package Id
@@ -74,7 +73,7 @@ results:
       type: string
 http:
   request:
-    uri: /csars?csarId=${id}
+    uri: /csars/${id}
     method: GET
   success_codes:
     - 201

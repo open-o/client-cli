@@ -37,6 +37,7 @@ public final class OpenOCommandConfg {
     public static final String DEFAULT_PARAMETER_OUTPUT_FORMAT = "format";
     public static final String DEFAULT_PARAMETER_OUTPUT_ATTR_LONG = "long";
     public static final String DEFAULT_PARAMETER_OUTPUT_NO_TITLE = "no-title";
+    public static final String DEFAULT_PARAMETER_OUTPUT_NO_AUTH = "no-auth";
 
     // Config properties
     private static final String CONF = "openo.properties";

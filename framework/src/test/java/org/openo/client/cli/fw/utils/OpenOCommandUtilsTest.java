@@ -182,7 +182,7 @@ public class OpenOCommandUtilsTest {
         OpenOCredentials cre = OpenOCommandUtils.fromParameters(cmd.getParameters());
         assertTrue(cre != null);
         Map<String, OpenOCommandParameter> map = OpenOCommandUtils.getInputMap(cmd.getParameters());
-        assertTrue(map.size() == 18);
+        assertTrue(map.size() == 19);
     }
 
     @Test

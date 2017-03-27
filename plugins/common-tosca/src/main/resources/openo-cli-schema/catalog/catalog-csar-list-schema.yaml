@@ -1,46 +1,9 @@
 openo_cmd_schema_version: 1.0
 name: catalog-csar-list
-description: List csar packages by filter condition from Open-O
+description: List csar packages from Open-O
 service:
   name: catalog
   version: v1
-
-parameters:
-  - name: name
-    description: Package name
-    scope: short
-    type: string
-    short_option: n
-    long_option: name
-    is_optional: false
-  - name: provider
-    description: Package provider
-    scope: short
-    type: string
-    short_option: o
-    long_option: provider
-    is_optional: false
-  - name: package-version
-    description: Package version
-    scope: short
-    type: string
-    short_option: e
-    long_option: package-version
-    is_optional: false
-  - name: deletion-pending
-    description: Package delay to delete
-    scope: short
-    type: string
-    short_option: g
-    long_option: deletion-pending
-    is_optional: false
-  - name: type
-    description: Package type
-    scope: short
-    type: string
-    short_option: y
-    long_option: type
-    is_optional: false
 results:
   direction: landscape
   attributes:
@@ -108,20 +71,20 @@ http:
     - 201
     - 200
   result_map:
-    id: $b{$.csarId}
-    name: $b{$.name}
-    download-uri: $b{$.downloadUri}
-    size: $b{$.size}
-    version: $b{$.version}
-    provider: $b{$.provider}
-    type: $b{$.type}
-    format: $b{$.format}
-    deletion-pending: $b{$.deletionPending}
-    create-time: $b{$.createTime}
-    modify-time: $b{$.modifyTime}
-    operational-state: $b{$.operationalState}
-    usage-state: $b{$.usageState}
-    onBoard-state: $b{$.onBoardState}
-    process-state: $b{$.processState}
+    id: $b{$.[*].csarId}
+    name: $b{$.[*].name}
+    download-uri: $b{$.[*].downloadUri}
+    size: $b{$.[*].size}
+    version: $b{$.[*].version}
+    provider: $b{$.[*].provider}
+    type: $b{$.[*].type}
+    format: $b{$.[*].format}
+    deletion-pending: $b{$.[*].deletionPending}
+    create-time: $b{$.[*].createTime}
+    modify-time: $b{$.[*].modifyTime}
+    operational-state: $b{$.[*].operationalState}
+    usage-state: $b{$.[*].usageState}
+    onBoard-state: $b{$.[*].onBoardState}
+    process-state: $b{$.[*].processState}
   sample_response:
-    body:'{"csarId":"string","name":"string","downloadUri":"string","size":"string","version":"string","provider":"string","type":"string","format":"string","deletionPending":"string","createTime":"string","modifyTime":"string","operationalState":"string","usageState":"string","onBoardState":"string","processState":"string"}'
+    body:'[{"csarId":"43574023-5704-4b84-976c-e9a3f93c08bb","name":"vpnUnderlayL3","downloadUri":"http://172.29.1.136/files/catalog-http/SSAR/huawei/vpnUnderlayL3/1.0/vpnUnderlayL3.csar","size":"23.7 KB","version":"1.0","provider":"huawei","type":"SSAR","format":"yaml","deletionPending":false,"createTime":"2017-03-24 10:17:44","modifyTime":"2017-03-24 10:17:44","operationalState":"Disabled","usageState":"NotInUse","onBoardState":"non-onBoarded","processState":"normal"},{"csarId":"985aa0ab-b9a9-4205-a0b6-f1a5fe142112","name":"enterprise2DC","downloadUri":"http://172.29.1.136/files/catalog-http/SSAR/huawei/enterprise2DC/1.0/enterprise2DC.csar","size":"31.3 KB","version":"1.0","provider":"huawei","type":"SSAR","format":"yaml","deletionPending":false,"createTime":"2017-03-24 10:17:41","modifyTime":"2017-03-24 10:17:41","operationalState":"Disabled","usageState":"NotInUse","onBoardState":"non-onBoarded","processState":"normal"}]'

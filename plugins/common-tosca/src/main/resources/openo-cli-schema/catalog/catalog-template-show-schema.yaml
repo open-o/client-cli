@@ -4,7 +4,6 @@ description: Retrieves the details of template from Open-O
 service:
   name: catalog
   version: v1
-
 parameters:
   - name: id
     description: Service template id
@@ -14,7 +13,7 @@ parameters:
     long_option: id
     is_optional: false
 results:
-  direction: landscape
+  direction: portrait
   attributes:
     - name: id
       description: Template Id
@@ -50,7 +49,7 @@ results:
       type: json
 http:
   request:
-    uri: /servicetemplates?serviceTemplateId=${id}
+    uri: /servicetemplates/${id}
     method: GET
   success_codes:
     - 201
@@ -65,4 +64,4 @@ http:
     download-uri: $b{$.downloadUri}
     input-param: $b{$.inputs}
   sample_response:
-    body:'{"serviceTemplateId":"string","templateName":"string","vendor":"string","version":"string","csarId":"string","type":"string","downloadUri":"string","inputs":"string","outputs":"string","operations":"string","substitution":"string"}'
+    body:'{"serviceTemplateId":"28e8c5f1-cbe2-46d3-ae63-5a117baf31b0","id":"vpnUnderlayL3","templateName":"vpnUnderlayL3","vendor":"sdno","version":"0.1","csarId":"43574023-5704-4b84-976c-e9a3f93c08bb","type":"VNF","downloadUri":"http://172.29.1.136/files/catalog-http/SSAR/huawei/vpnUnderlayL3/1.0/vpnUnderlayL3/underlayVPN_template.yaml","inputs":[{"name":"ac1_ip","type":"string","description":"ip of ac1, only for layer3 vpn","defaultValue":"none","required":false},{"name":"ac1_peer_ip","type":"string","description":"ip of ac1 peer CE tp, only for layer3 vpn","defaultValue":"none","required":false},{"name":"ac1_port","type":"string","description":"ac1 port","defaultValue":"none","required":false},{"name":"ac1_route","type":"string","description":"route configure of ac1, only for layer3 vpn","defaultValue":"none","required":false},{"name":"ac1_svlan","type":"integer","description":"ac1 svlan","defaultValue":0.0,"required":false},{"name":"ac2_ip","type":"string","description":"ip of ac2, only for layer3 vpn","defaultValue":"none","required":false},{"name":"ac2_peer_ip","type":"string","description":"ip of ac2 peer CE tp, only for layer3 vpn","defaultValue":"none","required":false},{"name":"ac2_port","type":"string","description":"ac2 port","defaultValue":"none","required":false},{"name":"ac2_route","type":"string","description":"route configure of ac2, only for layer3 vpn","defaultValue":"none","required":false},{"name":"ac2_svlan","type":"integer","description":"ac2 svlan","defaultValue":0.0,"required":false},{"name":"description","type":"string","description":"description of underlayvpn","defaultValue":"none","required":false},{"name":"name","type":"string","description":"Name of underlayervpn","defaultValue":"none","required":false},{"name":"pe1_ip","type":"string","description":"mgrip of pe1","defaultValue":"none","required":false},{"name":"pe2_ip","type":"string","description":"mgrip of pe2","defaultValue":"none","required":false},{"name":"serviceType","type":"string","description":"serviceType of underlayvpn","defaultValue":"l3vpn","required":false},{"name":"technology","type":"string","description":"technology of underlayvpn","defaultValue":"mpls","required":false},{"name":"topology","type":"string","description":"topology of underlayvpn","defaultValue":"point_to_point","required":false}],"outputs":[],"operations":[]}'

@@ -40,7 +40,7 @@ parameters:
     default_value: false
   - name: format
     type: string
-    description: Output formats, supported formatas such as table, csv, json, yaml
+    description: Output formats, supported formats such as table, csv, json, yaml
     short_option: f
     long_option: format
     default_value: table
@@ -56,3 +56,9 @@ parameters:
     short_option: t
     long_option: no-title
     default_value: true
+  - name: no-auth
+    type: bool
+    description: whether to authenticate user or not
+    short_option: a
+    long_option: no-auth
+    default_value: false
