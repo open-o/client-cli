@@ -245,7 +245,7 @@ public abstract class OpenOCommand {
             OpenOCredentials creds = OpenOCommandUtils.fromParameters(this.getParameters());
             this.authClient = new OpenOAuthClient(creds, this.getResult().isDebug());
 
-            if (!this.openOservice.isNoAuth() || "true".equals(paramMap.get(OpenOCommandConfg.DEFAULT_PARAMETER_OUTPUT_NO_AUTH).getValue())) {
+            if (!this.openOservice.isNoAuth() && !"true".equals(paramMap.get(OpenOCommandConfg.DEFAULT_PARAMETER_OUTPUT_NO_AUTH).getValue())) {
                 this.authClient.login();
             }
 
@@ -253,7 +253,7 @@ public abstract class OpenOCommand {
             this.run();
 
             // logout
-            if (!this.openOservice.isNoAuth() || "true".equals(paramMap.get(OpenOCommandConfg.DEFAULT_PARAMETER_OUTPUT_NO_AUTH).getValue())) {
+            if (!this.openOservice.isNoAuth() && !"true".equals(paramMap.get(OpenOCommandConfg.DEFAULT_PARAMETER_OUTPUT_NO_AUTH).getValue())) {
                 this.authClient.logout();
             }
 
