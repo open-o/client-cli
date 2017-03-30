@@ -46,12 +46,12 @@ http:
   success_codes:
     - 200
   result_map:
-    id: $b{$.[*].id}
-    name: $b{$.[*].name}
-    type: $b{$.[*].logicalType}
-    layer-rate: $b{$.[*].layerRate}
-    source-port: $b{$.[*].sourcePort}
-    sink-port: $b{$.[*].sinkPort}
-    source-ne: $b{$.[*].sinkNe}
+    id: $b{$.topologicalLinks.[*].id}
+    name: $b{$.topologicalLinks.[*].name}
+    type: $b{$.topologicalLinks.[*].logicalType}
+    layer-rate: $b{$.topologicalLinks.[*].layerRate}
+    source-port: $b{$.topologicalLinks.[*].sourcePort}
+    sink-port: $b{$.topologicalLinks.[*].sinkPort}
+    source-ne: $b{$.topologicalLinks.[*].sinkNe}
   sample_response:
-    body:'[{"id":"string","name":"string","logicalType":"string","layerRate":"string","sourcePort":"string","sinkPort":"string","sinkNe":"string"}]'
+    body:'{"topologicalLinks":[{"id":"string","name":"string","logicalType":"string","layerRate":"string","sourcePort":"string","sinkPort":"string","sinkNe":"string"}],"totalNum":0,"pageSize":1000,"currentPageNum":0,"totalPageNum":0}'

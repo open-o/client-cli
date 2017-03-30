@@ -711,7 +711,7 @@ public class OpenOCommandUtils {
 
     private static ArrayList<String> replaceLineFromOutputResults(String line, HttpResult resultHttp)
             throws OpenOCommandHttpHeaderNotFound, OpenOCommandHttpInvalidResponseBody,
-            OpenOCommandResultMapProcessingFailed, OpenOCommandResultEmpty {
+            OpenOCommandResultMapProcessingFailed {
         String headerProcessedLine = "";
 
         ArrayList<String> result = new ArrayList<>();
@@ -801,18 +801,16 @@ public class OpenOCommandUtils {
                         String valueS = value.toString();
                         if (value instanceof JSONArray) {
                             JSONArray arr = (JSONArray) value;
-                            if (!arr.isEmpty()) {
+                            if (!arr.isEmpty() && arr.size() > i) {
                                 valueS = arr.get(i).toString();
                             } else {
-                                throw new OpenOCommandResultEmpty();
+                                valueS = "";
                             }
                         }
 
                         bodyProcessedLine += bodyProcessedPattern.substring(currentIdx, idxS) + valueS;
                         currentIdx = idxE;
                         positionalIdx++;
-                    } catch (OpenOCommandResultEmpty e) {
-                        throw e;
                     } catch (Exception e) {
                         throw new OpenOCommandResultMapProcessingFailed(line, e);
                     }
@@ -879,6 +877,23 @@ public class OpenOCommandUtils {
         for (Entry<String, String> entry : resultMap.entrySet()) {
             String key = entry.getKey();
             resultsProcessed.put(key, replaceLineFromOutputResults(resultMap.get(key), resultHttp));
+        }
+
+        boolean allRowsEmpty = true;
+        for (Entry<String, ArrayList<String>> entry : resultsProcessed.entrySet()) {
+            for (String v: entry.getValue()) {
+                if (!v.isEmpty()) {
+                    allRowsEmpty = false;
+                    break;
+                }
+            }
+            if (!allRowsEmpty) {
+                break;
+            }
+        }
+
+        if (allRowsEmpty) {
+            throw new OpenOCommandResultEmpty();
         }
 
         return resultsProcessed;

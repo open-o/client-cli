@@ -52,4 +52,4 @@ http:
     port-index: $b{$.logicalTerminationPoint[*].portIndex}
     ip-address: $b{$.logicalTerminationPoint[*].ipAddress}
   sample_response:
-    body:'[{"name":"string","me":"string","type":"string","layerRate":"string","edgePoint":"string","portIndex":"string","ipAddress":"string"}]'
+    body:'{"totalNum":0,"logicalTerminationPoints":[{"name":"string","me":"string","type":"string","layerRate":"string","edgePoint":"string","portIndex":"string","ipAddress":"string"}],"pageSize":1000,"currentPageNum":0,"totalPageNum":0}'

@@ -19,10 +19,6 @@ results:
       description: SDNO network element productName
       scope: short
       type: string
-    - name: controller
-      description: SDNO network element controller
-      scope: short
-      type: string
     - name: ip-address
       description: SDNO network element ipAddress
       scope: short
@@ -34,10 +30,9 @@ http:
   success_codes:
     - 200
   result_map:
-    name: $b{$.[*].name}
-    version: $b{$.[*].version}
-    product-name: $b{$.[*].productName}
-    controller: $b{$.[*].controller}
-    ipAddress: $b{$.[*].ipAddress}
+    name: $b{$.managedElements.[*].name}
+    version: $b{$.managedElements.[*].version}
+    product-name: $b{$.managedElements.[*].productName}
+    ip-address: $b{$.managedElements.[*].ipAddress}
   sample_response:
-    body:'[{"name":"string","version":"string","productName":"string","controller":"string","ipAddress":"string"}]'
+    body:'{"managedElements":[{"id":"530898ca-352e-4d00-a409-884fc8b0016d","createtime":1490852655,"version":"V1R3","name":"Gateway","logicID":"849494949","phyNeID":"8965969966906","productName":"AC","ipAddress":"192.168.239.144","source":"os","adminState":"active","operState":"up","nativeID":"SfcNeId"},{"id":"d487cf92-3959-4c42-b987-a0b76234d4f6","createtime":1490852657,"version":"V1R3","name":"Firewall","logicID":"849494949","phyNeID":"8965969966906","productName":"AC","ipAddress":"192.168.243.143","source":"os","adminState":"active","operState":"up","nativeID":"FirewallId"},{"id":"NeId1","createtime":1490852657,"version":"V1R3","name":"UnderlayNe1","logicID":"849494949","phyNeID":"8965969966906","productName":"SNC","ipAddress":"192.168.250.10","source":"os","adminState":"active","operState":"up","nativeID":"networkwork1id"},{"id":"c4b0f39a-5603-4f29-a567-3e8e91c35306","createtime":1490852653,"version":"V1R3","name":"ThinCPE","logicID":"849494949","phyNeID":"8965969966906","productName":"AC","ipAddress":"192.168.233.155","source":"os","adminState":"active","operState":"up","nativeID":"ThinCPEId"},{"id":"6f22915e-f243-48a0-ae5d-3fe1e79bfd8b","createtime":1490852654,"version":"V1R3","name":"vCPE","logicID":"849494949","phyNeID":"8965969966906","productName":"AC","ipAddress":"192.168.237.168","source":"os","adminState":"active","operState":"up","nativeID":"vCPEId"},{"id":"NeId2","createtime":1490852658,"version":"V1R3","name":"UnderlayNe2","logicID":"849494949","phyNeID":"8965969966906","productName":"SNC","ipAddress":"192.168.249.11","source":"os","adminState":"active","operState":"up","nativeID":"networkwork2id"},{"id":"63d590c0-8d92-40ed-bb06-a07ff0dcf717","createtime":1490852656,"version":"V1R3","name":"LoadBalancer","logicID":"849494949","phyNeID":"8965969966906","productName":"AC","ipAddress":"192.168.241.141","source":"os","adminState":"active","operState":"up","nativeID":"LoadBalancerId"}],"totalNum":7,"pageSize":1000,"currentPageNum":0,"totalPageNum":1}'
