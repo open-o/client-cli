@@ -51,12 +51,12 @@ http:
     - 201
     - 200
   result_map:
-    id: $b{$.logicalTerminationPoint.id}
-    name: $b{$.logicalTerminationPoint.name}
-    type: $b{$.logicalTerminationPoint.logicalType}
-    layer-rate: $b{$.logicalTerminationPoint.layerRate}
-    edge-point: $b{$.logicalTerminationPoint.isEdgePoint}
-    port-index: $b{$.logicalTerminationPoint.portIndex}
-    ip-address: $b{$.logicalTerminationPoint.ipAddress}
+    id: $b{logicalTerminationPoint.id}
+    name: $b{logicalTerminationPoint.name}
+    type: $b{logicalTerminationPoint.logicalType}
+    layer-rate: $b{logicalTerminationPoint.layerRate}
+    edge-point: $b{logicalTerminationPoint.isEdgePoint}
+    port-index: $b{logicalTerminationPoint.portIndex}
+    ip-address: $b{logicalTerminationPoint.ipAddress}
   sample_response:
     body:'{"id":"id","name":"string","me":"string","type":"string","layerRate":"string","edgePoint":"string","portIndex":"string","ipAddress":"string"}'

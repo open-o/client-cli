@@ -30,30 +30,22 @@ results:
       description: SDNO network element productName
       scope: short
       type: string
-    - name: controller
-      description: SDNO network element controller
-      scope: short
-      type: string
     - name: ip-address
       description: SDNO network element ipAddress
       scope: short
       type: string
 http:
   request:
-    uri: /managed-elements/{id}
+    uri: /managed-elements/${id}
     method: GET
   success_codes:
     - 201
-    - 400
-    - 401
-    - 404
-    - 500
+    - 200
   result_map:
-    id: $b{$.id}
-    name: $b{$.name}
-    version: $b{$.version}
-    product-name: $b{$.productName}
-    controller: $b{$.controller}
-    ip-address: $b{$.ipAddress}
+    id: $b{managedElement.id}
+    name: $b{managedElement.name}
+    version: $b{managedElement.version}
+    product-name: $b{managedElement.productName}
+    ip-address: $b{managedElement.ipAddress}
   sample_response:
-    body:'{"id":"string","name":"string","version":"string","productName":"string","controller":"string","ipAddress":"string"}'
+    body:'{"managedElement":{"id":"aaf06481-6908-4b66-89bc-e3e8ea435f66","description":"TestNetworkElement","createtime":1490866127,"updatetime":null,"auditUserName":null,"auditUserID":null,"auditTerminal":null,"auditDomianName":null,"auditDomianID":null,"version":"V1R3","name":"ThinCPE","logicID":"849494949","phyNeID":"8965969966906","productName":"AC","isVirtual":null,"ipAddress":"192.168.233.155","source":"os","owner":null,"adminState":"active","operState":"up","serialNumber":null,"neRole":null,"manufacturer":null,"manufactureDate":null,"location":null,"accessIPVersion":null,"managementDomainID":null,"controllerID":["752ee226-3e5a-48e2-a938-eef57963d46c"],"siteID":["e2578906-36b2-4220-b573-82e6bf16847a"],"nativeID":"ThinCPEId","popID":null,"networkControlDomainID":null}}'

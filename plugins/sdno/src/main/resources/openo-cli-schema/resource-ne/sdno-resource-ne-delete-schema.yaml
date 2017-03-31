@@ -13,7 +13,8 @@ parameters:
     is_optional: false
 http:
   request:
-    uri: /managed-elements/{id}
+    uri: /managed-elements/${id}
     method: DELETE
   success_codes:
     - 200
+    - 204

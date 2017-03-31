@@ -12,13 +12,13 @@ parameters:
     short_option: n
     long_option: name
     is_optional: false
-  - name: ne-version
-    description: SDNO network element ME
+  - name: description
+    description: SDNO network element description
     scope: short
     type: string
-    short_option: x
-    long_option: ne-version
-    is_optional: false
+    short_option: e
+    long_option: description
+    is_optional: true
   - name: product-name
     description: SDNO network element productName
     scope: short
@@ -26,12 +26,19 @@ parameters:
     short_option: r
     long_option: product-name
     is_optional: true
-  - name: controller
-    description: SDNO network element controller
+  - name: ne-version
+    description: SDNO network element ME
     scope: short
     type: string
-    short_option: z
-    long_option: controller
+    short_option: x
+    long_option: ne-version
+    is_optional: true
+  - name: source
+    description: SDNO network element source
+    scope: short
+    type: string
+    short_option: o
+    long_option: source
     is_optional: true
   - name: ip-address
     description: SDNO network element IpAddress
@@ -39,42 +46,42 @@ parameters:
     type: string
     short_option: b
     long_option: ip-address
+    is_optional: false
+  - name: controller-name
+    description: SDNO network element controller
+    scope: short
+    type: string
+    short_option: z
+    long_option: controller-name
+    is_optional: true
+  - name: site-name
+    description: SDNO network element site name
+    scope: short
+    type: string
+    short_option: y
+    long_option: site-name
     is_optional: true
 results:
   direction: portrait
   attributes:
-    - name: name
-      description: SDNO network element name
+    - name: id
+      description: SDNO network element id
       scope: short
       type: string
-    - name: ne-version
-      description: SDNO network element version
-      scope: short
-      type: string
-    - name: product-name
-      description: SDNO network element productName
-      scope: short
-      type: string
-    - name: controller
-      description: SDNO network element controller
-      scope: short
-      type: string
-    - name: ip-address
-      description: SDNO network element ipAddress
+    - name: create-time
+      description: SDNO network element creation time
       scope: short
       type: string
 http:
   request:
     uri: /managed-elements
     method: POST
-    body: '{"name":"${name}","version":"${ne-version}","productName":"${product-name}","controller":"${controller}","ip-address":"${ipAddress}"}'
+    body: '{"managedElement":{"name":"${name}","description":"${description}","productName":"${product-name}","version":"${ne-version}","ipAddress":"${ip-address}"},"source":"${source}"},"controllerName":"${controller-name}","siteName":"${site-name}"}}'
   success_codes:
     - 201
+    - 200
   result_map:
-    name: $b{$.name}
-    ne-version: $b{$.version}
-    product-name: $b{$.productName}
-    controller: $b{$.controller}
-    ip-address: $b{$.ipAddress}
+    id: $b{managedElement.id}
+    create-time: $b{managedElement.createTime}
   sample_response:
-    body:'{"name":"string","version":"string","productName":"string","controller":"string","ipAddress":"string"}'
+    body: '{"managedElement":{"createTime":1490881502,"id":"32fca552-ee9b-4398-bb12-0d4d62cdf902"}}'

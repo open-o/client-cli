@@ -13,7 +13,7 @@ parameters:
     is_optional: false
 http:
   request:
-    uri: /sites/{id}
+    uri: /sites/${id}
     method: DELETE
   success_codes:
     - 200

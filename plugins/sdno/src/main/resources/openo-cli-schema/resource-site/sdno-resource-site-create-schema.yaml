@@ -26,6 +26,13 @@ parameters:
     short_option: l
     long_option: location
     is_optional: true
+  - name: tenant-id
+    description: Resource site location
+    scope: short
+    type: string
+    short_option: x
+    long_option: tenant-id
+    is_optional: true
 results:
   direction: portrait
   attributes:
@@ -33,29 +40,20 @@ results:
     description: Resource site ID
     scope: short
     type: string
-  - name: name
-    description: Resource site name
-    scope: short
-    type: string
-  - name: type
-    description: Resource site type
-    scope: short
-    type: string
-  - name: location
-    description: Resource site location
+  - name: create-time
+    description: Resource site creation time
     scope: short
     type: string
 http:
   request:
     uri: /sites
     method: POST
-    body: '{"name":"${name}","type":"${type}","location":"${location}"}'
+    body: '{"site":{"name":"${name}","type":"${type}","location":"${location}","tenantID":"${tenant-id}"}}'
   success_codes:
+    - 200
     - 201
   result_map:
-    id: $b{$.id}
-    name: $b{$.name}
-    type: $b{$.type}
-    location: $b{$.location}
+    id: $b{site.id}
+    create-time: $b{site.createTime}
   sample_response:
     body:'{"id":"string","name":"string","type":"string","location":"string"}'

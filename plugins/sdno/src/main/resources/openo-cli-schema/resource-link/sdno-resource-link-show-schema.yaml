@@ -48,7 +48,7 @@ results:
     type: string
 http:
   request:
-    uri: /topological-links/{id}
+    uri: /topological-links/${id}
     method: GET
   success_codes:
     - 201

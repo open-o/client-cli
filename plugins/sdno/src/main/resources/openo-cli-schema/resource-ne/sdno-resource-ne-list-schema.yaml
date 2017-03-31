@@ -7,6 +7,10 @@ service:
 results:
   direction: landscape
   attributes:
+    - name: id
+      description: SDNO network element id
+      scope: short
+      type: string
     - name: name
       description: SDNO network element name
       scope: short
@@ -30,6 +34,7 @@ http:
   success_codes:
     - 200
   result_map:
+    id: $b{$.managedElements.[*].id}
     name: $b{$.managedElements.[*].name}
     version: $b{$.managedElements.[*].version}
     product-name: $b{$.managedElements.[*].productName}

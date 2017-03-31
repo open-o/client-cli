@@ -13,7 +13,7 @@ parameters:
     is_optional: false
 http:
   request:
-    uri: /topological-links/{id}
+    uri: /topological-links/${id}
     method: DELETE
   success_codes:
     - 200
