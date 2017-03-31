@@ -36,6 +36,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * OpenO Command registrar provides a common place, where every command would get registered automatically when its
@@ -78,6 +79,14 @@ public class OpenOCommandRegistrar {
         }
 
         return registrar;
+    }
+
+    /**
+     * Get the list of discovered commands by registrar
+     * @return
+     */
+    public Set<String> listCommands() {
+        return this.registry.keySet();
     }
 
     /**
@@ -184,7 +193,7 @@ public class OpenOCommandRegistrar {
         attrDesc.setScope(OpenOCommandResultAttributeScope.SHORT);
         help.getRecords().add(attrDesc);
 
-        for (String cmdName : OpenOCommandUtils.sort(this.registry.keySet())) {
+        for (String cmdName : OpenOCommandUtils.sort(this.listCommands())) {
             OpenOCommand cmd;
             try {
                 cmd = this.get(cmdName);
@@ -198,7 +207,7 @@ public class OpenOCommandRegistrar {
         }
 
         try {
-            return "Provides Command Line Interface (CLI) for Open-O.\n\nFollowing commands are supported:\n"
+            return "\n\nOpen-O sub-commands:\n"
                     + help.print();
         } catch (OpenOCommandException e) {
             throw new OpenOCommandHelpFailed(e);

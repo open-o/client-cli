@@ -132,6 +132,11 @@ public class OpenOCommandRegistrarTest {
         String version = registerar.getVersion();
         assertNotNull(version);
     }
+
+    @Test
+    public void listTest() {
+        registerar.listCommands();
+    }
 }
 
 @OpenOCommandSchema(name = OpenOCommandTest.CMD_NAME, schema = "sample-test-schema.yaml")

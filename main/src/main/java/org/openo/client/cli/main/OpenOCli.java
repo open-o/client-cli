@@ -16,6 +16,7 @@
 
 package org.openo.client.cli.main;
 
+import org.apache.commons.io.IOUtils;
 import org.openo.client.cli.fw.OpenOCommand;
 import org.openo.client.cli.fw.OpenOCommandRegistrar;
 import org.openo.client.cli.fw.error.OpenOCommandWarning;
@@ -79,6 +80,7 @@ public class OpenOCli {
             if ((args.isEmpty())
                     || ((args.size() == 1) && (this.getLongOption(OpenOCliConstants.PARAM_HELP_LOGN).equals(args.get(0))
                             || this.getShortOption(OpenOCliConstants.PARAM_HELP_SHORT).equals(args.get(0))))) {
+                this.print(IOUtils.toString(this.getClass().getClassLoader().getResourceAsStream("openo-readme.txt")));
                 String help = OpenOCommandRegistrar.getRegistrar().getHelp();
                 this.print(help);
                 this.exitSuccessfully();
