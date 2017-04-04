@@ -23,6 +23,10 @@ results:
       description: SDNO logicalTerminationPoint name
       scope: short
       type: string
+    - name: me
+      description: SDNO logicalTerminationPoint meId
+      scope: short
+      type: string
     - name: type
       description: SDNO logicalTerminationPoint type
       scope: short
@@ -53,10 +57,11 @@ http:
   result_map:
     id: $b{logicalTerminationPoint.id}
     name: $b{logicalTerminationPoint.name}
+    me: $b{logicalTerminationPoint.meID}
     type: $b{logicalTerminationPoint.logicalType}
     layer-rate: $b{logicalTerminationPoint.layerRate}
     edge-point: $b{logicalTerminationPoint.isEdgePoint}
     port-index: $b{logicalTerminationPoint.portIndex}
     ip-address: $b{logicalTerminationPoint.ipAddress}
   sample_response:
-    body:'{"id":"id","name":"string","me":"string","type":"string","layerRate":"string","edgePoint":"string","portIndex":"string","ipAddress":"string"}'
+    body: '{"id":"id","name":"string","me":"string","type":"string","layerRate":"string","edgePoint":"string","portIndex":"string","ipAddress":"string"}'

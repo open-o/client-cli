@@ -76,4 +76,4 @@ http:
     parameters: $b{service.parameters}
 
   sample_response:
-    body:'{"service":{"serviceId":"string","name":"string","description":"string","activeStatus":"string","status":"string","creator":"string","createAt":"string","serviceDefId":"string","templateId":"string","domainHost":"string","nodeTemplateName":"string","nodeType":"string","segments":"array","parameters":{"key1":"value1","key2":"value2","key3":"value3"}}}'
+    body: '{"service":{"serviceId":"string","name":"string","description":"string","activeStatus":"string","status":"string","creator":"string","createAt":"string","serviceDefId":"string","templateId":"string","domainHost":"string","nodeTemplateName":"string","nodeType":"string","segments":"array","parameters":{"key1":"value1","key2":"value2","key3":"value3"}}}'

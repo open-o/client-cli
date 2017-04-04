@@ -24,13 +24,6 @@ parameters:
     short_option: r
     long_option: service-url
     is_optional: false
-  - name: status
-    description: Open-O service status
-    type: long
-    short_option: z
-    long_option: service-status
-    is_optional: true
-    default_value: 1
   - name: node-ip
     description: Open-O service running node IP
     type: string

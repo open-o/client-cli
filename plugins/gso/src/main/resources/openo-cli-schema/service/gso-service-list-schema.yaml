@@ -64,4 +64,4 @@ http:
     service-def-id: $b{services.[*].serviceDefId}
     template-id: $b{services.[*].templateId}
   sample_response:
-    body:'{"services":[{"serviceId":"string","name":"string","description":"string","activeStatus":"string","status":"string","creator":"string","createAt":"string","serviceDefId":"string","templateId":"string"}]}'
+    body: '{"services":[{"serviceId":"string","name":"string","description":"string","activeStatus":"string","status":"string","creator":"string","createAt":"string","serviceDefId":"string","templateId":"string"}]}'

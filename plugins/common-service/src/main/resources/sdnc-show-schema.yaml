@@ -85,5 +85,5 @@ http:
     product-name: $b{$.productName}
     create-time: $b{$.createTime}
   sample_response:
-    body:'{"id":"string","name":"string","vendor":"string","version":"string","description":"string","type":"string","createTime":"string","url":"string","userName":"string","password":"string","domain":"string","tenant":"string"}'
+    body: '{"id":"string","name":"string","vendor":"string","version":"string","description":"string","type":"string","createTime":"string","url":"string","userName":"string","password":"string","domain":"string","tenant":"string"}'
 

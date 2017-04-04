@@ -12,6 +12,34 @@ parameters:
     short_option: n
     long_option: name
     is_optional: false
+  - name: a-end
+    description: topological link aEnd
+    scope: short
+    type: string
+    short_option: b
+    long_option: a-end
+    is_optional: false
+  - name: z-end
+    description: topological link zEnd
+    scope: short
+    type: string
+    short_option: c
+    long_option: z-end
+    is_optional: false
+  - name: a-end-me
+    description: topological link aEndME
+    scope: short
+    type: string
+    short_option: g
+    long_option: a-end-me
+    is_optional: false
+  - name: z-end-me
+    description: topological link zEndME
+    scope: short
+    type: string
+    short_option: q
+    long_option: z-end-me
+    is_optional: false
   - name: type
     description: Topological link type
     scope: short
@@ -26,33 +54,61 @@ parameters:
     short_option: l
     long_option: layer-rate
     is_optional: true
-  - name: source-port
-    description: Topological link source port
+  - name: source
+    description: Topological link source
     scope: short
     type: string
     short_option: o
-    long_option: source-port
+    long_option: source
     is_optional: true
-  - name: sink-port
-    description: Topological link sink port
+  - name: direction
+    description: Topological link direction
     scope: short
     type: string
-    short_option: k
-    long_option: sink-port
+    short_option: j
+    long_option: direction
     is_optional: true
-  - name: source-ne
-    description: Topological link source ne
+  - name: phy-bw
+    description: Topological link phyBW
     scope: short
     type: string
-    short_option: e
-    long_option: source-ne
+    short_option: p1
+    long_option: phy-bw
     is_optional: true
-  - name: sink-ne
-    description: Topological link sink ne
+  - name: owner
+    description: Topological link owner
     scope: short
     type: string
-    short_option: i
-    long_option: sink-ne
+    short_option: r
+    long_option: owner
+    is_optional: true
+  - name: admin-state
+    description: topological link adminState
+    scope: short
+    type: string
+    short_option: w
+    long_option: admin-state
+    is_optional: true
+  - name: oper-state
+    description: Topological link operState
+    scope: short
+    type: string
+    short_option: x
+    long_option: oper-state
+    is_optional: true
+  - name: native-id
+    description: Topological link nativeID
+    scope: short
+    type: string
+    short_option: z
+    long_option: native-id
+    is_optional: true
+  - name: latency
+    description: Topological link latency
+    scope: short
+    type: string
+    short_option: l1
+    long_option: latency
     is_optional: true
 results:
   direction: portrait
@@ -61,48 +117,20 @@ results:
     description: Topological link ID
     scope: short
     type: string
-  - name: name
-    description: Topological link name
-    scope: short
-    type: string
-  - name: type
-    description: Topological link type
-    scope: short
-    type: string
-  - name: layer-rate
-    description: Topological link layer rate
-    scope: short
-    type: string
-  - name: source-port
-    description: Topological link source port
-    scope: short
-    type: string
-  - name: sink-port
-    description: Topological link sink port
-    scope: short
-    type: string
-  - name: source-ne
-    description: Topological link source ne
-    scope: short
-    type: string
-  - name: sink-ne
-    description: Topological link sink ne
+  - name: create-time
+    description: Topological link createTime
     scope: short
     type: string
 http:
   request:
     uri: /topological-links
     method: POST
-    body: '{"name":"${name}","logicalType":"${type}","layerRate":"${layer-rate}","sourcePort":"${source-port}","sinkPort":"${sink-port}","sinkNe":"${sink-ne}"}'
+    body: '{"topologicalLink":{"name":"${name}","aEnd":"${a-end}","zEnd":"${z-end}","aEndME":"${a-end-me}","zEndME":"${z-end-me}","logicalType":"${type}","layerRate":"${layer-rate}","source":"${source}","direction":"${direction}","phyBW":"${phy-bw}","owner":"${owner}","adminState":"${admin-state}","operState":"${oper-state}","nativeID":"${native-id}","latency":"${latency}"}}'
   success_codes:
     - 201
+    - 200
   result_map:
-    id: $b{$.id}
-    name: $b{$.name}
-    type: $b{$.logicalType}
-    layer-rate: $b{$.layerRate}
-    source-port: $b{$.sourcePort}
-    sink-port: $b{$.sinkPort}
-    sink-ne: $b{$.sinkNe}
+    create-time: $b{topologicalLink.createTime}
+    id: $b{topologicalLink.id}
   sample_response:
-    body:'{"id":"string","name":"string","logicalType":"string","layerRate":"string","sourcePort":"string","sinkPort":"string","sinkNe":"string"}'
+    body: '{"topologicalLink":{"createTime":1491206196,"id":"050683e6-cc40-4640-8c05-a3273b99b12b"}}'

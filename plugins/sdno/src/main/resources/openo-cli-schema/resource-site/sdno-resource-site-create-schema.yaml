@@ -56,4 +56,4 @@ http:
     id: $b{site.id}
     create-time: $b{site.createTime}
   sample_response:
-    body:'{"id":"string","name":"string","type":"string","location":"string"}'
+    body: '{"id":"string","name":"string","type":"string","location":"string"}'

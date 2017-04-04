@@ -151,4 +151,4 @@ http:
     certificate-url: $b{$.certificateUrl}
     create-time: $b{$.createTime}
   sample_response:
-    body:'{"id":"string","name":"string","vendor":"string","version":"string","description":"string","type":"string","createTime":"string","url":"string","userName":"string","password":"string","vimId":"string","certificateUrl":"string"}'
+    body: '{"id":"string","name":"string","vendor":"string","version":"string","description":"string","type":"string","createTime":"string","url":"string","userName":"string","password":"string","vimId":"string","certificateUrl":"string"}'

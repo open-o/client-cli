@@ -43,4 +43,4 @@ http:
     type: $b{site.type}
     location: $b{site.location}
   sample_response:
-      body:'{"site":{"id":"e2578906-36b2-4220-b573-82e6bf16847a","description":null,"createtime":1490866126,"updatetime":null,"auditUserName":null,"auditUserID":null,"auditTerminal":null,"auditDomianName":null,"auditDomianID":null,"type":"tenant_site","tenantID":"tenantid","location":"testlocation","name":"Site4Test","tenantSiteIDs":null}}'
+      body: '{"site":{"id":"e2578906-36b2-4220-b573-82e6bf16847a","description":null,"createtime":1490866126,"updatetime":null,"auditUserName":null,"auditUserID":null,"auditTerminal":null,"auditDomianName":null,"auditDomianID":null,"type":"tenant_site","tenantID":"tenantid","location":"testlocation","name":"Site4Test","tenantSiteIDs":null}}'

@@ -22,28 +22,24 @@ results:
     description: Topological link name
     scope: short
     type: string
-  - name: type
-    description: Topological link type
+  - name: logical-type
+    description: Topological link logical type
     scope: short
     type: string
   - name: layer-rate
     description: Topological link layer rate
     scope: short
     type: string
-  - name: source-port
-    description: Topological link source port
+  - name: source
+    description: Topological link source
     scope: short
     type: string
-  - name: sink-port
-    description: Topological link sink port
+  - name: admin-state
+    description: Topological link admin state
     scope: short
     type: string
-  - name: source-ne
-    description: Topological link source ne
-    scope: short
-    type: string
-  - name: sink-ne
-    description: Topological sink ne
+  - name: owner
+    description: Topological link source owner
     scope: short
     type: string
 http:
@@ -52,13 +48,14 @@ http:
     method: GET
   success_codes:
     - 201
+    - 200
   result_map:
-    id: $b{$.[*].id}
-    name: $b{$.[*].name}
-    type: $b{$.[*].logicalType}
-    layer-rate: $b{$.[*].layerRate}
-    source-port: $b{$.[*].sourcePort}
-    sink-port: $b{$.[*].sinkPort}
-    source-ne: $b{$.[*].sinkNe}
+    id: $b{topologicalLink.id}
+    name: $b{topologicalLink.name}
+    logical-type: $b{topologicalLink.logicalType}
+    layer-rate: $b{topologicalLink.layerRate}
+    source: $b{topologicalLink.source}
+    admin-state: $b{topologicalLink.adminState}
+    owner: $b{topologicalLink.owner}
   sample_response:
-     body:'[{"id":"string","name":"string","logicalType":"string","layerRate":"string","sourcePort":"string","sinkPort":"string","sinkNe":"string"}]'
+     body: '[{"id":"string","name":"string","logicalType":"string","layerRate":"string","sourcePort":"string","sinkPort":"string","sinkNe":"string"}]'

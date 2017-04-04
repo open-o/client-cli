@@ -15,28 +15,24 @@ results:
     description: Topological link name
     scope: short
     type: string
-  - name: type
-    description: Topological link type
+  - name: logical-type
+    description: Topological link logical type
     scope: short
     type: string
   - name: layer-rate
     description: Topological link layer rate
     scope: short
     type: string
-  - name: source-port
-    description: Topological link source port
+  - name: source
+    description: Topological link source
     scope: short
     type: string
-  - name: sink-port
-    description: Topological link sink port
+  - name: admin-state
+    description: Topological link admin state
     scope: short
     type: string
-  - name: source-ne
-    description: Topological link source ne
-    scope: short
-    type: string
-  - name: sink-ne
-    description: Topological sink ne
+  - name: owner
+    description: Topological link source owner
     scope: short
     type: string
 http:
@@ -46,12 +42,12 @@ http:
   success_codes:
     - 200
   result_map:
-    id: $b{$.topologicalLinks.[*].id}
-    name: $b{$.topologicalLinks.[*].name}
-    type: $b{$.topologicalLinks.[*].logicalType}
-    layer-rate: $b{$.topologicalLinks.[*].layerRate}
-    source-port: $b{$.topologicalLinks.[*].sourcePort}
-    sink-port: $b{$.topologicalLinks.[*].sinkPort}
-    source-ne: $b{$.topologicalLinks.[*].sinkNe}
+    id: $b{topologicalLinks.[*].id}
+    name: $b{topologicalLinks.[*].name}
+    logical-type: $b{topologicalLinks.[*].logicalType}
+    layer-rate: $b{topologicalLinks.[*].layerRate}
+    source: $b{topologicalLinks.[*].source}
+    admin-state: $b{topologicalLinks.[*].adminState}
+    owner: $b{topologicalLinks.[*].owner}
   sample_response:
-    body:'{"topologicalLinks":[{"id":"string","name":"string","logicalType":"string","layerRate":"string","sourcePort":"string","sinkPort":"string","sinkNe":"string"}],"totalNum":0,"pageSize":1000,"currentPageNum":0,"totalPageNum":0}'
+    body: '{"topologicalLinks":[{"id":"721683e4-3f6e-41d5-bca0-1982e6bac67c","createtime":1490935464,"name":"String","layerRate":"678","aEnd":"19.5.6.7","zEnd":"193.4.57.8","aEndME":"193.5.6.7","zEndME":"189.78.6.7","owner":"nhua","logicalType":"fiberLink","source":"network_me","adminState":"active","nativeID":"dxsj"}],"totalNum":1,"pageSize":1000,"currentPageNum":0,"totalPageNum":1}'

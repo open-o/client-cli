@@ -1,0 +1,116 @@
+openo_cmd_schema_version: 2.0
+name: extsys
+description: Open-O ESR Virtual Infrastructure Manager (VIM)
+version: v1
+attributes:
+  - name: id
+    description: Open-O VIM ID
+    type: string
+    short_option: i
+    long_option: id
+  - name: name
+    description: Open-O VIM name
+    type: string
+    short_option: n
+    long_option: name
+  - name: vendor
+    description: Open-O VIM vendor
+    type: string
+    short_option: e
+    long_option: vendor
+  - name: type
+    description: Open-O VIM type
+    type: string
+    default_value: openstack
+  - name: version
+    description: Open-O VIM version
+    type: string
+    short_option: r
+    long_option: vim-version
+  - name: url
+    description: Open-O VIM base url
+    type: url
+    short_option: l
+    long_option: url
+  - name: description
+    description: Open-O VIM description
+    type: string
+    short_option: i
+    long_option: description
+    is_optional: true
+  - name: username
+    description: Open-O VIM username
+    type: string
+    short_option: g
+    long_option: username
+  - name: password
+    description: Open-O VIM password
+    type: string
+    is_secured: true
+    short_option: j
+    long_option: password
+  - name: domain
+    description: Open-O VIM domain
+    type: string
+    short_option: o
+    long_option: domain
+  - name: tenant
+    description: Open-O VIM tenant
+    type: string
+    short_option: k
+    long_option: tenant
+create:
+  parameters:
+    - name: ${name}
+    - name: ${vendor}
+    - name: ${type}
+    - name: ${version}
+      short_name: vim-version
+    - name: ${url}
+    - name: ${description}
+    - name: ${username}
+    - name: ${password}
+    - name: ${domain}
+    - name: ${tenant}
+  results:
+    - name: ${--ALL--}
+show:
+  parameters:
+    - name: ${id}
+  results:
+    - name: ${--ALL--}
+list:
+  results:
+    - name: ${id}
+    - name: ${name}
+    - name: ${vendor}
+      scope: long
+    - name: ${type}
+    - name: ${vim-version}
+    - name: ${url}
+    - name: ${description}
+      scope: long
+    - name: ${username}
+    - name: ${password}
+      scope: long
+    - name: ${domain}
+      scope: long
+    - name: ${tenant}
+      scope: long
+    - name: ${create-time}
+      scope: long
+delete:
+  parameters:
+    - name: ${id}
+update:
+  parameters:
+    - name: ${id}
+    - name: ${name}
+    - name: ${url}
+    - name: ${description}
+    - name: ${username}
+    - name: ${password}
+    - name: ${domain}
+    - name: ${tenant}
+  results:
+    - name: ${--ALL--}

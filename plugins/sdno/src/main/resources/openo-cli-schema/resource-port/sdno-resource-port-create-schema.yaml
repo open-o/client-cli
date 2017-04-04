@@ -4,7 +4,6 @@ description: Create the sdno port
 service:
   name: sdnobrs
   version: v1
-
 parameters:
   - name: name
     description: SDNO port name
@@ -19,14 +18,21 @@ parameters:
     type: string
     short_option: x
     long_option: me
-    is_optional: true
+    is_optional: false
   - name: type
     description: SDNO port type
     scope: short
     type: string
     short_option: r
     long_option: type
-    is_optional: true
+    is_optional: false
+  - name: ip-address
+    description: SDNO port IpAddress
+    scope: short
+    type: string
+    short_option: b
+    long_option: ip-address
+    is_optional: false
   - name: layer-rate
     description: SDNO port layer rate
     scope: short
@@ -48,12 +54,75 @@ parameters:
     short_option: i
     long_option: port-index
     is_optional: true
-  - name: ip-address
-    description: SDNO port IpAddress
+  - name: source
+    description: SDNO port source
     scope: short
     type: string
-    short_option: b
-    long_option: ip-address
+    short_option: c
+    long_option: source
+    is_optional: true
+  - name: owner
+    description: SDNO port owner
+    scope: short
+    type: string
+    short_option: e
+    long_option: owner
+    is_optional: true
+  - name: admin-state
+    description: SDNO port admin state
+    scope: short
+    type: string
+    short_option: g
+    long_option: admin-state
+    is_optional: true
+  - name: oper-state
+    description: SDNO port operational State
+    scope: short
+    type: string
+    short_option: k
+    long_option: oper-state
+    is_optional: true
+  - name: native-id
+    description: SDNO port nativeID
+    scope: short
+    type: string
+    short_option: l
+    long_option: native-id
+    is_optional: true
+  - name: tenant-id
+    description: SDNO port tenantID
+    scope: short
+    type: string
+    short_option: q
+    long_option: tenant-id
+    is_optional: true
+  - name: mac-address
+    description: SDNO port macAddress
+    scope: short
+    type: string
+    short_option: v1
+    long_option: mac-address
+    is_optional: true
+  - name: description
+    description: SDNO port description
+    scope: short
+    type: string
+    short_option: w
+    long_option: description
+    is_optional: true
+  - name: phy-bw
+    description: SDNO port phyBW
+    scope: short
+    type: string
+    short_option: y
+    long_option: phyBW
+    is_optional: true
+  - name: ip-mask
+    description: SDNO port ipMask
+    scope: short
+    type: string
+    short_option: j
+    long_option: ip-mask
     is_optional: true
 results:
   direction: portrait
@@ -62,46 +131,20 @@ results:
       description: SDNO logicalTerminationPoint id
       scope: short
       type: string
-    - name: name
-      description: SDNO logicalTerminationPoint name
-      scope: short
-      type: string
-    - name: me
-      description: SDNO logicalTerminationPoint me
-      scope: short
-      type: string
-    - name: type
-      description: SDNO logicalTerminationPoint type
-      scope: short
-      type: string
-    - name: layer-rate
-      description: SDNO logicalTerminationPoint layerRate
-      scope: short
-      type: string
-    - name: edge-point
-      description: SDNO logicalTerminationPoint edgePoint
-      scope: short
-      type: string
-    - name: port-index
-      description: SDNO logicalTerminationPoint portIndex
-      scope: short
-      type: string
-    - name: ip-address
-      description: SDNO logicalTerminationPoint ipAddress
+    - name: create-time
+      description: SDNO logicalTerminationPoint createTime
       scope: short
       type: string
 http:
   request:
     uri: /logical-termination-points
     method: POST
-    body: '{"logicalTerminationPoint":{"name":"${name}","meID":"${me}","logicalType":"${type}","layerRate":"${layer-rate}","isEdgePoint":"${edge-point}","portIndex":"${port-index}",
-    "source":"${source}","ipAddress":"${ip-address}","adminState":"${adminState}","operState":"${operState}","direction":"${direction}",
-     "phyBW":"${phyBW}","ipMask":"${ipMask}","nativeID":"${nativeID}","macAddress":"${macAddress}","tenantID":"${tenantID}","usageState":"${usageState}","containedLayers":"${containedLayers}","description":"${description}"}}'
+    body: '{"logicalTerminationPoint":{"name":"${name}","meID":"${me}","logicalType":"${type}","ipAddress":"${ip-address}","layerRate":"${layer-rate}","isEdgePoint":"${edge-point}","portIndex":"${port-index}","source":"${source}","owner":"${owner}","adminState":"${admin-state}","operState":"${oper-state}","nativeID":"${native-id}","tenantID":"${tenant-id}","macAddress":"${mac-address}","description":"${description}","phyBW":"${phy-bw}","ipMask":"${ip-mask}"}}'
   success_codes:
     - 201
     - 200
   result_map:
-    id: $b{$.logicalTerminationPoints.id}
-    createTime: $b{$.logicalTerminationPoints.createTime}
+    id: $b{logicalTerminationPoint.id}
+    create-time: $b{$.logicalTerminationPoint.createTime}
   sample_response:
-    body:'{"id":"string","createTime":"string"}'
+    body: '{"logicalTerminationPoint":{"createTime":1491198313,"id":"92bb155a-23cb-47f8-9905-7117c5a3204d"}}'

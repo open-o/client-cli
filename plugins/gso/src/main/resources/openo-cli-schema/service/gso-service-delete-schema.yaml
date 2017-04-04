@@ -30,4 +30,4 @@ http:
   result_map:
     operation-id: $b{$.operationId}
   sample_response:
-    body:'{"operationId":"string"}'
+    body: '{"operationId":"string"}'

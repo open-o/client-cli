@@ -81,4 +81,4 @@ http:
     used-memory: $b{$.datacenters[*].usedMemory}
     used-disk: $b{$.datacenters[*].usedDisk}
   sample_response:
-    body:'{"datacenters":[{"id":"string","vimId":"string","vimName":"string","status":"string","name":"string","country":"string","location":"string","totalCPU":"string","totalMemory":"string","totalDisk":"string","usedCPU":"string","usedMemory":"string","usedDisk":"string"}]}'
+    body: '{"datacenters":[{"id":"string","vimId":"string","vimName":"string","status":"string","name":"string","country":"string","location":"string","totalCPU":"string","totalMemory":"string","totalDisk":"string","usedCPU":"string","usedMemory":"string","usedDisk":"string"}]}'

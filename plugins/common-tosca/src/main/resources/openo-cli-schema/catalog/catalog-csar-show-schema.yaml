@@ -71,6 +71,10 @@ results:
       description: Package process state
       scope: short
       type: string
+    - name: provider
+      description: Package provider
+      scope: short
+      type: string
 http:
   request:
     uri: /csars/${id}
@@ -95,4 +99,4 @@ http:
     onBoard-state: $b{$.onBoardState}
     process-state: $b{$.processState}
   sample_response:
-    body:'{"csarId":"string","name":"string","downloadUri":"string","size":"string","version":"string","provider":"string","type":"string","format":"string","deletionPending":"string","createTime":"string","modifyTime":"string","operationalState":"string","usageState":"string","onBoardState":"string","processState":"string"}'
+    body: '{"csarId":"string","name":"string","downloadUri":"string","size":"string","version":"string","provider":"string","type":"string","format":"string","deletionPending":"string","createTime":"string","modifyTime":"string","operationalState":"string","usageState":"string","onBoardState":"string","processState":"string"}'

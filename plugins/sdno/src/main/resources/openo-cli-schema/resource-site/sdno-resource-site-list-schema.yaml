@@ -35,4 +35,4 @@ http:
     type: $b{$.sites.[*].type}
     location: $b{$.sites.[*].location}
   sample_response:
-    body:'{"totalNum":1,"pageSize":1000,"currentPageNum":0,"sites":[{"id":"9316e8ac-522f-42f8-9308-714781d96e3a","createtime":1490852652,"type":"tenant_site","tenantID":"tenantid","location":"testlocation","name":"Site4Test"}],"totalPageNum":1}'
+    body: '{"totalNum":1,"pageSize":1000,"currentPageNum":0,"sites":[{"id":"9316e8ac-522f-42f8-9308-714781d96e3a","createtime":1490852652,"type":"tenant_site","tenantID":"tenantid","location":"testlocation","name":"Site4Test"}],"totalPageNum":1}'

@@ -64,4 +64,4 @@ http:
     id: $b{$.service.serviceId}
     operations-id: $b{$.service.operationId}
   sample_response:
-    body:'{"service":{"operationId":"string","serviceId":"string"}}'
+    body: '{"service":{"operationId":"string","serviceId":"string"}}'
