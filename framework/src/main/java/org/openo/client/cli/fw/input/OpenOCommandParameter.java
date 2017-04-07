@@ -31,14 +31,6 @@ import java.util.Map;
  *
  */
 public class OpenOCommandParameter {
-    public static final String NAME = "name";
-    public static final String DESCRIPTION = "description";
-    public static final String SHORT_OPTION = "short_option";
-    public static final String LONG_OPTION = "long_option";
-    public static final String TYPE = "type";
-    public static final String IS_OPTIONAL = "is_optional";
-    public static final String DEFAULT_VALUE = "default_value";
-    public static final String IS_SECURED = "is_secured";
 
     /*
      * Name, for positional parameters, the place is decided from schema file definition

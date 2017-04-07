@@ -20,10 +20,6 @@ package org.openo.client.cli.fw.ad;
  * Open-O Service as reported in Open-O MSB like msb v1 or /api/microservice/v1.
  */
 public class OpenOService {
-    public static final String NAME = "name";
-    public static final String VERSION = "version";
-    public static final String BASE_PATH = "base_path";
-    public static final String NO_AUTH = "no-auth";
     /*
      * OpenO Service name like gso.
      */

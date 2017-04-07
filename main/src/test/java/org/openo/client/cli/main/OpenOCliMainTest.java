@@ -25,11 +25,14 @@ import org.openo.client.cli.fw.error.OpenOCommandException;
 import org.openo.client.cli.main.utils.OpenOCliUtils;
 
 import java.io.File;
+import java.io.IOException;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 public class OpenOCliMainTest {
 
@@ -146,8 +149,8 @@ public class OpenOCliMainTest {
     @Test
     @Ignore
     public void testServiceListCommand() {
-        this.handle(new String[] { "microservice-list", "-u", "root1", "-p", "root123", "-m",
-                "http://192.168.4.47:80", "--long", "--no-title", "true", "-d" });
+        this.handle(new String[] { "microservice-list", "-u", "root1", "-p", "root123", "-m", "http://192.168.4.47:80",
+                "--long", "--no-title", "true", "-d" });
     }
 
     @Test
@@ -188,23 +191,23 @@ public class OpenOCliMainTest {
     @Ignore
     public void testSdnclist() {
 
-        this.handle(
-                new String[] { "sdnc-list", "-p", "root123", "--msb-url", "http://192.168.99.100", "-u", "root1", "-d" });
+        this.handle(new String[] { "sdnc-list", "-p", "root123", "--msb-url", "http://192.168.99.100", "-u", "root1",
+                "-d" });
     }
 
     @Test
     @Ignore
     public void testNFVResourcelist() {
-        this.handle(
-                new String[] { "resource-datacenter-show", "--id", "test", "-u", "root", "-p", "root123",  "--msb-url", "http://192.168.99.100", "-a", "-d"});
+        this.handle(new String[] { "resource-datacenter-show", "--id", "test", "-u", "root", "-p", "root123",
+                "--msb-url", "http://192.168.99.100", "-a", "-d" });
     }
 
     @Test
     @Ignore
     public void testNFVResourceShow() {
 
-        this.handle(
-                new String[] { "resource-datacenter-show", "--id", "test", "-u", "root", "-p", "root123",  "--msb-url", "http://192.168.99.100", "-a", "-d"});
+        this.handle(new String[] { "resource-datacenter-show", "--id", "test", "-u", "root", "-p", "root123",
+                "--msb-url", "http://192.168.99.100", "-a", "-d" });
     }
 
     @Test
@@ -223,11 +226,41 @@ public class OpenOCliMainTest {
 
     @Test
     @Ignore
-    public void testgsoServiceCreateCommand() {
+    public void testGsoServiceCreateCommand() {
         this.handle(new String[] { "service-create", "-m", "http://192.168.4.47:80", "-u", "root1", "-p", "root123",
                 "-x", "test", "-z", "test", "-n", "test", "-r", "123", "-j",
                 "D:/workspace/open-o/integration/test/csit/plans/gso/sanity-check/jsoninput/lcm_CreateServiceReq.json",
                 "-d" });
+    }
+
+    @Test
+    @Ignore
+    public void testPortCreate() {
+        this.handle(new String[] { "resource-link-create", "-u", "root", "-p", "root123", "--msb-url",
+                "http://192.168.4.213", "-d", "-n", "PradeepLink1", "-b", "19.5.6.13", "-c", "193.4.57.13", "-g",
+                "193.5.6.13", "-q", "189.78.6.13", "-y", "fiberLink" });
+    }
+
+    @Test
+    public void validateCommands() throws IOException, OpenOCommandException {
+        Map<String, String> cmdSchemaMap = OpenOCommandRegistrar.getRegistrar().getAllCommandToSchemaMap();
+        for (String cmdName : cmdSchemaMap.keySet()) {
+            System.out.println(
+                    "************************* '" + cmdSchemaMap.get(cmdName) + "' *******************************");
+            this.handle(new String[] { "schema-validate", "-l", cmdSchemaMap.get(cmdName), "-i", "true", "-m",
+                    "http://192.168.4.47:80", "-u", "root1", "-p", "root123" });
+        }
+    }
+
+    @Test
+    public void commandHelpTest() throws OpenOCommandException {
+        Set<String> cmds = OpenOCommandRegistrar.getRegistrar().listCommands();
+
+        for (String cmdName : cmds) {
+            System.out.println("************************* '" + cmdName + "' *******************************");
+            this.handle(new String[] { cmdName, "-h" });
+        }
+
     }
 
 }

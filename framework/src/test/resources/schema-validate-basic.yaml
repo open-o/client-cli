@@ -1,0 +1,68 @@
+openo_cmd_schema_version: 1.0
+description: Register microservice into Open-O
+name: schema-validate
+service:
+  name: msb
+parameters:
+  - name: service-name1
+    description: Open-O service name
+    type: string
+    short_option: x
+    long_option: service-name
+    is_optional: false
+  - name: service-version
+    description: Open-O service version
+    type: string
+    short_option: x
+    long_option: service-version
+    is_optional: false
+  - name: service-url
+    description: Open-O service base url
+    type: url1
+    short_option: u
+    long_option: service-url
+    is_optional: false1
+  - name: status
+    description: Open-O service status
+    type: long
+    short_option: z
+    long_option: service-version
+    is_optional: true
+    default_value: 1
+  - name: node-ip
+    description: Open-O service running node IP
+    type: string
+  - name: node-port
+    description: Open-O service running node port
+    type: string
+  - name: create-or-update
+    description: Open-O service create or update
+    type: cfbcv
+    default_value: true
+results:
+  direction: portrait1
+  attributes:
+    - name: name
+      description: Open-O service name
+      scope: short
+      type: string
+    - name: version
+      description: Open-O service version
+      scope: short
+      type: string
+    - name: status
+      description: Open-O service base url
+      scope: short
+      type: url
+    - name: status
+      description: Open-O service status
+      scope: short1
+      type: long
+    - name: nodes
+      description: Open-O service running nodes
+      scope: long
+      type: string
+    - name: location
+      description: Open-O service location
+      scope: long
+      type: url

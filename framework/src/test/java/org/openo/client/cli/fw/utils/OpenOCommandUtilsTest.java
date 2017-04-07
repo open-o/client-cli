@@ -16,25 +16,27 @@
 
 package org.openo.client.cli.fw.utils;
 
+
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
+
+import mockit.Invocation;
+import mockit.Mock;
+import mockit.MockUp;
 
 import org.junit.FixMethodOrder;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
 import org.openo.client.cli.fw.OpenOCommand;
-import org.openo.client.cli.fw.OpenOCommandRegistrarTest;
 import org.openo.client.cli.fw.OpenOCommandSchema;
-import org.openo.client.cli.fw.ad.OpenOAuthClient;
 import org.openo.client.cli.fw.ad.OpenOCredentials;
 import org.openo.client.cli.fw.cmd.OpenOHttpCommand;
 import org.openo.client.cli.fw.cmd.OpenOSwaggerCommand;
-import org.openo.client.cli.fw.error.OpenOCommandDiscoveryFailed;
 import org.openo.client.cli.fw.error.OpenOCommandException;
 import org.openo.client.cli.fw.error.OpenOCommandHelpFailed;
-import org.openo.client.cli.fw.error.OpenOCommandHttpFailure;
 import org.openo.client.cli.fw.error.OpenOCommandHttpHeaderNotFound;
 import org.openo.client.cli.fw.error.OpenOCommandHttpInvalidResponseBody;
 import org.openo.client.cli.fw.error.OpenOCommandInvalidParameterType;
@@ -54,13 +56,8 @@ import org.openo.client.cli.fw.output.OpenOCommandResult;
 import org.openo.client.cli.fw.run.OpenOCommandExecutor;
 import org.springframework.core.io.Resource;
 
-import mockit.Invocation;
-import mockit.Mock;
-import mockit.MockUp;
 
-import java.io.File;
 import java.io.IOException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -252,7 +249,7 @@ public class OpenOCommandUtilsTest {
     @Test
     public void findOpenOCommandsTest() {
         List<Class<OpenOCommand>> cmds = OpenOCommandUtils.findOpenOCommands();
-        assertTrue(cmds.size() == 1);
+        assertTrue(cmds.size() == 2);
     }
 
     @Test

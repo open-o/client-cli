@@ -24,9 +24,7 @@ import java.util.Map;
  *
  */
 public class HttpResult {
-    public static final String BODY = "body";
-    public static final String HEADERS = "headers";
-    public static final String COOKIES = "cookies";
+
     private int status;
 
     private String resBody;

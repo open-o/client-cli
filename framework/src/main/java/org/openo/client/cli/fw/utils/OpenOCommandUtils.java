@@ -25,7 +25,7 @@ import org.openo.client.cli.fw.ad.OpenOCredentials;
 import org.openo.client.cli.fw.ad.OpenOService;
 import org.openo.client.cli.fw.cmd.OpenOHttpCommand;
 import org.openo.client.cli.fw.cmd.OpenOSwaggerCommand;
-import org.openo.client.cli.fw.conf.OpenOCommandConfg;
+import org.openo.client.cli.fw.conf.Constants;
 import org.openo.client.cli.fw.error.OpenOCommandDiscoveryFailed;
 import org.openo.client.cli.fw.error.OpenOCommandException;
 import org.openo.client.cli.fw.error.OpenOCommandHelpFailed;
@@ -104,7 +104,7 @@ public class OpenOCommandUtils {
 
         if (inputStream == null) {
             try {
-                Resource resource = getExternalResource(schemaName, OpenOCommandConfg.EXTERNAL_SCHEMA_PATH_PATERN);
+                Resource resource = getExternalResource(schemaName, Constants.EXTERNAL_SCHEMA_PATH_PATERN);
 
                 if (resource != null) {
                     inputStream = resource.getInputStream();
@@ -125,8 +125,8 @@ public class OpenOCommandUtils {
             throw new OpenOCommandInvalidSchema(schemaName, e);
         }
         String schemaVersion = "";
-        if (values.keySet().contains(OpenOCommand.OPENO_CMD_SCHEMA_VERSION)) {
-            Object obj = values.get(OpenOCommand.OPENO_CMD_SCHEMA_VERSION);
+        if (values.keySet().contains(Constants.OPENO_CMD_SCHEMA_VERSION)) {
+            Object obj = values.get(Constants.OPENO_CMD_SCHEMA_VERSION);
             schemaVersion = obj.toString();
         }
 
@@ -170,7 +170,7 @@ public class OpenOCommandUtils {
         List<String> names = new ArrayList<>();
 
         if (includeDefault) {
-            loadSchema(cmd, OpenOCommandConfg.DEFAULT_PARAMETER_FILE_NAME, shortOptions, longOptions, names);
+            loadSchema(cmd, Constants.DEFAULT_PARAMETER_FILE_NAME, shortOptions, longOptions, names);
         }
 
         loadSchema(cmd, schemaName, shortOptions, longOptions, names);
@@ -185,31 +185,31 @@ public class OpenOCommandUtils {
             for (Map.Entry<String, ?> entry : values.entrySet()) {
                 String key = entry.getKey();
 
-                if (OpenOCommand.NAME.equals(key)) {
+                if (Constants.NAME.equals(key)) {
                     Object val = values.get(key);
                     cmd.setName(val.toString());
-                } else if (OpenOCommand.DESCRIPTION.equals(key)) {
+                } else if (Constants.DESCRIPTION.equals(key)) {
                     Object val = values.get(key);
                     cmd.setDescription(val.toString());
-                } else if (OpenOCommand.SERVICE.equals(key)) {
+                } else if (Constants.SERVICE.equals(key)) {
                     Map<String, String> map = (Map<String, String>) values.get(key);
                     OpenOService srv = new OpenOService();
 
                     for (Map.Entry<String, String> entry1 : map.entrySet()) {
                         String key1 = entry1.getKey();
 
-                        if (OpenOService.NAME.equals(key1)) {
+                        if (Constants.NAME.equals(key1)) {
                             srv.setName(map.get(key1));
-                        } else if (OpenOService.VERSION.equals(key1)) {
+                        } else if (Constants.VERSION.equals(key1)) {
                             srv.setVersion(map.get(key1));
-                        } else if (OpenOService.NO_AUTH.equals(key1)) {
+                        } else if (Constants.NO_AUTH.equals(key1)) {
                             Object obj = map.get(key1);
                             srv.setNoAuth("true".equalsIgnoreCase(obj.toString()));
                         }
                     }
 
                     cmd.setService(srv);
-                } else if (OpenOCommand.PARAMETERS.equals(key)) {
+                } else if (Constants.PARAMETERS.equals(key)) {
                     List<Map<String, String>> list = (ArrayList) values.get(key);
 
                     for (Map<String, String> map : list) {
@@ -218,38 +218,38 @@ public class OpenOCommandUtils {
                         for (Map.Entry<String, String> entry1 : map.entrySet()) {
                             String key2 = entry1.getKey();
 
-                            if (OpenOCommandParameter.NAME.equals(key2)) {
+                            if (Constants.NAME.equals(key2)) {
                                 if (names.contains(map.get(key2))) {
                                     throw new OpenOCommandParameterNameConflict(map.get(key2));
                                 }
                                 names.add(map.get(key2));
                                 param.setName(map.get(key2));
-                            } else if (OpenOCommandParameter.DESCRIPTION.equals(key2)) {
+                            } else if (Constants.DESCRIPTION.equals(key2)) {
                                 param.setDescription(map.get(key2));
-                            } else if (OpenOCommandParameter.SHORT_OPTION.equals(key2)) {
+                            } else if (Constants.SHORT_OPTION.equals(key2)) {
                                 if (shortOptions.contains(map.get(key2))) {
                                     throw new OpenOCommandParameterOptionConflict(map.get(key2));
                                 }
                                 shortOptions.add(map.get(key2));
                                 param.setShortOption(map.get(key2));
-                            } else if (OpenOCommandParameter.LONG_OPTION.equals(key2)) {
+                            } else if (Constants.LONG_OPTION.equals(key2)) {
                                 if (longOptions.contains(map.get(key2))) {
                                     throw new OpenOCommandParameterOptionConflict(map.get(key2));
                                 }
                                 longOptions.add(map.get(key2));
                                 param.setLongOption(map.get(key2));
-                            } else if (OpenOCommandParameter.DEFAULT_VALUE.equals(key2)) {
+                            } else if (Constants.DEFAULT_VALUE.equals(key2)) {
                                 Object obj = map.get(key2);
                                 param.setDefaultValue(obj.toString());
-                            } else if (OpenOCommandParameter.TYPE.equals(key2)) {
+                            } else if (Constants.TYPE.equals(key2)) {
                                 param.setParameterType(ParameterType.get(map.get(key2)));
-                            } else if (OpenOCommandParameter.IS_OPTIONAL.equals(key2)) {
+                            } else if (Constants.IS_OPTIONAL.equals(key2)) {
                                 if ("true".equalsIgnoreCase(String.valueOf(map.get(key2)))) {
                                     param.setOptional(true);
                                 } else {
                                     param.setOptional(false);
                                 }
-                            } else if (OpenOCommandParameter.IS_SECURED.equals(key2)) {
+                            } else if (Constants.IS_SECURED.equals(key2)) {
                                 if ("true".equalsIgnoreCase(String.valueOf(map.get(key2)))) {
                                     param.setSecured(true);
                                 } else {
@@ -260,15 +260,15 @@ public class OpenOCommandUtils {
                         cmd.getParameters().add(param);
 
                     }
-                } else if (OpenOCommand.RESULTS.equals(key)) {
+                } else if (Constants.RESULTS.equals(key)) {
                     Map<String, ?> valueMap = (Map<String, ?>) values.get(key);
                     OpenOCommandResult result = new OpenOCommandResult();
                     for (Map.Entry<String, ?> entry1 : valueMap.entrySet()) {
                         String key3 = entry1.getKey();
 
-                        if (OpenOCommandResult.DIRECTION.equals(key3)) {
+                        if (Constants.DIRECTION.equals(key3)) {
                             result.setPrintDirection(PrintDirection.get((String) valueMap.get(key3)));
-                        } else if (OpenOCommandResult.ATTRIBUTES.equals(key3)) {
+                        } else if (Constants.ATTRIBUTES.equals(key3)) {
                             List<Map<String, String>> attrs = (ArrayList) valueMap.get(key3);
 
                             for (Map<String, String> map : attrs) {
@@ -276,15 +276,15 @@ public class OpenOCommandUtils {
                                 for (Map.Entry<String, String> entry4 : map.entrySet()) {
                                     String key4 = entry4.getKey();
 
-                                    if (OpenOCommandResultAttribute.NAME.equals(key4)) {
+                                    if (Constants.NAME.equals(key4)) {
                                         attr.setName(map.get(key4));
-                                    } else if (OpenOCommandResultAttribute.DESCRIPTION.equals(key4)) {
+                                    } else if (Constants.DESCRIPTION.equals(key4)) {
                                         attr.setDescription(map.get(key4));
-                                    } else if (OpenOCommandResultAttribute.SCOPE.equals(key4)) {
+                                    } else if (Constants.SCOPE.equals(key4)) {
                                         attr.setScope(OpenOCommandResultAttributeScope.get(map.get(key4)));
-                                    } else if (OpenOCommandResultAttribute.TYPE.equals(key4)) {
+                                    } else if (Constants.TYPE.equals(key4)) {
                                         attr.setType(ParameterType.get(map.get(key4)));
-                                    } else if (OpenOCommandResultAttribute.IS_SECURED.equals(key4)) {
+                                    } else if (Constants.IS_SECURED.equals(key4)) {
                                         if ("true".equals(String.valueOf(map.get(key4)))) {
                                             attr.setSecured(true);
                                         } else {
@@ -334,21 +334,21 @@ public class OpenOCommandUtils {
     public static void loadSchema(OpenOSwaggerCommand cmd, String schemaName) throws OpenOCommandException {
         try {
             Map<String, ?> values = (Map<String, ?>) validateSchemaVersion(schemaName, cmd.getSchemaVersion());
-            Map<String, String> valueMap = (Map<String, String>) values.get(OpenOSwaggerCommand.EXECUTOR);
+            Map<String, String> valueMap = (Map<String, String>) values.get(Constants.EXECUTOR);
             OpenOCommandExecutor exec = new OpenOCommandExecutor();
 
             for (Map.Entry<String, String> entry1 : valueMap.entrySet()) {
                 String key1 = entry1.getKey();
 
-                if (OpenOCommandExecutor.API.equals(key1)) {
+                if (Constants.API.equals(key1)) {
                     exec.setApi(valueMap.get(key1));
-                } else if (OpenOCommandExecutor.CLIENT.equals(key1)) {
+                } else if (Constants.CLIENT.equals(key1)) {
                     exec.setClient(valueMap.get(key1));
-                } else if (OpenOCommandExecutor.ENTITY.equals(key1)) {
+                } else if (Constants.ENTITY.equals(key1)) {
                     exec.setEntity(valueMap.get(key1));
-                } else if (OpenOCommandExecutor.EXCEPTION.equals(key1)) {
+                } else if (Constants.EXCEPTION.equals(key1)) {
                     exec.setException(valueMap.get(key1));
-                } else if (OpenOCommandExecutor.METHOD.equals(key1)) {
+                } else if (Constants.METHOD.equals(key1)) {
                     exec.setMethod(valueMap.get(key1));
                 }
             }
@@ -388,39 +388,39 @@ public class OpenOCommandUtils {
     public static void loadSchema(OpenOHttpCommand cmd, String schemaName) throws OpenOCommandException {
         try {
             Map<String, ?> values = (Map<String, ?>) validateSchemaVersion(schemaName, cmd.getSchemaVersion());
-            Map<String, ?> valMap = (Map<String, ?>) values.get(OpenOHttpCommand.HTTP);
+            Map<String, ?> valMap = (Map<String, ?>) values.get(Constants.HTTP);
 
             for (Map.Entry<String, ?> entry1 : valMap.entrySet()) {
                 String key1 = entry1.getKey();
-                if (OpenOHttpCommand.REQUEST.equals(key1)) {
+                if (Constants.REQUEST.equals(key1)) {
                     Map<String, ?> map = (Map<String, ?>) valMap.get(key1);
 
                     for (Map.Entry<String, ?> entry2 : map.entrySet()) {
                         String key2 = entry2.getKey();
 
-                        if (HttpInput.URI.equals(key2)) {
+                        if (Constants.URI.equals(key2)) {
                             Object obj = map.get(key2);
                             cmd.getInput().setUri(obj.toString());
-                        } else if (HttpInput.MERHOD.equals(key2)) {
+                        } else if (Constants.MERHOD.equals(key2)) {
                             Object obj = map.get(key2);
                             cmd.getInput().setMethod(obj.toString());
-                        } else if (HttpInput.BODY.equals(key2)) {
+                        } else if (Constants.BODY.equals(key2)) {
                             Object obj = map.get(key2);
                             cmd.getInput().setBody(obj.toString());
-                        } else if (HttpInput.HEADERS.equals(key2)) {
+                        } else if (Constants.HEADERS.equals(key2)) {
                             Map<String, String> head = (Map<String, String>) map.get(key2);
                             cmd.getInput().setReqHeaders(head);
-                        } else if (HttpInput.QUERIES.equals(key2)) {
+                        } else if (Constants.QUERIES.equals(key2)) {
                             Map<String, String> query = (Map<String, String>) map.get(key2);
 
                             cmd.getInput().setReqQueries(query);
                         }
                     }
-                } else if (OpenOHttpCommand.SUCCESS_CODES.equals(key1)) {
+                } else if (Constants.SUCCESS_CODES.equals(key1)) {
                     cmd.setSuccessStatusCodes((ArrayList) valMap.get(key1));
-                } else if (OpenOHttpCommand.RESULT_MAP.equals(key1)) {
+                } else if (Constants.RESULT_MAP.equals(key1)) {
                     cmd.setResultMap((Map<String, String>) valMap.get(key1));
-                } else if (OpenOHttpCommand.SAMPLE_RESPONSE.equals(key1)) {
+                } else if (Constants.SAMPLE_RESPONSE.equals(key1)) {
                     // (mrkanag) implement sample response handling
                 }
             }
@@ -461,14 +461,14 @@ public class OpenOCommandUtils {
         paramTable.setIncludeSeparator(false);
 
         OpenOCommandResultAttribute attrName = new OpenOCommandResultAttribute();
-        attrName.setName(OpenOCommandParameter.NAME);
-        attrName.setDescription(OpenOCommandParameter.NAME);
+        attrName.setName(Constants.NAME);
+        attrName.setDescription(Constants.NAME);
         attrName.setScope(OpenOCommandResultAttributeScope.SHORT);
         paramTable.getRecords().add(attrName);
 
         OpenOCommandResultAttribute attrDescription = new OpenOCommandResultAttribute();
-        attrDescription.setName(OpenOCommandParameter.DESCRIPTION);
-        attrDescription.setDescription(OpenOCommandParameter.DESCRIPTION);
+        attrDescription.setName(Constants.DESCRIPTION);
+        attrDescription.setDescription(Constants.DESCRIPTION);
         attrDescription.setScope(OpenOCommandResultAttributeScope.SHORT);
         paramTable.getRecords().add(attrDescription);
 
@@ -577,9 +577,9 @@ public class OpenOCommandUtils {
             paramMap.put(param.getName(), param.getValue().toString());
         }
 
-        return new OpenOCredentials(paramMap.get(OpenOCommandConfg.DEAFULT_PARAMETER_USERNAME),
-                paramMap.get(OpenOCommandConfg.DEAFULT_PARAMETER_PASS_WORD),
-                paramMap.get(OpenOCommandConfg.DEAFULT_PARAMETER_MSB_URL));
+        return new OpenOCredentials(paramMap.get(Constants.DEAFULT_PARAMETER_USERNAME),
+                paramMap.get(Constants.DEAFULT_PARAMETER_PASS_WORD),
+                paramMap.get(Constants.DEAFULT_PARAMETER_MSB_URL));
     }
 
     /**
@@ -711,7 +711,7 @@ public class OpenOCommandUtils {
 
     private static ArrayList<String> replaceLineFromOutputResults(String line, HttpResult resultHttp)
             throws OpenOCommandHttpHeaderNotFound, OpenOCommandHttpInvalidResponseBody,
-            OpenOCommandResultMapProcessingFailed {
+            OpenOCommandResultMapProcessingFailed, OpenOCommandResultEmpty {
         String headerProcessedLine = "";
 
         ArrayList<String> result = new ArrayList<>();
@@ -798,19 +798,21 @@ public class OpenOCommandUtils {
                     int idxE = idxS + 2; // %s
                     try {
                         Object value = values.get(positionalIdx);
-                        String valueS = value.toString();
+                        String valueS = String.valueOf(value);
                         if (value instanceof JSONArray) {
                             JSONArray arr = (JSONArray) value;
-                            if (!arr.isEmpty() && arr.size() > i) {
+                            if (!arr.isEmpty()) {
                                 valueS = arr.get(i).toString();
                             } else {
-                                valueS = "";
+                                throw new OpenOCommandResultEmpty();
                             }
                         }
 
                         bodyProcessedLine += bodyProcessedPattern.substring(currentIdx, idxS) + valueS;
                         currentIdx = idxE;
                         positionalIdx++;
+                    } catch (OpenOCommandResultEmpty e) {
+                        throw e;
                     } catch (Exception e) {
                         throw new OpenOCommandResultMapProcessingFailed(line, e);
                     }
@@ -879,23 +881,6 @@ public class OpenOCommandUtils {
             resultsProcessed.put(key, replaceLineFromOutputResults(resultMap.get(key), resultHttp));
         }
 
-        boolean allRowsEmpty = true;
-        for (Entry<String, ArrayList<String>> entry : resultsProcessed.entrySet()) {
-            for (String v: entry.getValue()) {
-                if (!v.isEmpty()) {
-                    allRowsEmpty = false;
-                    break;
-                }
-            }
-            if (!allRowsEmpty) {
-                break;
-            }
-        }
-
-        if (allRowsEmpty) {
-            throw new OpenOCommandResultEmpty();
-        }
-
         return resultsProcessed;
     }
 
@@ -911,7 +896,7 @@ public class OpenOCommandUtils {
     public static List<ExternalSchema> findAllExternalSchemas() throws OpenOCommandException {
         List<ExternalSchema> extSchemas = new ArrayList<>();
         try {
-            Resource[] res = getExternalResources(OpenOCommandConfg.EXTERNAL_SCHEMA_PATH_PATERN);
+            Resource[] res = getExternalResources(Constants.EXTERNAL_SCHEMA_PATH_PATERN);
             if (res != null && res.length > 0) {
                 Map<String, ?> resourceMap;
                 for (Resource resource : res) {
@@ -919,15 +904,15 @@ public class OpenOCommandUtils {
                     if (resourceMap != null && resourceMap.size() > 0) {
                         ExternalSchema schema = new ExternalSchema();
                         schema.setSchemaName(resource.getFilename());
-                        schema.setCmdName((String) resourceMap.get(OpenOCommand.NAME));
-                        Object obj = resourceMap.get(OpenOCommand.OPENO_CMD_SCHEMA_VERSION);
+                        schema.setCmdName((String) resourceMap.get(Constants.NAME));
+                        Object obj = resourceMap.get(Constants.OPENO_CMD_SCHEMA_VERSION);
                         schema.setVersion(obj.toString());
                         extSchemas.add(schema);
                     }
                 }
             }
         } catch (IOException e) {
-            throw new OpenOCommandDiscoveryFailed(OpenOCommandConfg.EXTERNAL_SCHEMA_DIRECTORY, e);
+            throw new OpenOCommandDiscoveryFailed(Constants.EXTERNAL_SCHEMA_DIRECTORY, e);
         }
 
         return extSchemas;
@@ -1000,16 +985,16 @@ public class OpenOCommandUtils {
     public static void persist(List<ExternalSchema> schemas) throws OpenOCommandDiscoveryFailed {
         if (schemas != null) {
             try {
-                Resource[] resources = getExternalResources(OpenOCommandConfg.EXTERNAL_DISCOVERY_DIRECTORY);
+                Resource[] resources = getExternalResources(Constants.EXTERNAL_DISCOVERY_DIRECTORY);
                 if (resources != null && resources.length == 1) {
                     String path = resources[0].getURI().getPath();
-                    File file = new File(path + File.separator + OpenOCommandConfg.EXTERNAL_DISCOVERY_FILE);
+                    File file = new File(path + File.separator + Constants.EXTERNAL_DISCOVERY_FILE);
                     ObjectMapper mapper = new ObjectMapper();
                     mapper.writerWithDefaultPrettyPrinter().writeValue(file, schemas);
                 }
             } catch (IOException e1) {
-                throw new OpenOCommandDiscoveryFailed(OpenOCommandConfg.EXTERNAL_DISCOVERY_DIRECTORY,
-                        OpenOCommandConfg.EXTERNAL_DISCOVERY_FILE, e1);
+                throw new OpenOCommandDiscoveryFailed(Constants.EXTERNAL_DISCOVERY_DIRECTORY,
+                        Constants.EXTERNAL_DISCOVERY_FILE, e1);
             }
         }
     }
@@ -1024,14 +1009,14 @@ public class OpenOCommandUtils {
     public static boolean isJsonFileDiscovered() throws OpenOCommandDiscoveryFailed {
         Resource resource = null;
         try {
-            resource = getExternalResource(OpenOCommandConfg.EXTERNAL_DISCOVERY_FILE,
-                    OpenOCommandConfg.EXTERNAL_DISCOVERY_DIRECTORY_PATTERN);
+            resource = getExternalResource(Constants.EXTERNAL_DISCOVERY_FILE,
+                    Constants.EXTERNAL_DISCOVERY_DIRECTORY_PATTERN);
             if (resource != null) {
                 return true;
             }
         } catch (IOException e) {
-            throw new OpenOCommandDiscoveryFailed(OpenOCommandConfg.EXTERNAL_DISCOVERY_DIRECTORY,
-                    OpenOCommandConfg.EXTERNAL_DISCOVERY_FILE, e);
+            throw new OpenOCommandDiscoveryFailed(Constants.EXTERNAL_DISCOVERY_DIRECTORY,
+                    Constants.EXTERNAL_DISCOVERY_FILE, e);
         }
 
         return false;
@@ -1055,8 +1040,8 @@ public class OpenOCommandUtils {
             }
         } else {
             try {
-                Resource resource = getExternalResource(OpenOCommandConfg.EXTERNAL_DISCOVERY_FILE,
-                        OpenOCommandConfg.EXTERNAL_DISCOVERY_DIRECTORY_PATTERN);
+                Resource resource = getExternalResource(Constants.EXTERNAL_DISCOVERY_FILE,
+                        Constants.EXTERNAL_DISCOVERY_DIRECTORY_PATTERN);
                 if (resource != null) {
                     File file = new File(resource.getURI().getPath());
                     ObjectMapper mapper = new ObjectMapper();
@@ -1064,8 +1049,8 @@ public class OpenOCommandUtils {
                     schemas.addAll(Arrays.asList(list));
                 }
             } catch (IOException e) {
-                throw new OpenOCommandDiscoveryFailed(OpenOCommandConfg.EXTERNAL_DISCOVERY_DIRECTORY,
-                        OpenOCommandConfg.EXTERNAL_DISCOVERY_FILE, e);
+                throw new OpenOCommandDiscoveryFailed(Constants.EXTERNAL_DISCOVERY_DIRECTORY,
+                        Constants.EXTERNAL_DISCOVERY_FILE, e);
             }
         }
 

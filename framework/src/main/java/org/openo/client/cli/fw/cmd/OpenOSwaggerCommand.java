@@ -30,10 +30,6 @@ import java.util.List;
 
 public abstract class OpenOSwaggerCommand extends OpenOCommand {
 
-    // (mrkanag) change this different value
-    public static final String OPENO_CMD_SCHEMA_VERSION_VALUE = "1.0"; // cli-swagger-
-
-    public static final String EXECUTOR = "exec";
 
     private OpenOCommandExecutor cmdExecutor;
 

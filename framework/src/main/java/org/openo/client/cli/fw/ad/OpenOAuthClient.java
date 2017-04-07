@@ -18,6 +18,7 @@ package org.openo.client.cli.fw.ad;
 
 import com.jayway.jsonpath.JsonPath;
 import org.apache.http.HttpStatus;
+import org.openo.client.cli.fw.conf.Constants;
 import org.openo.client.cli.fw.conf.OpenOCommandConfg;
 import org.openo.client.cli.fw.error.OpenOCommandException;
 import org.openo.client.cli.fw.error.OpenOCommandExecutionFailed;
@@ -34,18 +35,6 @@ import org.openo.client.cli.fw.http.OpenOHttpConnection;
  *
  */
 public class OpenOAuthClient {
-
-    public static final String AUTH_SERVICE = "auth";
-
-    public static final String AUTH_SERVICE_VERSION = "v1";
-
-    public static final String TOKEN = "{\"userName\": \"%s\",\"password\": \"%s\"}";
-
-    private static final String MSB_URI = "/api/microservices/v1";
-
-    private static final String MSB_SERVICE_URI = MSB_URI + "/services/%s/version/%s";
-
-    private static final String MSB = "msb";
 
     /*
      * Open-O credentials
@@ -79,7 +68,8 @@ public class OpenOAuthClient {
         }
 
         HttpInput input = new HttpInput().setUri(this.getAuthUrl() + "/tokens")
-                .setBody(String.format(TOKEN, creds.getUsername(), creds.getPassword())).setMethod("post");
+                .setBody(String.format(Constants.TOKEN, creds.getUsername(), creds.getPassword()))
+                .setMethod("post");
 
         HttpResult result;
         try {
@@ -92,9 +82,9 @@ public class OpenOAuthClient {
         }
 
         if (OpenOCommandConfg.isCookiesBasedAuth()) {
-            this.http.setAuthToken(result.getRespCookies().get(OpenOHttpConnection.X_AUTH_TOKEN));
+            this.http.setAuthToken(result.getRespCookies().get(Constants.X_AUTH_TOKEN));
         } else {
-            this.http.setAuthToken(result.getRespHeaders().get(OpenOHttpConnection.X_AUTH_TOKEN));
+            this.http.setAuthToken(result.getRespHeaders().get(Constants.X_AUTH_TOKEN));
         }
     }
 
@@ -145,12 +135,12 @@ public class OpenOAuthClient {
      *             http request failed
      */
     public String getServiceBasePath(OpenOService srv) throws OpenOCommandException {
-        if (srv.getName().equals(MSB)) {
+        if (srv.getName().equals(Constants.MSB)) {
             return this.getMsbUrl();
         }
 
-        HttpInput input = new HttpInput()
-                .setUri(this.creds.getMsbUrl() + String.format(MSB_SERVICE_URI, srv.getName(), srv.getVersion()));
+        HttpInput input = new HttpInput().setUri(this.creds.getMsbUrl()
+                + String.format(Constants.MSB_SERVICE_URI, srv.getName(), srv.getVersion()));
         HttpResult result = this.http.get(input);
 
         if (result.getStatus() == HttpStatus.SC_NOT_FOUND) {
@@ -169,13 +159,13 @@ public class OpenOAuthClient {
 
     private String getAuthUrl() throws OpenOCommandException {
         OpenOService srv = new OpenOService();
-        srv.setName(AUTH_SERVICE);
-        srv.setVersion(AUTH_SERVICE_VERSION);
+        srv.setName(Constants.AUTH_SERVICE);
+        srv.setVersion(Constants.AUTH_SERVICE_VERSION);
         return this.getServiceBasePath(srv);
     }
 
     private String getMsbUrl() {
-        return this.creds.getMsbUrl() + MSB_URI;
+        return this.creds.getMsbUrl() + Constants.MSB_URI;
     }
 
     public String getAuthToken() {
@@ -197,7 +187,7 @@ public class OpenOAuthClient {
      */
     public HttpResult run(HttpInput input) throws OpenOCommandHttpFailure {
         if (OpenOCommandConfg.isCookiesBasedAuth()) {
-            input.getReqCookies().put(OpenOHttpConnection.X_AUTH_TOKEN, http.getAuthToken());
+            input.getReqCookies().put(Constants.X_AUTH_TOKEN, http.getAuthToken());
         }
         return this.http.request(input);
     }

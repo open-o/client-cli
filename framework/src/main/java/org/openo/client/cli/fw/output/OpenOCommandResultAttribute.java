@@ -26,11 +26,6 @@ import java.util.List;
  * time, it captures the value of the output as well.
  */
 public class OpenOCommandResultAttribute {
-    public static final String NAME = "name";
-    public static final String DESCRIPTION = "description";
-    public static final String SCOPE = "scope";
-    public static final String TYPE = "type";
-    public static final String IS_SECURED = "is_secured";
 
     /*
      * Output name

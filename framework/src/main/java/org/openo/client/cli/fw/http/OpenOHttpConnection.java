@@ -44,6 +44,7 @@ import org.apache.http.impl.cookie.BasicClientCookie;
 import org.apache.http.protocol.BasicHttpContext;
 import org.apache.http.protocol.HttpContext;
 import org.apache.http.util.EntityUtils;
+import org.openo.client.cli.fw.conf.Constants;
 import org.openo.client.cli.fw.error.OpenOCommandHttpFailure;
 
 import java.io.IOException;
@@ -65,12 +66,6 @@ import javax.net.ssl.X509TrustManager;
  * Helps to make http connection.<br>
  */
 public class OpenOHttpConnection {
-
-    private static final String SSLCONTEST_TLS = "TLSV1.2";
-
-    private static final String APPLICATION_JSON = "application/json";
-
-    public static final String X_AUTH_TOKEN = "X-Auth-Token";
 
     private HttpClient httpClient = null;
 
@@ -111,7 +106,7 @@ public class OpenOHttpConnection {
     public OpenOHttpConnection(boolean isSecured, boolean debug) throws OpenOCommandHttpFailure {
         try {
             if (isSecured) {
-                SSLContext sslContext = SSLContext.getInstance(SSLCONTEST_TLS);
+                SSLContext sslContext = SSLContext.getInstance(Constants.SSLCONTEST_TLS);
                 sslContext.init(null, new TrustManager[] { new TrustAllX509TrustManager() },
                         new java.security.SecureRandom());
                 X509HostnameVerifier hostnameVerifier = new AllowAllHostnameVerifier();
@@ -229,15 +224,15 @@ public class OpenOHttpConnection {
     }
 
     private void addCommonHeaders(HttpInput input) {
-        input.getReqHeaders().put("Content-Type", APPLICATION_JSON);
-        input.getReqHeaders().put("Accept", APPLICATION_JSON);
+        input.getReqHeaders().put("Content-Type", Constants.APPLICATION_JSON);
+        input.getReqHeaders().put("Accept", Constants.APPLICATION_JSON);
         if (this.xauthToken != null) {
-            input.getReqHeaders().put(X_AUTH_TOKEN, this.xauthToken);
+            input.getReqHeaders().put(Constants.X_AUTH_TOKEN, this.xauthToken);
         }
     }
 
     private void addCommonCookies(CookieStore cookieStore) {
-        Cookie cookie = new BasicClientCookie(X_AUTH_TOKEN, this.xauthToken);
+        Cookie cookie = new BasicClientCookie(Constants.X_AUTH_TOKEN, this.xauthToken);
         cookieStore.addCookie(cookie);
     }
 

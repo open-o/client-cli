@@ -16,18 +16,14 @@
 
 package org.openo.client.cli.fw.input;
 
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 import org.openo.client.cli.fw.error.OpenOCommandException;
-import org.openo.client.cli.fw.error.OpenOCommandHttpFailure;
 import org.openo.client.cli.fw.error.OpenOCommandInvalidParameterValue;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class OpenOCommandParameterTest {

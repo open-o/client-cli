@@ -23,12 +23,7 @@ import java.util.Map;
  * Captures HTTP request URI, body and request &query parameters. <br>
  */
 public class HttpInput {
-    public static final String URI = "uri";
-    public static final String BODY = "body";
-    public static final String MERHOD = "method";
-    public static final String HEADERS = "headers";
-    public static final String QUERIES = "queries";
-    public static final String COOKIES = "cookies";
+
     private String reqUri = "";
 
     private String reqBody = "";

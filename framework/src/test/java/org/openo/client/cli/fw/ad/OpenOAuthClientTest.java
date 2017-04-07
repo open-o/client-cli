@@ -24,21 +24,15 @@ import mockit.MockUp;
 
 import org.junit.AfterClass;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.openo.client.cli.fw.conf.OpenOCommandConfg;
 import org.openo.client.cli.fw.error.OpenOCommandException;
 import org.openo.client.cli.fw.error.OpenOCommandExecutionFailed;
 import org.openo.client.cli.fw.error.OpenOCommandHttpFailure;
-import org.openo.client.cli.fw.error.OpenOCommandLoginFailed;
-import org.openo.client.cli.fw.error.OpenOCommandLogoutFailed;
 import org.openo.client.cli.fw.error.OpenOCommandServiceNotFound;
 import org.openo.client.cli.fw.http.HttpInput;
 import org.openo.client.cli.fw.http.HttpResult;
 import org.openo.client.cli.fw.http.OpenOHttpConnection;
-
-import java.util.HashMap;
-import java.util.Map;
 
 public class OpenOAuthClientTest {
 

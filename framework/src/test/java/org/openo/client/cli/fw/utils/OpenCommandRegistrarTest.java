@@ -34,6 +34,8 @@ public class OpenCommandRegistrarTest {
     public void test() throws OpenOCommandException {
         OpenOCommandRegistrar registrar = OpenOCommandRegistrar.getRegistrar();
         OpenOCommand cmd = registrar.get("sample-test");
+        registrar.listCommands();
+        registrar.getAllCommandToSchemaMap();
         cmd.printVersion();
     }
 

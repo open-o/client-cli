@@ -19,7 +19,7 @@ package org.openo.client.cli.fw;
 import org.openo.client.cli.fw.ad.OpenOAuthClient;
 import org.openo.client.cli.fw.ad.OpenOCredentials;
 import org.openo.client.cli.fw.ad.OpenOService;
-import org.openo.client.cli.fw.conf.OpenOCommandConfg;
+import org.openo.client.cli.fw.conf.Constants;
 import org.openo.client.cli.fw.error.OpenOCommandException;
 import org.openo.client.cli.fw.error.OpenOCommandHelpFailed;
 import org.openo.client.cli.fw.error.OpenOCommandInvalidParameterType;
@@ -47,14 +47,6 @@ import java.util.Map;
  *
  */
 public abstract class OpenOCommand {
-    public static final String NAME = "name";
-    public static final String DESCRIPTION = "description";
-    public static final String SERVICE = "service";
-    public static final String PARAMETERS = "parameters";
-    public static final String RESULTS = "results";
-
-    public static final String OPENO_CMD_SCHEMA_VERSION = "openo_cmd_schema_version";
-    private static final String OPENO_CMD_SCHEMA_VERSION_VALUE = "1.0";
 
     private String cmdDescription;
 
@@ -73,7 +65,7 @@ public abstract class OpenOCommand {
     protected boolean isInitialzied = false;
 
     public String getSchemaVersion() {
-        return OPENO_CMD_SCHEMA_VERSION_VALUE;
+        return Constants.OPENO_CMD_SCHEMA_VERSION_VALUE;
     }
 
     /**
@@ -142,7 +134,7 @@ public abstract class OpenOCommand {
         return cmdSchemaName;
     }
 
-    private void setSchemaName(String schemaName) {
+    protected void setSchemaName(String schemaName) {
         this.cmdSchemaName = schemaName;
     }
 
@@ -206,7 +198,7 @@ public abstract class OpenOCommand {
         Map<String, OpenOCommandParameter> paramMap = this.getParametersMap();
 
         // -h or --help is always higher precedence !, user can set this value to get help message
-        if ("true".equals(paramMap.get(OpenOCommandConfg.DEFAULT_PARAMETER_HELP).getValue())) {
+        if ("true".equals(paramMap.get(Constants.DEFAULT_PARAMETER_HELP).getValue())) {
             OpenOCommandResult result = new OpenOCommandResult();
             result.setType(ResultType.TEXT);
             result.setOutput(this.printHelp());
@@ -214,7 +206,7 @@ public abstract class OpenOCommand {
         }
 
         // -v or --version is next higher precedence !, user can set this value to get help message
-        if ("true".equals(paramMap.get(OpenOCommandConfg.DEFAULT_PARAMETER_VERSION).getValue())) {
+        if ("true".equals(paramMap.get(Constants.DEFAULT_PARAMETER_VERSION).getValue())) {
             OpenOCommandResult result = new OpenOCommandResult();
             result.setType(ResultType.TEXT);
             result.setOutput(this.printVersion());
@@ -226,17 +218,17 @@ public abstract class OpenOCommand {
 
         // -f or --format
         this.cmdResult.setType(
-                ResultType.get(paramMap.get(OpenOCommandConfg.DEFAULT_PARAMETER_OUTPUT_FORMAT).getValue().toString()));
-        if ("true".equals(paramMap.get(OpenOCommandConfg.DEFAULT_PARAMETER_OUTPUT_ATTR_LONG).getValue())) {
+                ResultType.get(paramMap.get(Constants.DEFAULT_PARAMETER_OUTPUT_FORMAT).getValue().toString()));
+        if ("true".equals(paramMap.get(Constants.DEFAULT_PARAMETER_OUTPUT_ATTR_LONG).getValue())) {
             this.cmdResult.setScope(OpenOCommandResultAttributeScope.LONG);
         }
         // --no-title
-        if ("true".equals(paramMap.get(OpenOCommandConfg.DEFAULT_PARAMETER_OUTPUT_NO_TITLE).getValue())) {
+        if ("true".equals(paramMap.get(Constants.DEFAULT_PARAMETER_OUTPUT_NO_TITLE).getValue())) {
             this.cmdResult.setIncludeTitle(false);
         }
 
         // --debug
-        if ("true".equals(paramMap.get(OpenOCommandConfg.DEFAULT_PARAMETER_DEBUG).getValue())) {
+        if ("true".equals(paramMap.get(Constants.DEFAULT_PARAMETER_DEBUG).getValue())) {
             this.cmdResult.setDebug(true);
         }
 
@@ -245,7 +237,8 @@ public abstract class OpenOCommand {
             OpenOCredentials creds = OpenOCommandUtils.fromParameters(this.getParameters());
             this.authClient = new OpenOAuthClient(creds, this.getResult().isDebug());
 
-            if (!this.openOservice.isNoAuth() && !"true".equals(paramMap.get(OpenOCommandConfg.DEFAULT_PARAMETER_OUTPUT_NO_AUTH).getValue())) {
+            if (!this.openOservice.isNoAuth()
+                    && !"true".equals(paramMap.get(Constants.DEFAULT_PARAMETER_OUTPUT_NO_AUTH).getValue())) {
                 this.authClient.login();
             }
 
@@ -253,7 +246,8 @@ public abstract class OpenOCommand {
             this.run();
 
             // logout
-            if (!this.openOservice.isNoAuth() && !"true".equals(paramMap.get(OpenOCommandConfg.DEFAULT_PARAMETER_OUTPUT_NO_AUTH).getValue())) {
+            if (!this.openOservice.isNoAuth()
+                    && !"true".equals(paramMap.get(Constants.DEFAULT_PARAMETER_OUTPUT_NO_AUTH).getValue())) {
                 this.authClient.logout();
             }
 
@@ -267,7 +261,6 @@ public abstract class OpenOCommand {
             throw e;
         }
 
-
         return this.cmdResult;
     }
 
@@ -280,8 +273,7 @@ public abstract class OpenOCommand {
     /*
      * Get my service base path (endpoint).
      */
-    protected String getBasePath()
-            throws OpenOCommandException {
+    protected String getBasePath() throws OpenOCommandException {
         return this.authClient.getServiceBasePath(this.getService());
     }
 

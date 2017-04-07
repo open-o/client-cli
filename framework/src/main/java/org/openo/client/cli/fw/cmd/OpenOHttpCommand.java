@@ -17,6 +17,7 @@
 package org.openo.client.cli.fw.cmd;
 
 import org.openo.client.cli.fw.OpenOCommand;
+import org.openo.client.cli.fw.conf.Constants;
 import org.openo.client.cli.fw.error.OpenOCommandException;
 import org.openo.client.cli.fw.error.OpenOCommandExecutionFailed;
 import org.openo.client.cli.fw.http.HttpInput;
@@ -34,13 +35,6 @@ import java.util.Map;
  *
  */
 public class OpenOHttpCommand extends OpenOCommand {
-    public static final String HTTP = "http";
-    public static final String REQUEST = "request";
-    public static final String SAMPLE_RESPONSE = "sample_response";
-    public static final String SUCCESS_CODES = "success_codes";
-    public static final String RESULT_MAP = "result_map";
-
-    private static final String OPENO_CMD_SCHEMA_VERSION_VALUE = "1.0";
 
     private HttpInput input = new HttpInput();
 
@@ -54,7 +48,7 @@ public class OpenOHttpCommand extends OpenOCommand {
 
     @Override
     public String getSchemaVersion() {
-        return OPENO_CMD_SCHEMA_VERSION_VALUE;
+        return Constants.OPENO_CMD_SCHEMA_VERSION_VALUE;
     }
 
     public void setSuccessStatusCodes(List<Integer> successStatusCodes) {

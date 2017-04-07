@@ -17,6 +17,7 @@
 package org.openo.client.cli.fw;
 
 import org.openo.client.cli.fw.cmd.OpenOHttpCommand;
+import org.openo.client.cli.fw.conf.Constants;
 import org.openo.client.cli.fw.conf.OpenOCommandConfg;
 import org.openo.client.cli.fw.error.OpenOCommandException;
 import org.openo.client.cli.fw.error.OpenOCommandHelpFailed;
@@ -82,11 +83,38 @@ public class OpenOCommandRegistrar {
     }
 
     /**
-     * Get the list of discovered commands by registrar
-     * @return
+     * Get the list of discovered commands by registrar.
+     *
+     * @return set
      */
     public Set<String> listCommands() {
         return this.registry.keySet();
+    }
+
+    /**
+     * Returns map of command to schema.
+     *
+     * @return map
+     * @throws OpenOCommandException
+     *             exception
+     */
+    public Map<String, String> getAllCommandToSchemaMap() throws OpenOCommandException {
+        Map<String, String> map = new HashMap<>();
+        List<ExternalSchema> schemas = OpenOCommandUtils.findAllExternalSchemas();
+        if (schemas != null) {
+            for (ExternalSchema schema : schemas) {
+                map.put(schema.getCmdName(), schema.getSchemaName());
+            }
+        }
+        if (this.registry != null) {
+            for (String cmd : this.registry.keySet()) {
+                if (!map.containsKey(cmd) && registry.get(cmd) != null) {
+                    map.put(cmd, this.getSchemaFileName(registry.get(cmd)));
+                }
+            }
+        }
+
+        return map;
     }
 
     /**
@@ -176,20 +204,20 @@ public class OpenOCommandRegistrar {
         help.setPrintDirection(PrintDirection.LANDSCAPE);
 
         OpenOCommandResultAttribute attr = new OpenOCommandResultAttribute();
-        attr.setName(OpenOCommand.NAME.toUpperCase());
-        attr.setDescription(OpenOCommand.NAME);
+        attr.setName(Constants.NAME.toUpperCase());
+        attr.setDescription(Constants.DESCRIPTION);
         attr.setScope(OpenOCommandResultAttributeScope.SHORT);
         help.getRecords().add(attr);
 
         OpenOCommandResultAttribute attrSrv = new OpenOCommandResultAttribute();
-        attrSrv.setName(OpenOCommand.SERVICE.toUpperCase());
-        attrSrv.setDescription(OpenOCommand.SERVICE);
+        attrSrv.setName(Constants.SERVICE.toUpperCase());
+        attrSrv.setDescription(Constants.SERVICE);
         attrSrv.setScope(OpenOCommandResultAttributeScope.SHORT);
         help.getRecords().add(attrSrv);
 
         OpenOCommandResultAttribute attrDesc = new OpenOCommandResultAttribute();
-        attrDesc.setName(OpenOCommand.DESCRIPTION.toUpperCase());
-        attrDesc.setDescription(OpenOCommand.DESCRIPTION);
+        attrDesc.setName(Constants.DESCRIPTION.toUpperCase());
+        attrDesc.setDescription(Constants.DESCRIPTION);
         attrDesc.setScope(OpenOCommandResultAttributeScope.SHORT);
         help.getRecords().add(attrDesc);
 
@@ -207,8 +235,7 @@ public class OpenOCommandRegistrar {
         }
 
         try {
-            return "\n\nOpen-O sub-commands:\n"
-                    + help.print();
+            return "\n\nOpen-O sub-commands:\n" + help.print();
         } catch (OpenOCommandException e) {
             throw new OpenOCommandHelpFailed(e);
         }

@@ -19,14 +19,14 @@ package org.openo.client.cli.fw.output;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
 import org.junit.Ignore;
 import org.junit.Test;
 import org.openo.client.cli.fw.error.OpenOCommandException;
 import org.openo.client.cli.fw.input.ParameterType;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class OpenOCommandResultTest {
 
@@ -47,7 +47,6 @@ public class OpenOCommandResultTest {
                 && "Output".equals(res.getOutput()) && PrintDirection.LANDSCAPE.equals(res.getPrintDirection())
                 && res.getRecords().isEmpty() && OpenOCommandResultAttributeScope.LONG.equals(res.getScope())
                 && ResultType.TABLE.equals(res.getType()));
-
 
         String help = res.print();
 

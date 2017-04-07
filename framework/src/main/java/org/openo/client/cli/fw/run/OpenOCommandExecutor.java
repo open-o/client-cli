@@ -21,11 +21,6 @@ package org.openo.client.cli.fw.run;
  *
  */
 public class OpenOCommandExecutor {
-    public static final String API = "api";
-    public static final String CLIENT = "client";
-    public static final String ENTITY = "entity";
-    public static final String METHOD = "method";
-    public static final String EXCEPTION = "exception";
 
     private String apiName;
     private String clientName;

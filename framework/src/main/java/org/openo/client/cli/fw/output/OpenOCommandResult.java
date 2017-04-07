@@ -16,7 +16,7 @@
 
 package org.openo.client.cli.fw.output;
 
-import org.openo.client.cli.fw.conf.OpenOCommandConfg;
+import org.openo.client.cli.fw.conf.Constants;
 import org.openo.client.cli.fw.error.OpenOCommandException;
 import org.openo.client.cli.fw.error.OpenOCommandOutputFormatNotsupported;
 import org.openo.client.cli.fw.error.OpenOCommandOutputPrintingFailed;
@@ -34,8 +34,6 @@ import java.util.Map;
  *
  */
 public class OpenOCommandResult {
-    public static final String DIRECTION = "direction";
-    public static final String ATTRIBUTES = "attributes";
 
     /*
      * if type=JSON, then JSON response of the command from back-end Open-O service, by default all the command would
@@ -202,11 +200,11 @@ public class OpenOCommandResult {
         } else {
             // Add property column
             OpenOCommandResultAttribute prp = new OpenOCommandResultAttribute();
-            prp.setName(OpenOCommandConfg.PORTRAINT_COLUMN_NAME_PROPERTY);
+            prp.setName(Constants.PORTRAINT_COLUMN_NAME_PROPERTY);
             prp.setScope(OpenOCommandResultAttributeScope.SHORT);
             // Add value column
             OpenOCommandResultAttribute val = new OpenOCommandResultAttribute();
-            val.setName(OpenOCommandConfg.PORTRAINT_COLUMN_NAME_VALUE);
+            val.setName(Constants.PORTRAINT_COLUMN_NAME_VALUE);
             val.setScope(OpenOCommandResultAttributeScope.SHORT);
 
             for (OpenOCommandResultAttribute record : this.getScopedRecords()) {

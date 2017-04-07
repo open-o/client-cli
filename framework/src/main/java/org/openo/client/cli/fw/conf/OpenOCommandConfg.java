@@ -25,39 +25,6 @@ import java.util.Properties;
  */
 public final class OpenOCommandConfg {
 
-    public static final String DEFAULT_PARAMETER_FILE_NAME = "default_input_parameters.yaml";
-
-    // Common parameters used across all commands.
-    public static final String DEAFULT_PARAMETER_USERNAME = "openo-username";
-    public static final String DEAFULT_PARAMETER_PASS_WORD = "openo-password";
-    public static final String DEAFULT_PARAMETER_MSB_URL = "msb-url";
-    public static final String DEFAULT_PARAMETER_HELP = "help";
-    public static final String DEFAULT_PARAMETER_VERSION = "version";
-    public static final String DEFAULT_PARAMETER_DEBUG = "debug";
-    public static final String DEFAULT_PARAMETER_OUTPUT_FORMAT = "format";
-    public static final String DEFAULT_PARAMETER_OUTPUT_ATTR_LONG = "long";
-    public static final String DEFAULT_PARAMETER_OUTPUT_NO_TITLE = "no-title";
-    public static final String DEFAULT_PARAMETER_OUTPUT_NO_AUTH = "no-auth";
-
-    // Config properties
-    private static final String CONF = "openo.properties";
-    private static final String OPENO_IGNORE_AUTH = "cli.ignore_auth";
-    private static final String OPENO_CLI_VERSION = "cli.version";
-    private static final String HTTP_API_KEY_USE_COOKIES = "http.api_key_use_cookies";
-    private static final String HTTP_X_AUTH_TOKEN = "http.x_auth_token";
-
-    // used while printing the column name during PORTRAIT mode print
-    public static final String PORTRAINT_COLUMN_NAME_PROPERTY = "property";
-    public static final String PORTRAINT_COLUMN_NAME_VALUE = "value";
-
-    public static final String EXTERNAL_SCHEMA_DIRECTORY = "openo-cli-schema";
-    public static final String EXTERNAL_YAML_PATTERN = "/**/*.yaml";
-    public static final String EXTERNAL_JSON_PATTERN = "/**/*.json";
-    public static final String EXTERNAL_SCHEMA_PATH_PATERN = EXTERNAL_SCHEMA_DIRECTORY + EXTERNAL_YAML_PATTERN;
-    public static final String EXTERNAL_DISCOVERY_DIRECTORY = "data";
-    public static final String EXTERNAL_DISCOVERY_FILE = "external-schema.json";
-    public static final String EXTERNAL_DISCOVERY_DIRECTORY_PATTERN = EXTERNAL_DISCOVERY_DIRECTORY
-            + EXTERNAL_JSON_PATTERN;
     private static Properties prps = new Properties();
 
     /**
@@ -69,9 +36,9 @@ public final class OpenOCommandConfg {
 
     static {
         try {
-            prps.load(OpenOCommandConfg.class.getClassLoader().getResourceAsStream(CONF));
+            prps.load(OpenOCommandConfg.class.getClassLoader().getResourceAsStream(Constants.CONF));
         } catch (IOException e) {
-            throw new RuntimeException(e); //NOSONAR
+            throw new RuntimeException(e); // NOSONAR
         }
     }
 
@@ -81,7 +48,7 @@ public final class OpenOCommandConfg {
      * @return boolean
      */
     public static boolean isAuthIgnored() {
-        if ("true".equals(prps.getProperty(OPENO_IGNORE_AUTH))) {
+        if ("true".equals(prps.getProperty(Constants.OPENO_IGNORE_AUTH))) {
             return true;
         }
 
@@ -89,7 +56,7 @@ public final class OpenOCommandConfg {
     }
 
     public static String getVersion() {
-        return prps.getProperty(OPENO_CLI_VERSION);
+        return prps.getProperty(Constants.OPENO_CLI_VERSION);
     }
 
     /**
@@ -98,7 +65,7 @@ public final class OpenOCommandConfg {
      * @return boolean
      */
     public static boolean isCookiesBasedAuth() {
-        if ("true".equals(prps.getProperty(HTTP_API_KEY_USE_COOKIES))) {
+        if ("true".equals(prps.getProperty(Constants.HTTP_API_KEY_USE_COOKIES))) {
             return true;
         }
 
@@ -106,7 +73,7 @@ public final class OpenOCommandConfg {
     }
 
     public static String getXAuthTokenName() {
-        return prps.getProperty(HTTP_X_AUTH_TOKEN, "X-Auth-Token");
+        return prps.getProperty(Constants.HTTP_X_AUTH_TOKEN, "X-Auth-Token");
     }
 
 }

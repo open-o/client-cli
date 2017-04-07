@@ -25,9 +25,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.openo.client.cli.fw.error.OpenOCommandException;
 import org.openo.client.cli.fw.error.OpenOCommandHelpFailed;
-import org.openo.client.cli.fw.error.OpenOCommandInvalidRegistration;
 import org.openo.client.cli.fw.error.OpenOCommandNotFound;
-import org.openo.client.cli.fw.error.OpenOCommandOutputPrintingFailed;
 import org.openo.client.cli.fw.error.OpenOCommandRegistrationFailed;
 
 import java.io.File;
@@ -91,14 +89,17 @@ public class OpenOCommandRegistrarTest {
     @Test
     public void openOCommandRegistrationFailedTest() throws OpenOCommandException {
 
-        OpenOCommand com = new OpenOCommand() {
+        @OpenOCommandSchema(name = "Test2", schema = "sample-test-schema.yaml")
+        class Test extends OpenOCommand {
 
             @Override
             protected void run() throws OpenOCommandException {
 
             }
 
-        };
+        }
+
+        OpenOCommand com = new Test();
         Class<OpenOCommand> cmd = (Class<OpenOCommand>) com.getClass();
         try {
             registerar.register("Test2", cmd);
@@ -111,8 +112,7 @@ public class OpenOCommandRegistrarTest {
 
     @Test(expected = OpenOCommandHelpFailed.class)
     // For coverage
-    public void helpTestException()
-            throws OpenOCommandException {
+    public void helpTestException() throws OpenOCommandException {
         OpenOCommand test = new OpenOCommandTest1();
         Class<OpenOCommand> cmd = (Class<OpenOCommand>) test.getClass();
         registerar = new OpenOCommandRegistrar();

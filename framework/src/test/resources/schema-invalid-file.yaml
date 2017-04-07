@@ -1,0 +1,6 @@
+openo_cmd_schema_version: 1.0
+description: Register microservice into Open-O
+name: schema-validate
+service:dasd
+  name: msbdsa
+  - name: service-name1

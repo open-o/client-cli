@@ -4,7 +4,6 @@ description: Show network service
 service:
   name: gso
   version: v1
-
 parameters:
   - name: id
     description: Network service id
