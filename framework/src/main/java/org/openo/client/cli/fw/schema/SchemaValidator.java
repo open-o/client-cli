@@ -207,7 +207,6 @@ public class SchemaValidator extends AbstractSchemaValidate {
         Set<String> bodyParamNames = new HashSet<>();
         Object bodyString = requestMap.get(BODY);
         if (bodyString == null) {
-            //schemaErrors.add(HTTP_BODY_SECTION_EMPTY);
             return bodyParamNames;
         }
 
@@ -215,7 +214,7 @@ public class SchemaValidator extends AbstractSchemaValidate {
         JSONObject obj = null;
         try {
             obj = new ObjectMapper().readValue(body, JSONObject.class);
-        } catch (IOException e1) {
+        } catch (IOException e1) { // NOSONAR
             schemaErrors.add(HTTP_BODY_FAILED_PARSING);
         }
         if (obj == null || "".equals(obj.toString())) {
@@ -283,7 +282,7 @@ public class SchemaValidator extends AbstractSchemaValidate {
 
         try {
             new ObjectMapper().readValue(json.toString(), JSONObject.class);
-        } catch (IOException e1) {
+        } catch (IOException e1) { // NOSONAR
             schemaErrors.add(HTTP_SAMPLE_RESPONSE_FAILED_PARSING);
         }
     }

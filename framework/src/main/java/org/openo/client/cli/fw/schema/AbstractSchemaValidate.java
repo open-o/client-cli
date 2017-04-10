@@ -185,7 +185,7 @@ public abstract class AbstractSchemaValidate implements SchemaValidate {
                 try {
                     inputStream.close();
                 } catch (IOException e) {
-                    throw new OpenOCommandInvalidSchema(fileName, e);
+                    throw new OpenOCommandInvalidSchema(fileName, e); // NOSONAR
                 }
             }
         }
