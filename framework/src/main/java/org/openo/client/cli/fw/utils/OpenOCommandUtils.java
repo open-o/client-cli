@@ -102,20 +102,18 @@ public class OpenOCommandUtils {
     public static Map<String, ?> validateSchemaVersion(String schemaName, String version) throws OpenOCommandException {
         InputStream inputStream = OpenOCommandUtils.class.getClassLoader().getResourceAsStream(schemaName);
 
+        try {
+            Resource resource = getExternalResource(schemaName, Constants.EXTERNAL_SCHEMA_PATH_PATERN);
+
+            if (resource != null) {
+                inputStream = resource.getInputStream();
+            }
+
+        } catch (IOException e) {
+            throw new OpenOCommandSchemaNotFound(schemaName, e);
+        }
         if (inputStream == null) {
-            try {
-                Resource resource = getExternalResource(schemaName, Constants.EXTERNAL_SCHEMA_PATH_PATERN);
-
-                if (resource != null) {
-                    inputStream = resource.getInputStream();
-                }
-
-            } catch (IOException e) {
-                throw new OpenOCommandSchemaNotFound(schemaName, e);
-            }
-            if (inputStream == null) {
-                throw new OpenOCommandSchemaNotFound(schemaName);
-            }
+            throw new OpenOCommandSchemaNotFound(schemaName);
         }
 
         Map<String, ?> values = null;

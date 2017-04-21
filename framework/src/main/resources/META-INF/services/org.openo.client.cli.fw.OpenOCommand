@@ -1,1 +1,2 @@
 org.openo.client.cli.fw.cmd.OpenOSchemaValidateCommand
+org.openo.client.cli.fw.cmd.OpenOSchemaRefreshCommand

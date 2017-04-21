@@ -71,7 +71,9 @@ public class ValidateSchemaTest {
                         .validate();
         new SchemaValidator(new File(ValidateSchemaTest.class.getClassLoader()
                 .getResource("schema-validate-invalidschematype.yaml").getFile())).validate();
-
+        new SchemaValidator(
+                new File(ValidateSchemaTest.class.getClassLoader().getResource("schema-validate-invalid.yaml").getFile()))
+                        .validate();
         new SchemaValidator(
                 new File(ValidateSchemaTest.class.getClassLoader().getResource("schema-validate-pass.yaml").getFile()))
                         .validate();

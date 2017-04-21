@@ -95,13 +95,11 @@ public class SchemaValidator extends AbstractSchemaValidate {
         }
 
         Object object = httpMap.get(SAMPLE_RESPONSE);
-        if (object instanceof String) {
-            schemaErrors.add(HTTP_SAMPLE_RESPONSE_FAILED_PARSING);
-        } else {
-            Map<String, Object> sampleResponseBodyMap = (Map<String, Object>) httpMap.get(BODY);
-
-            if (sampleResponseBodyMap != null && !sampleResponseBodyMap.isEmpty()) {
-                validateSampleResponse(sampleResponseBodyMap);
+        if (object != null) {
+            if (object instanceof String) {
+                schemaErrors.add(HTTP_SAMPLE_RESPONSE_FAILED_PARSING);
+            } else {
+                validateSampleResponse((Map<String, Object>) object);
             }
         }
     }
@@ -274,14 +272,18 @@ public class SchemaValidator extends AbstractSchemaValidate {
     private void validateSampleResponse(Map<String, Object> sampleResponseBodyMap) {
 
         // validate the json
-        Object json = sampleResponseBodyMap.get(SAMPLE_RESPONSE);
+        Object json = sampleResponseBodyMap.get(BODY);
         if (json == null) {
             schemaErrors.add(HTTP_SAMPLE_RESPONSE_EMPTY);
             return;
         }
-
+        String jsonString = json.toString();
         try {
-            new ObjectMapper().readValue(json.toString(), JSONObject.class);
+            if (jsonString.startsWith("[")) {
+                new ObjectMapper().readValue(jsonString, JSONObject[].class);
+            } else {
+                new ObjectMapper().readValue(jsonString, JSONObject.class);
+            }
         } catch (IOException e1) { // NOSONAR
             schemaErrors.add(HTTP_SAMPLE_RESPONSE_FAILED_PARSING);
         }

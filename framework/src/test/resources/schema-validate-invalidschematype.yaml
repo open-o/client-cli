@@ -66,9 +66,9 @@ results:
       type: url
 http:
   request:
-    uri: /services
+    uri:
     method: POST
-    body: '{"serviceName":"${service}","serviceName":"${service-name}","version":"${service-version}","url":"${service-url}","protocol":"REST","visualRange":"1","lb_policy":"hash","nodes":[{"ip":"${node-ip}","port":"${node-port}","ttl":0}]}'
+    body:
     headers:
     queries:
       createOrUpdate: ${create-or-update1}

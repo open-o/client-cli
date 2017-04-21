@@ -249,7 +249,7 @@ public class OpenOCommandUtilsTest {
     @Test
     public void findOpenOCommandsTest() {
         List<Class<OpenOCommand>> cmds = OpenOCommandUtils.findOpenOCommands();
-        assertTrue(cmds.size() == 2);
+        assertTrue(cmds.size() == 3);
     }
 
     @Test

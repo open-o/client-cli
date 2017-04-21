@@ -104,6 +104,7 @@
                   <overWriteReleases>false</overWriteReleases>
                   <overWriteSnapshots>false</overWriteSnapshots>
                   <overWriteIfNewer>true</overWriteIfNewer>
+                  <excludeArtifactIds>junit</excludeArtifactIds>
                 </configuration>
               </execution>
             </executions>
