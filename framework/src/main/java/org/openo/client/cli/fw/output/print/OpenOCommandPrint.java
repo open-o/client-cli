@@ -170,13 +170,13 @@ public class OpenOCommandPrint {
         while (tok.hasMoreTokens()) {
             String word = tok.nextToken();
 
-            while (word.length() > maxCharInLine) {
+            while (word.length() >= maxCharInLine) {
                 output.append(word.substring(0, maxCharInLine - lineLen) + "\n");
                 word = word.substring(maxCharInLine - lineLen);
                 lineLen = 0;
             }
 
-            if (lineLen + word.length() > maxCharInLine) {
+            if (lineLen + word.length() >= maxCharInLine) {
                 output.append("\n");
                 lineLen = 0;
             }
