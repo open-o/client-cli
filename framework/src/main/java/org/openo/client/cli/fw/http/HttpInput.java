@@ -36,6 +36,8 @@ public class HttpInput {
 
     private Map<String, String> reqCookies = new HashMap<>();
 
+    private boolean binaryData;
+
     public String getUri() {
         return this.reqUri;
     }
@@ -108,10 +110,19 @@ public class HttpInput {
         return this;
     }
 
+    public boolean isBinaryData() {
+        return binaryData;
+    }
+
+    public void setBinaryData(boolean binaryData) {
+        this.binaryData = binaryData;
+    }
+
     @Override
     public String toString() {
-        return "\nURL: " + this.getUri() + "\nMethod: " + this.getMethod() + "\nRequest Queries: " + this.getReqQueries()
-                + "\nRequest Body: " + this.getBody() + "\nRequest Headers: " + this.getReqHeaders().toString()
-                + "\nRequest Cookies: " + this.getReqCookies().toString();
+        return "\nURL: " + this.getUri() + "\nMethod: " + this.getMethod() + "\nRequest Queries: "
+                + this.getReqQueries() + "\nRequest Body: " + this.getBody() + "\nRequest Headers: "
+                + this.getReqHeaders().toString() + "\nRequest Cookies: " + this.getReqCookies().toString()
+                + "\nbinaryData=" + this.binaryData;
     }
 }

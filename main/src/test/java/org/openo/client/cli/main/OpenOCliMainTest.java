@@ -235,6 +235,20 @@ public class OpenOCliMainTest {
 
     @Test
     @Ignore
+    public void testCsrUpload() {
+        this.handle(new String[] { "catalog-csar-create", "-u", "root", "-p", "root123", "--msb-url",
+                "http://192.168.4.47", "-d", "-a", "-z", "D:\\enterprise2DC.csar" });
+    }
+
+    @Test
+    @Ignore
+    public void testCsrDelete() {
+        this.handle(new String[] { "catalog-csar-delete", "-u", "root", "-p", "root123", "--msb-url",
+                "http://192.168.4.47", "-d", "-a", "-i", "7aa791f9-4e5f-433a-afeb-3555bcbabb47" });
+    }
+
+    @Test
+    @Ignore
     public void testPortCreate() {
         this.handle(new String[] { "resource-link-create", "-u", "root", "-p", "root123", "--msb-url",
                 "http://192.168.4.213", "-d", "-n", "PradeepLink1", "-b", "19.5.6.13", "-c", "193.4.57.13", "-g",

@@ -109,4 +109,13 @@ public class OpenOCommandParameterTest {
         assertTrue("{\"One\":\"1\",\"Two\":\"2\",\"Three\":\"3\"}".equals(param.getValue()));
     }
 
+    @Test(expected = OpenOCommandInvalidParameterValue.class)
+    public void openOCommandInvalidParameterValueBinaryExeceptionTest() throws OpenOCommandException {
+        OpenOCommandParameter param = new OpenOCommandParameter();
+        param.setName("name");
+        param.setParameterType(ParameterType.BINARY);
+        param.setValue("value");
+        param.validate();
+    }
+
 }

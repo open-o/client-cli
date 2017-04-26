@@ -1,0 +1,32 @@
+openo_cmd_schema_version: 1.0
+name: catalog-csar-create
+description: Upload csar packages from Open-O
+service:
+  name: catalog
+  version: v1
+parameters:
+  - name: file-path
+    description: Package file path
+    scope: short
+    type: binary
+    short_option: z
+    long_option: file-path
+    is_optional: false
+results:
+  direction: portrait
+  attributes:
+    - name: id
+      description: Package Id
+      scope: short
+      type: string
+http:
+  request:
+    uri: /csars
+    method: POST
+    body: ${file-path}
+  success_codes:
+    - 200
+  result_map:
+    id: $b{$.csarId}
+  sample_response:
+    body: '{"csarId":"43574023-5704-4b84-976c-e9a3f93c08bb"}'

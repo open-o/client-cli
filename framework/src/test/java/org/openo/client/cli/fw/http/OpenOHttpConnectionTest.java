@@ -92,6 +92,24 @@ public class OpenOHttpConnectionTest {
         con.post(inp);
     }
 
+
+    @Test(expected = OpenOCommandHttpFailure.class)
+    public void httpUnSecuredPostExceptionTest1() throws OpenOCommandHttpFailure {
+        new MockUp<CloseableHttpClient>() {
+            @Mock
+            public CloseableHttpResponse execute(HttpUriRequest request, HttpContext context)
+                    throws IOException, ClientProtocolException {
+
+                throw new IOException("IO Exception");
+            }
+        };
+
+        inp.setMethod("post");
+        inp.setBinaryData(true);
+        con = new OpenOHttpConnection(false, true);
+        con.post(inp);
+    }
+
     @Test(expected = OpenOCommandHttpFailure.class)
     public void httpUnSecuredPutExceptionTest() throws OpenOCommandHttpFailure {
         new MockUp<CloseableHttpClient>() {

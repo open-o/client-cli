@@ -122,6 +122,7 @@ public class Constants {
     public static final String PARAMETER_TYPE_URL = "url";
     public static final String PARAMETER_TYPE_BOOL = "bool";
     public static final String PARAMETER_TYPE_ARRAY = "array";
+    public static final String PARAMETER_TYPE_BINARY = "binary";
     public static final String PARAMETER_TYPE_MAP = "map";
 
     public static final String BOOLEAN_TRUE = "true";

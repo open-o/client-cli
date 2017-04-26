@@ -42,7 +42,7 @@ public class HttpInputOutputTest {
         inp.setReqQueries(new HashMap<String, String>());
 
         assertTrue(
-                "\nURL: uri\nMethod: method\nRequest Queries: {}\nRequest Body: body\nRequest Headers: {}\nRequest Cookies: {}"
+                "\nURL: uri\nMethod: method\nRequest Queries: {}\nRequest Body: body\nRequest Headers: {}\nRequest Cookies: {}\nbinaryData=false"
                         .equals(inp.toString()));
     }
 

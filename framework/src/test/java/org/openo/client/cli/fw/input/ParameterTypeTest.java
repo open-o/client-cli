@@ -34,6 +34,7 @@ public class ParameterTypeTest {
                     && ParameterType.URL.equals(ParameterType.get("url"))
                     && ParameterType.BOOL.equals(ParameterType.get("bool"))
                     && ParameterType.MAP.equals(ParameterType.get("map"))
+                    && ParameterType.BINARY.equals(ParameterType.get("binary"))
                     && ParameterType.ARRAY.equals(ParameterType.get("array")));
         } catch (OpenOCommandInvalidParameterType e) {
             fail("Shouldn't have thrown this exception : " + e.getMessage());

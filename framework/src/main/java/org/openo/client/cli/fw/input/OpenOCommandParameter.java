@@ -23,6 +23,7 @@ import org.openo.client.cli.fw.error.OpenOCommandException;
 import org.openo.client.cli.fw.error.OpenOCommandInvalidParameterValue;
 import org.openo.client.cli.fw.error.OpenOCommandParameterMissing;
 
+import java.io.File;
 import java.util.List;
 import java.util.Map;
 
@@ -239,6 +240,13 @@ public class OpenOCommandParameter {
         // (mrkanag) empty check needs to revisit
         if (!this.isOptional() && (this.getValue() == null || this.getValue().toString().isEmpty())) {
             throw new OpenOCommandParameterMissing(this.getName());
+        }
+
+        if (!this.isOptional() && ParameterType.BINARY.equals(parameterType)) {
+            File file = new File(value.toString());
+            if (!file.isFile()) {
+                throw new OpenOCommandInvalidParameterValue(this.getName());
+            }
         }
 
         // (mrkanag) validate for type supported ParameterType using constraints

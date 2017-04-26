@@ -37,7 +37,7 @@ results:
       type: string
     - name: deletion-pending
       description: Package delay to delete
-      scope: short
+      scope: long
       type: string
     - name: create-time
       description: Package create time
@@ -45,15 +45,15 @@ results:
       type: string
     - name: modify-time
       description: Package modify time
-      scope: short
+      scope: long
       type: string
     - name: operational-state
       description: Package operational state
-      scope: short
+      scope: long
       type: string
     - name: usage-state
       description: Package usage state
-      scope: short
+      scope: long
       type: string
     - name: onBoard-state
       description: Package onboard state

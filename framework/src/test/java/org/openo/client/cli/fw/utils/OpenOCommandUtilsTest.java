@@ -327,7 +327,7 @@ public class OpenOCommandUtilsTest {
 
         HttpInput input1 = OpenOCommandUtils.populateParameters(params, input);
         String expected = "\nURL: uri\nMethod: method\nRequest Queries: {key3={\"defaultValue3\"}}\n"
-                + "Request Body: body\nRequest Headers: {key2=defaultValue2}\nRequest Cookies: {}";
+                + "Request Body: body\nRequest Headers: {key2=defaultValue2}\nRequest Cookies: {}\nbinaryData=false";
         assertEquals(expected, input1.toString());
 
         input.setBody("${body}");

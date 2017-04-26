@@ -85,7 +85,7 @@ public abstract class AbstractSchemaValidate implements SchemaValidate {
 
     protected static final List<String> PARAMETER_TYPES = Arrays.asList(PARAMETER_TYPE_JSON, PARAMETER_TYPE_YAML,
             PARAMETER_TYPE_STRING, PARAMETER_TYPE_LONG, PARAMETER_TYPE_URL, PARAMETER_TYPE_BOOL, PARAMETER_TYPE_ARRAY,
-            PARAMETER_TYPE_MAP);
+            PARAMETER_TYPE_MAP, PARAMETER_TYPE_BINARY);
 
     protected static final List<String> RESULT_PARAMS_LIST = Arrays.asList(NAME, DESCRIPTION, TYPE, SHORT_OPTION,
             LONG_OPTION, IS_OPTIONAL, DEFAULT_VALUE, IS_SECURED);

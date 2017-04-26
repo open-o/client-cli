@@ -1,0 +1,20 @@
+openo_cmd_schema_version: 1.0
+name: catalog-csar-delete
+description: Delete csar package from Open-O
+service:
+  name: catalog
+  version: v1
+parameters:
+  - name: id
+    description: Package id
+    scope: short
+    type: string
+    short_option: i
+    long_option: id
+    is_optional: false
+http:
+  request:
+    uri: /csars/${id}
+    method: DELETE
+  success_codes:
+    - 204

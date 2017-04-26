@@ -17,6 +17,7 @@
 package org.openo.client.cli.fw.http;
 
 import org.apache.http.Header;
+import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.ParseException;
 import org.apache.http.client.CookieStore;
@@ -36,6 +37,9 @@ import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
 import org.apache.http.conn.ssl.X509HostnameVerifier;
 import org.apache.http.cookie.Cookie;
 import org.apache.http.entity.StringEntity;
+import org.apache.http.entity.mime.HttpMultipartMode;
+import org.apache.http.entity.mime.MultipartEntity;
+import org.apache.http.entity.mime.content.FileBody;
 import org.apache.http.impl.client.BasicCookieStore;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.impl.client.LaxRedirectStrategy;
@@ -47,6 +51,7 @@ import org.apache.http.util.EntityUtils;
 import org.openo.client.cli.fw.conf.Constants;
 import org.openo.client.cli.fw.error.OpenOCommandHttpFailure;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URI;
@@ -224,7 +229,9 @@ public class OpenOHttpConnection {
     }
 
     private void addCommonHeaders(HttpInput input) {
+        if (!input.isBinaryData()) {
         input.getReqHeaders().put("Content-Type", Constants.APPLICATION_JSON);
+        }
         input.getReqHeaders().put("Accept", Constants.APPLICATION_JSON);
         if (this.xauthToken != null) {
             input.getReqHeaders().put(Constants.X_AUTH_TOKEN, this.xauthToken);
@@ -276,7 +283,11 @@ public class OpenOHttpConnection {
         HttpRequestBase requestBase = null;
         if ("post".equals(input.getMethod())) {
             HttpPost httpPost = new HttpPost();
+            if (input.isBinaryData()) {
+                httpPost.setEntity(getMultipartEntity(input));
+            } else {
             httpPost.setEntity(this.getStringEntity(input));
+            }
             requestBase = httpPost;
         } else if ("put".equals(input.getMethod())) {
             HttpPut httpPut = new HttpPut();
@@ -324,5 +335,12 @@ public class OpenOHttpConnection {
 
     public void close() {
         this.setAuthToken(null);
+    }
+
+    private HttpEntity getMultipartEntity(HttpInput input) {
+        FileBody fileBody = new FileBody(new File(input.getBody().trim()));
+        MultipartEntity multipartEntity = new MultipartEntity();
+        multipartEntity.addPart("file", fileBody);
+        return multipartEntity;
     }
 }

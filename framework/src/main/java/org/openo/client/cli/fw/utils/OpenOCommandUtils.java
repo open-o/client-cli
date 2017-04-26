@@ -838,7 +838,12 @@ public class OpenOCommandUtils {
     public static HttpInput populateParameters(Map<String, OpenOCommandParameter> params, HttpInput input)
             throws OpenOCommandException {
         HttpInput inp = new HttpInput();
-
+        for (OpenOCommandParameter param : params.values()) {
+            if (ParameterType.BINARY.equals(param.getParameterType())) {
+                inp.setBinaryData(true);
+                break;
+            }
+        }
         inp.setBody(replaceLineFromInputParameters(input.getBody(), params));
         inp.setUri(replaceLineFromInputParameters(input.getUri(), params));
         inp.setMethod(input.getMethod().toLowerCase());
