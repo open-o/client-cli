@@ -16,6 +16,13 @@
 
 package org.openo.client.cli.main;
 
+import static org.junit.Assert.assertTrue;
+
+import jline.console.ConsoleReader;
+import mockit.Invocation;
+import mockit.Mock;
+import mockit.MockUp;
+
 import org.aspectj.lang.annotation.After;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -275,6 +282,66 @@ public class OpenOCliMainTest {
             this.handle(new String[] { cmdName, "-h" });
         }
 
+    }
+
+    @Test
+    public void interactiveTest() {
+        cli = new OpenOCli(new String[] { "-i" });
+        boolean isInter = cli.isInteractive();
+
+        assertTrue(isInter);
+        cli = new OpenOCli(new String[] { "--interactive" });
+        isInter = cli.isInteractive();
+        assertTrue(isInter);
+        cli.getExitCode();
+
+        mockConsole("exit");
+        cli.handleInteractive();
+
+        mockConsole("bye");
+        cli.handleInteractive();
+
+        mockConsole("clear");
+        try {
+            cli.handleInteractive();
+        } catch (Exception e) {
+        }
+
+        mockConsole("microservice-create -h");
+
+        try {
+            cli.handleInteractive();
+        } catch (Exception e) {
+        }
+
+        mockConsoleReader();
+        cli.handleInteractive();
+
+    }
+
+    private static void mockConsoleReader() {
+        new MockUp<OpenOCli>() {
+            @Mock
+            public ConsoleReader createConsoleReader() throws IOException {
+                throw new IOException("Exception mock");
+            }
+        };
+    }
+
+    private static void mockConsole(String input) {
+        new MockUp<ConsoleReader>() {
+            boolean isMock = true;
+
+            @Mock
+            public String readLine(Invocation inv) throws IOException {
+                if (isMock) {
+                    isMock = false;
+                return input;
+                } else {
+                    return inv.proceed(input);
+                }
+            }
+        };
     }
 
 }

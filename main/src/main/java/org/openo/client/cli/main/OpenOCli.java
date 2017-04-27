@@ -19,12 +19,18 @@ package org.openo.client.cli.main;
 import org.apache.commons.io.IOUtils;
 import org.openo.client.cli.fw.OpenOCommand;
 import org.openo.client.cli.fw.OpenOCommandRegistrar;
+import org.openo.client.cli.fw.error.OpenOCommandException;
 import org.openo.client.cli.fw.error.OpenOCommandWarning;
 import org.openo.client.cli.fw.input.OpenOCommandParameter;
 import org.openo.client.cli.fw.output.OpenOCommandResult;
 import org.openo.client.cli.main.conf.OpenOCliConstants;
+import org.openo.client.cli.main.interactive.StringCompleter;
 import org.openo.client.cli.main.utils.OpenOCliUtils;
 
+import jline.TerminalFactory;
+import jline.console.ConsoleReader;
+
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -109,6 +115,77 @@ public class OpenOCli {
     }
 
     /**
+     * Handles Interactive Mode. --interactive or -i
+     */
+    public void handleInteractive() { // NOSONAR
+        if (isInteractive()) {
+            ConsoleReader console = null;
+            try {
+                console = createConsoleReader();
+                String line = null;
+                while ((line = console.readLine()) != null) {
+                    if (OpenOCliConstants.PARAM_INTERACTIVE_EXIT.equalsIgnoreCase(line)
+                            || OpenOCliConstants.PARAM_INTERACTIVE_BYE.equalsIgnoreCase(line)) {
+                        break;
+                    } else if (OpenOCliConstants.PARAM_INTERACTIVE_CLEAR.equalsIgnoreCase(line)) {
+                        console.clearScreen();
+                        continue;
+                    }
+                    this.args = Arrays.asList(line.split(OpenOCliConstants.PARAM_INTERACTIVE_ARG_SPLIT_PATTERN));
+                    handleCommand();
+                }
+            } catch (IOException e) { // NOSONAR
+                this.print("Failed to read console, " + e.getMessage());
+            } finally {
+                try {
+                    TerminalFactory.get().restore();
+                } catch (Exception e) { // NOSONAR
+                }
+                if (console != null) {
+                    console.close();
+                }
+                this.exitSuccessfully();
+            }
+        }
+    }
+
+    /**
+     * Checks if the command is interactive.
+     *
+     * @return boolean
+     */
+    public boolean isInteractive() {
+        if ((args.size() == 1) && (this.getLongOption(OpenOCliConstants.PARAM_INTERACTIVE_LONG).equals(args.get(0))
+                || this.getShortOption(OpenOCliConstants.PARAM_INTERACTIVE_SHORT).equals(args.get(0)))) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * Creates console reader object.
+     *
+     * @return ConsoleReader
+     * @throws IOException
+     *             exception
+     */
+    private ConsoleReader createConsoleReader() throws IOException {
+        ConsoleReader console = new ConsoleReader();
+        try {
+            StringCompleter strCompleter = new StringCompleter(OpenOCommandRegistrar.getRegistrar().listCommands());
+            strCompleter.add(OpenOCliConstants.PARAM_INTERACTIVE_EXIT,
+                    OpenOCliConstants.PARAM_INTERACTIVE_CLEAR);
+            console.addCompleter(strCompleter);
+            console.setPrompt(OpenOCliConstants.PARAM_INTERACTIVE_PROMPT);
+        } catch (OpenOCommandException e) { // NOSONAR
+            this.print("Failed to load openo commands," + e.getMessage());
+        }
+
+        return console;
+    }
+
+    /**
      * Handles command.
      */
     public void handleCommand() {
@@ -161,13 +238,19 @@ public class OpenOCli {
      */
     public void handle() {
         this.handleHelp();
+
         if (this.exitCode == -1) {
             this.handleVersion();
+        }
+
+        if (this.exitCode == -1) {
+            this.handleInteractive();
+        }
+
             if (this.exitCode == -1) {
                 this.handleCommand();
             }
         }
-    }
 
     /**
      * Main method.
